@@ -1,0 +1,408 @@
+---
+title:
+- Supercomputing for Big Data -- Lab Manual
+
+author:
+- R.P. Hes
+- T.C. Leliveld
+---
+
+Introduction
+============
+
+In this lab we will put the concepts that are central to Supercomputing with
+Big Data in some practical context. We will analyze a large open data set and
+identify a way of processing it efficiently using [Apache Spark] and the
+[Amazon Web Services] (AWS). The data set in question is the [GDELT 2.0 Global
+Knowledge Graph] (GKG), which indexes persons, organizations, companies,
+locations, themes, and even emotions from live news reports in print, broadcast
+and internet sources all over the world. We will use this data to construct a
+histogram of the topics that are most popular at any given time, hopefully
+giving us some interesting insights into the most important themes in recent
+history.
+
+<!-- In the previous assignments, you have become familiarized with a number of big -->
+<!-- data frameworks such as Hadoop and Apache Spark, but we haven't done much -->
+<!-- supercomputing, let alone on big data. In the second lab of Supercomputing with -->
+<!-- Big Data we will analyze the [Common Crawl], a monthly open-source crawl of the -->
+<!-- internet. We will be building a lookup table for Dutch phone numbers and the -->
+<!-- sites they are referenced in. As one might expect, the Common Crawl is a rather -->
+<!-- large data set --- the [July 2017 crawl] is 240 TiB uncompressed. To facilitate -->
+<!-- this analysis, we will make use of Amazon Web Services (AWS). This assignment -->
+<!-- is based on a Yelp Engineering blog post called, [Analyzing the Web For the -->
+<!-- Price of a Sandwich], and the [commoncrawl/cc-pyspark examples]. -->
+Feedback is appreciated! The lab files will be hosted on [GitHub]. Feel free to
+make issues and/or pull requests to suggest or implement improvements.
+
+Before You Start
+----------------
+
+The complete data set we will be looking at in assignment 2 weighs in at
+several terabytes, so we need some kind of compute and storage infrastructure
+to run the pipeline. In this lab we will use Amazon AWS to facilitate this. As
+a student you are eligible for credits on this platform. We would like you to
+register for the [GitHub Student Developer Pack], as soon as you decide to
+take this course. This gives you access to around 100 dollars worth of credits.
+This should be ample to complete assignment 2. Note that you need a credit card
+to apply.
+
+**Make sure you register for these credits as soon as possible! You can always
+send an email to the TAs if you run into any trouble.**
+
+Goal of this Lab
+----------------
+
+The goal of this lab is to:
+
+-   familiarize yourself with Apache Spark, the MapReduce programming model,
+    and Scala as a programming language;
+-   learn how to characterize your big data problem analytically and
+    practically and what machines best fit this profile;
+-   get hands-on experience with cloud-based systems;
+-   learn about the existing infrastructure for big data and the difficulties
+    with these; and
+-   learn how an existing application should be modified to function in a
+    streaming data context.
+
+You will work in groups of two. In this lab manual we will introduce a big data
+pipeline for identifying important events from the GDELT Global Knowledge Graph
+(GKG). In assignment 1, you will start by writing a Spark application that runs
+on a small subset of the data on your local computer. You will use this to
+analyze its scaling behavior and draw some conclusions on how to run it
+efficiently in the cloud. It is up to you how you want to define *efficiently*,
+which can be in terms of performance, cost, or a combination of the two.
+
+You may have noticed that this assignment does not contain any supercomputing,
+let alone big data. For assignment 2, you will get the opportunity to deploy
+your code to multiple machines simultaneously, in an effort to process the
+complete dataset, which measures several terabytes. It is up to you to find the
+configuration that will get you the most efficiency, as per your definition in
+assignment 1.
+
+For the final assignment, we will take a step back and modify the code from
+assignment 1 to work in a streaming data context. You will attempt to rewrite
+the application to process events in real-time, in a way that is still scalable
+over many machines.
+
+<!-- The lab will be graded on the basis of your report. In the spirit of giving -->
+<!-- you freedom to find interesting things to optimize, you will not be graded on -->
+<!-- the achieved result, but on the quality of your analysis and the originality of -->
+<!-- your contribution. After the reports are handed in, each group will present -->
+<!-- their suggested improvements and the results they achieved. Each student will -->
+<!-- also have a discussion with the TAs about their work. -->
+<!-- For each optimization you perform, you need to provide a hypothesis why you -->
+<!-- think this will improve some metric. Try and quantify this as well, giving you -->
+<!-- some expected result. Report how you implemented the suggested improvement, and -->
+<!-- finally measure the improvement in the system. Did this match your hypothesis? -->
+<!-- More interestingly, if it did not, why? Let's illustrate this with an example: -->
+<!-- > The analysis at hand takes about 4 hours to run on a cluster of 20 machines. -->
+<!-- > We are interested in optimizing the performance per dollar spent metric. -->
+<!-- > Consider the amount of IO that happens at the start of the computation. The -->
+<!-- > computation consists of analyzing 8TiB of data, thus each machine goes -->
+<!-- > through about 400GB of data. The machines provisioned have a 400 Mbps -->
+<!-- > connection. Each machine spends about 133 minutes downloading. For an extra -->
+<!-- > \$0.10 I can upgrade the machines one tier, doubling the connection speed. -->
+<!-- > This moves the price from \$0.20 to \$0.30 per machine per instance hour. The -->
+<!-- > machines spend half the time downloading, cutting of an hour of the -->
+<!-- > computation, a 33% increase in speed. The provisioning cost of the machines -->
+<!-- > changes from $20 \cdot 0.20 \cdot 4$, to $20 \cdot 0.30 \cdot 3$, or 16 to -->
+<!-- > 18: a 10% decrease. -->
+<!-- > -->
+<!-- > This is tested by provisioning m4.xlarge machines instead of m4.large. This -->
+<!-- > resulted in a computation that ran 50 minutes shorter. Due to the baseline -->
+<!-- > being shorter than 4 hours it still resulted in an entire instance hour less -->
+<!-- > than the baseline, so in practice we achieve a slightly smaller performance -->
+<!-- > increase (26%), while still maintaining a 10% decrease in cost. This can be -->
+<!-- > attributed to the CPUs of the machines not being able to keep up with the -->
+<!-- > network connection. This can be seen from the CloudWatch monitoring tools, -->
+<!-- > where it's clear that our CPUs are over utilized, but the machines have -->
+<!-- > leftover network bandwidth. -->
+<!-- Finally, please test your hypothesis with classmates, as this will improve -->
+<!-- everybody's understanding and that is what we are here for after all! -->
+<!-- The rest of the document explains how the pipeline works and gives a brief -->
+<!-- introduction on working with AWS. At the end of the document there's a small -->
+<!-- section detailing what needs to be done for the report and the presentation. -->
+
+Background
+==========
+
+Apache Spark
+------------
+
+Scala
+-----
+
+The GDELT Project
+-----------------
+
+TODO
+
+Amazon Web Services
+-------------------
+
+AWS offers a large amount of different services. For assignment 2 these are the
+most important:
+
+[EC2]
+:   Elastic Compute Cloud allows you to provision a variety of different
+    machines that can be used to run a computation. An overview of the
+    different machines and their use cases can be found on the EC2 website.
+
+[EMR]
+:   Elastic MapReduce is a layer on top of EC2, that allows you to quickly
+    deploy MapReduce-like applications, for instance Apache Spark.
+
+[S3]
+:   Simple Storage Server is an object based storage system that is easy to
+    interact with from different AWS services.
+
+Note that the Common Crawl is hosted on AWS S3 in the [US east region], so any
+machines interacting with this data set should also be provisioned there.
+
+AWS EC2 offers spot instances, a marketplace for unused machines that you can
+bid on. These spot instances are often a order of magnitude cheaper than
+on-demand instances. The current price list can be found in the [EC2 website].
+We recommend using spot instances for the entirety of this lab.
+
+Assignment 1
+============
+
+Assignment 2
+============
+
+Building the pipeline
+---------------------
+
+In this chapter, we will talk about the different stages of the standard Big
+Data Pipeline and how they apply to the analysis we are trying to perform. In
+the next chapter we will demonstrate how to chain these different stages
+together.
+
+![Standard Big Data pipeline.]
+
+### Sense and Store
+
+As this information is stored on Amazon S3, the sense and store stage are
+performed by maintainers of the GDELT project.
+
+### Retrieve
+
+### Filter
+
+### Analysis
+
+### Visualization
+
+Chaining the Pipeline Together
+------------------------------
+
+Using AWS
+---------
+
+We will be using the AWS infrastructure to run the pipeline. Log in to the AWS
+console, and open the S3 interface. Create a bucket where we can store the
+scripts, the segments index files, and the output from the pipeline.
+
+There are (at least) two ways to transfer files to S3:
+
+1.  The web interface, and
+2.  The command line interface.
+
+The web interface is straightforward to use. To use the command line interface,
+first install the [AWS CLI].
+
+To copy a file
+
+``` {.bash}
+aws s3 cp path/to/file s3://destination-bucket/path/to/file
+```
+
+To copy a directory recursively
+
+``` {.bash}
+aws s3 cp --recursive s3://origin-bucket/path/to/file
+```
+
+To move a file
+
+``` {.bash}
+aws s3 mv path/to/file s3://destination-bucket/path/to/file
+```
+
+The aws-cli contains much more functionality, which can be found on the
+[AWS-CLI docs].
+
+Move the phone analyzer script, the dependency shell script, and the segment
+indices to your S3 bucket.
+
+We are now ready to provision a cluster. Go to the EMR service, and select
+*Create Cluster*. Next select *Go to advanced options*, select the latest
+release, and check the frameworks you want to use (in this case Spark, and
+Hadoop). We need to enter some software settings specifically to ensure we are
+using Python 3. Enter the following in the *Edit software settings* dialog. A
+copy paste friendly example can be found on the [AWS site].
+
+``` {.json}
+[
+    {
+    "Classification": "spark-env",
+    "Configurations": [
+            {
+                "Classification": "export",
+                "Properties": {
+                    "PYSPARK_PYTHON": "/usr/bin/python3"
+                }
+            }
+        ]
+    }
+]
+```
+
+EMR works with steps, which can be thought of as a job, or the execution of a
+single program. You can choose to add steps in the creation of the cluster, but
+this can also be done at a later time. Press *next*.
+
+In the *Hardware Configuration* screen, we can configure the arrangement and
+selection of the machines. I would suggest starting out with *m4.large*
+machines on spot pricing. You should be fine running an example workload with a
+single master node and two core nodes.[^1] Be sure to select *spot pricing* and
+place an appropriate bid. Remember that you can always check the current prices
+in the information popup or on the [Amazon website][EC2 website]. After
+selecting the machines, press *next*.
+
+In the *General Options* you can select a cluster name. You can tune where the
+system logs and a number of other features (more information in the popups). To
+install the dependencies on the system you need to add a *Bootstrap Action*.
+Select *Custom action*, then *Configure and add*. In this pop-up, give this
+action a appropriate name, the *Script location* should point to the dependency
+shell script in your previously created S3 bucket. Be aware that the correct
+install command on EC2 instances is `sudo pip-3.4`. You can leave the *Optional
+arguments* dialog empty. After finishing this step, press *next*.
+
+You should now arrive in the *Security Options* screen. If you have not created
+a *EC2 keypair*, I highly recommend that you do so now. This will allow you to
+forward the Yarn and Spark web interfaces to your browser. This makes debugging
+and monitoring the execution of your Spark Job much more manageable. To create
+a *EC2 keypair*, follow the AWS instructions.
+
+After this has all been completed you are ready to spin up your first cluster
+by pressing *Create cluster*. Once the cluster has been created, AWS will start
+provisioning machines. This should take about 10 minutes. In the meantime you
+can add a step. Go the *Steps* foldout, and select *Spark application* for
+*Step Type*. Clicking on *Configure* will open a dialogue in which you can
+select the application location in your S3 bucket, as well as provide a number
+of argument to the program, spark-submit, as well as your action on failure. We
+need to provide a number of arguments to the program to specify our input
+segment index, and output directory at the very least. An example argument list
+is included below
+
+    -i s3://sbd-ex/input/test_s3_wet.txt
+    -o s3://sbd-ex/output
+    -p 4
+    -n "example arguments"
+
+Before the setup has finished you should also configure a proxy for the web
+interfaces. More detailed information can be found on the [AWS website]. You
+can check the logs in your S3 bucket, or the web interfaces to track the
+progress of your application and whether any errors have occurred. If
+everything went well, you should have output in your S3 bucket. Check this on
+your machine by copying the files and inspecting the results in a Spark shell
+by loading it via SQLContext.
+
+``` {.ipython}
+~ pyspark
+Python 3.5.1 (default, Mar  6 2016, 15:01:56)
+Type "copyright", "credits" or "license" for more information.
+
+IPython 4.0.0 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object', use 'object??' for extra...
+Using Spark's default log4j profile: org/apache/spark/log4j-d...
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For Spa...
+17/08/31 17:01:56 WARN NativeCodeLoader: Unable to load nativ...
+17/08/31 17:02:01 WARN ObjectStore: Failed to get database gl...
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 2.2.0
+      /_/
+
+Using Python version 3.5.1 (default, Mar  6 2016 15:01:56)
+SparkSession available as 'spark'.
+
+In [1]: sqlc = SQLContext(sc)
+
+In [2]: df = sqlc.read.parquet("./output")
+
+In [4]: df.count()
+Out[4]: 106
+```
+
+Report
+------
+
+We have become familiar with both the pipeline in this exercise, as well as the
+AWS infrastructure. Now determine a metric you are trying to optimize. Based on
+this metric find areas that you could improve the pipeline in. Remember to
+report the following:
+
+-   hypothesis (preferably quantitatively) about what your change is going to
+    do,
+-   implementation, how did you go about implementing the change, and
+-   results, was your hypothesis correct (if not, why?).
+
+As a starting point you can make a good analysis of the application. Figure out
+what kind of of I/O is happening (e.g. how much MB's does each machine have to
+download) versus the amount of compute time that is happening. You can try and
+find the optimal machine for your metric. You can compare this to a "general
+purpose" m4.large machine.
+
+A word of advice: Be careful not to overspend your credits! It is your
+responsibility to ensure you are not blowing all your credits straight away.
+How much data do you need to process to get a reasonable indication of the
+performance on the entire dataset? Can you make meaningful prediction from
+working with smaller sample sizes? Try and extrapolate this to the entire
+dataset.
+
+Presentation
+------------
+
+Each group will have a short presentation where they present their proposed
+improvements, and how they panned out. This is not graded, but rather an
+informal session to see what your fellow students tried, and how that worked
+out. Prepare 1-2 slides per improvement you implemented, containing the
+aforementioned three points. The date and location of this session will be
+announced later.
+
+Assignment 3
+============
+
+
+[^1]: By default, there are some limitations on the number of spot instances
+    your account is allowed to provision. If you don't have access to enough
+    spot instances, the procedure to request additional can be found in the
+    [AWS documentation].
+
+  [GitHub]: https://github.com/Tclv/SBD-2018
+  [GitHub Student Developer Pack]: https://education.github.com/pack
+  [EC2]: https://aws.amazon.com/ec2/
+  [EMR]: https://aws.amazon.com/emr/
+  [S3]: https://aws.amazon.com/s3/
+  [US east region]: https://aws.amazon.com/public-datasets/common-crawl/
+  [EC2 website]: https://aws.amazon.com/ec2/spot/pricing/
+  [Spark overview page]: https://spark.apache.org/docs/latest/
+  [lab's GitHub repository]: https://github.com/Tclv/SBD-Lab2/blob/master/get_dependencies.sh
+  [Standard Big Data pipeline.]: ./images/big_data_stages
+  [AWS CLI]: http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+  [AWS-CLI docs]: https://aws.amazon.com/cli/
+  [AWS site]: https://aws.amazon.com/premiumsupport/knowledge-center/emr-pyspark-python-3x/
+  [AWS website]: http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html
+  [AWS documentation]: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html
+  [Apache Spark]: https://spark.apache.org
+  [Amazon Web Services]: https://aws.amazon.com
+  [GDELT 2.0 Global Knowledge Graph]:
+  https://blog.gdeltproject.org/introducing-gkg-2-0-the-next-generation-of-the-gdelt-global-knowledge-graph/
