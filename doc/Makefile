@@ -3,7 +3,7 @@ INPUT := $(wildcard *.text)
 
 PANDOC=pandoc
 
-PANDOC_OPTIONS=--filter pandoc-citeproc --standalone --highlight-style=pygments --toc -f markdown
+PANDOC_OPTIONS=--filter pandoc-citeproc --standalone --highlight-style=pygments --toc -f markdown -F pandoc-crossref
 PANDOC_OPTIONS_LATEX=--pdf-engine=xelatex --variable papersize=a4 --variable documentclass=memoir \
 		     --variable classoption=article --variable mainfont="TeX Gyre Pagella" \
 		     --variable mathfont="TeX Gyre Pagella Math" --variable monofont="Source Code Pro" \
