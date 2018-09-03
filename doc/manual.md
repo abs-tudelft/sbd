@@ -1,4 +1,18 @@
-# Introduction
+-   [Introduction](#introduction)
+    -   [Before You Start](#before-you-start)
+    -   [Goal of this Lab](#goal-of-this-lab)
+-   [Lab 1](#lab-1)
+    -   [Scala](#scala)
+    -   [Apache Spark](#apache-spark)
+        -   [Resilient Distributed Datasets](#resilient-distributed-datasets)
+        -   [Dataframe and Dataset](#dataframe-and-dataset)
+    -   [SBT](#sbt)
+    -   [The GDelt Project](#the-gdelt-project)
+    -   [Deliverables](#deliverables)
+    -   [Questions](#questions)
+
+Introduction
+============
 
 In this lab we will put the concepts that are central to Supercomputing with
 Big Data in some practical context. We will analyze a large open data set and
@@ -10,10 +24,11 @@ and internet sources all over the world. We will use this data to construct a
 histogram of the topics that are most popular on a given day, hopefully giving
 us some interesting insights into the most important themes in recent history.
 
-Feedback is appreciated\! The lab files will be hosted on [GitHub](https://github.com/Tclv/SBD-2018). Feel free t.
+Feedback is appreciated! The lab files will be hosted on [GitHub](https://github.com/Tclv/SBD-2018). Feel free to
 make issues and/or pull requests to suggest or implement improvements.
 
-## Before You Start
+Before You Start
+----------------
 
 The complete data set we will be looking at in lab 2 weighs in at
 several terabytes, so we need some kind of compute and storage infrastructure
@@ -22,27 +37,28 @@ a student you are eligible for credits on this platform. We would like you to
 register for the [GitHub Student Developer Pack](https://education.github.com/pack), as soon as you decide to
 take this course. This gives you access to around 100 dollars worth of credits.
 This should be ample to complete lab 2. Note that you need a credit card
-to apply\[1\]. Don’t forget to follow to register on AWS using the
+to apply[1]. Don’t forget to follow to register on AWS using the
 referral link from Github.
 
-**Make sure you register for these credits as soon as possible\! You can always
+**Make sure you register for these credits as soon as possible! You can always
 send an email to the TAs if you run into any trouble.**
 
 **Before the end of the first week (Sunday 09/09/18), please send your TUDelft
 email address to the TAs to register for the lab**
 
-## Goal of this Lab
+Goal of this Lab
+----------------
 
 The goal of this lab is to:
 
-  - familiarize yourself with Apache Spark, the MapReduce programming model,
+-   familiarize yourself with Apache Spark, the MapReduce programming model,
     and Scala as a programming language;
-  - learn how to characterize your big data problem analytically and
+-   learn how to characterize your big data problem analytically and
     practically and what machines best fit this profile;
-  - get hands-on experience with cloud-based systems;
-  - learn about the existing infrastructure for big data and the difficulties
+-   get hands-on experience with cloud-based systems;
+-   learn about the existing infrastructure for big data and the difficulties
     with these; and
-  - learn how an existing application should be modified to function in a
+-   learn how an existing application should be modified to function in a
     streaming data context.
 
 You will work in groups of two. In this lab manual we will introduce a big data
@@ -71,14 +87,16 @@ For the final lab, we will modify the code from lab 1 to work in a streaming
 data context. You will attempt to rewrite the application to process events in
 real-time, in a way that is still scalable over many machines.
 
-# Lab 1
+Lab 1
+=====
 
 In this lab, we will design and develop the code in Spark to process GDelt
 data, which will be used in lab 2 to scale the analysis to the entire dataset.
 We will first give a brief introduction to the various technologies used in
 this lab.
 
-## Scala
+Scala
+-----
 
 Apache Spark, our big data framework of choice for this lab, is implemented in
 Scala, a compiled language on the JVM that supports a mix between functional
@@ -90,12 +108,11 @@ reasons why Spark was written in Scala are:
     **J**ava **AR**chive format, or JAR). This simplifies deploying to cloud
     provider big data platforms as we don’t need specific knowledge of the
     operating system, or even the underlying architecture.
-
 2.  Compared to Java, Scala has some advantages in supporting more complex
-    types, type inference, and anonymous functions\[2\]. Matei
+    types, type inference, and anonymous functions[2]. Matei
     Zaharia, Apache Spark’s original author, has said the following about why
     Spark was implemented in Scala in a [Reddit AMA](https://www.reddit.com/r/IAmA/comments/31bkue/im_matei_zaharia_creator_of_spark_and_cto_at/):
-    
+
     > At the time we started, I really wanted a PL that supports a
     > language-integrated interface (where people write functions inline, etc),
     > because I thought that was the way people would want to program these
@@ -114,7 +131,8 @@ using Scala to program in this lab. An introduction to Scala can be found on
 the [Scala language site](https://docs.scala-lang.org/tour/tour-of-scala.html). You can have a brief look at it, but you can also
 pick up topics as you go through the lab.
 
-## Apache Spark
+Apache Spark
+------------
 
 Apache Spark provides a programming model for a resilient distributed
 shared memory model. To elaborate on this, Spark allows you to program against
@@ -140,8 +158,7 @@ We will consider both here shortly.
 
 ### Resilient Distributed Datasets
 
-![Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
-integers as elements.](./images/RDD.png)
+<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" />
 
 RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
@@ -161,25 +178,65 @@ instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in fig. 1 as the arrows between
 elements.
 
-<div id="tbl:narrow_wide_dependency">
-
-| Narrow Dependency        | Wide Dependency |
-| :----------------------- | :-------------- |
-| `map`                    | `coGroup`       |
-| `mapValues`              | `flatMap`       |
-| `flatMap`                | `groupByKey`    |
-| `filter`                 | `reduceByKey`   |
-| `mapPartitions`          | `combineByKey`  |
-| `mapPartitionsWithIndex` | `distinct`      |
-| `join` with sorted keys  | `join`          |
-|                          | `intersection`  |
-|                          | `repartition`   |
-|                          | `coalesce`      |
-|                          | `sort`          |
-
-Table 1: List of wide and narrow dependencies for (pair) RDD operations
-
-</div>
+<table style="width:60%;">
+<caption>Table 1: List of wide and narrow dependencies for (pair) RDD operations</caption>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Narrow Dependency</th>
+<th style="text-align: left;">Wide Dependency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>map</code></td>
+<td style="text-align: left;"><code>coGroup</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>mapValues</code></td>
+<td style="text-align: left;"><code>flatMap</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>flatMap</code></td>
+<td style="text-align: left;"><code>groupByKey</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>filter</code></td>
+<td style="text-align: left;"><code>reduceByKey</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>mapPartitions</code></td>
+<td style="text-align: left;"><code>combineByKey</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>mapPartitionsWithIndex</code></td>
+<td style="text-align: left;"><code>distinct</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>join</code> with sorted keys</td>
+<td style="text-align: left;"><code>join</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>intersection</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>repartition</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>coalesce</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>sort</code></td>
+</tr>
+</tbody>
+</table>
 
 Now that you have an idea of what the abstraction is about, let’s demonstrate
 some example code with the Spark shell. *If you want to paste pieces of code
@@ -596,7 +653,8 @@ This was a brief overview of the 2 (or 3) different Spark APIs. You can always
 find more information on the programming guides for [RDDs](https://spark.apache.org/docs/latest/rdd-programming-guide.html) and
 [Dataframes/Datasets](https://spark.apache.org/docs/latest/sql-programming-guide.html) and in the [Spark documentation](https://spark.apache.org/docs/2.3.1/api/scala/index.html#package)
 
-## SBT
+SBT
+---
 
 We showed how to run Spark in interactive mode. Now we will explain how to
 build applications, that can be submitted using the `spark-submit` command.
@@ -617,7 +675,7 @@ The project’s name, dependencies, and versioning is defined in the `build.sbt`
 file. An example `build.sbt` file is
 
     ThisBuild / scalaVersion := "2.11.12"
-    
+
     lazy val example = (project in file("."))
       .settings(
         name := "Example project",
@@ -692,10 +750,10 @@ We can also open an interactive session using SBT.
     [info] Starting scala interpreter...
     Welcome to Scala 2.11.12 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_102).
     Type in expressions for evaluation. Or try :help.
-    
+
     scala> example.Example.addOne('a', 1)
     res1: (Char, Int) = (a,2)
-    
+
     scala> println("Interactive environment")
     Interactive environment
 
@@ -703,11 +761,11 @@ To build Spark applications with SBT we need to include dependencies (Spark
 most notably) to build the project. Modify your `build.sbt` file like so
 
     ThisBuild / scalaVersion := "2.11.12"
-    
+
     lazy val example = (project in file("."))
       .settings(
         name := "Example project",
-    
+
         libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.1",
         libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1" 
       )
@@ -800,8 +858,8 @@ set to change the log levels programmatically, if desired.
 
     import org.apache.log4j.{Level, Logger}
     ...
-    
-    
+
+
     def main(args: Array[String]) {
         ...
         Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
@@ -811,7 +869,8 @@ set to change the log levels programmatically, if desired.
 You can also use this logger to log your application which might be helpful for
 debugging on the AWS cluster later on.
 
-## The GDelt Project
+The GDelt Project
+-----------------
 
 Now that we have introduced the different technologies, we can start talking
 about the goal of the first lab. In this lab you will write the application in
@@ -829,7 +888,8 @@ The entire dataset is split in 120164 csv files. We will provide
 you with a script that will download a number of sample files, as well as
 generate a file that can serve as an index where to load these files from.
 
-## Deliverables
+Deliverables
+------------
 
 The deliverables for the first lab are:
 
@@ -840,7 +900,8 @@ The deliverables for the first lab are:
 Your report and code will be discussed in a brief oral examination during the
 lab, the schedule of which will be posted on Brightspace.
 
-## Questions
+Questions
+---------
 
 General questions:
 
@@ -858,7 +919,7 @@ General questions:
 6.  Consider the following scenario. You are running a Spark program on a big
     data cluster with 10 worker nodes and a single master node. One of the
     worker nodes fails. In what way does Spark’s programming model help you
-    recover the lost work? (Think about the directed acyclic graph\!)
+    recover the lost work? (Think about the directed acyclic graph!)
 
 Implementation analysis questions:
 
@@ -878,13 +939,11 @@ Implementation analysis questions:
     takes to execute? The amount of money it takes to perform the analysis on
     the cluster? A combination of these two, or something else? Pick something
     you think would be an interesting metric, as this is the metric you will be
-    optimizing in the 2nd lab\!
+    optimizing in the 2nd lab!
 
-<!-- end list -->
+[1] In case you don’t have a credit card: In previous years, students have
+used prepaid credit cards (available online) to register.
 
-1.  In case you don’t have a credit card: In previous years, students have
-    used prepaid credit cards (available online) to register.
-
-2.  Since Java 8, Java also supports anonymous functions, or
-    lambda expression, but this version wasn’t released at the time of Spark’s
-    initial release.
+[2] Since Java 8, Java also supports anonymous functions, or
+lambda expression, but this version wasn’t released at the time of Spark’s
+initial release.
