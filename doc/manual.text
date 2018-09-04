@@ -623,6 +623,8 @@ structure is
 
 ```
 ├── build.sbt
+├── project
+│   └── build.properties
 └── src
     └── main
         └── scala
@@ -643,9 +645,12 @@ lazy val example = (project in file("."))
     name := "Example project",
   )
 ```
-
 This specifies the Scala version of the project (2.11.12) and the name of the
 project.
+
+If you run `sbt` in this folder it will generate the project directory and 
+`build.properties`. `build.properties` contains the SBT version that is
+used to build the project with, for backwards compatibility.
 
 Open `example.scala` and add the following
 
@@ -796,6 +801,8 @@ object ExampleSpark {
   }
 }
 ```
+You can build a JAR using the `package` command in SBT. This JAR will be
+located in the `target/scala-version/project_name_version.jar`.
 
 You can run the JAR via `spark-submit` (which will run on local mode).
 ```
@@ -848,25 +855,78 @@ local machine.
 We will use the GDelt version 2 GKG files. The format these files are in is tab
 separated values. The exact specification of each columns and details can be
 found in the [GKG codebook]. The schema of the files can be read in
-`headers.csv`. The columns that are most relevant are the "date" column and the
-"allNames" column.
+`headers.csv` in the `data` folder. The columns that are most relevant are the
+"date" column and the "allNames" column.
 
-The entire dataset is split in 120164 csv files. We will provide
-you with a script that will download a number of sample files, as well as
-generate a file that can serve as an index where to load these files from.
+In the `data` folder you will also find a script called `get_data`. This script
+will download a number of sample files to your computer, and generate a
+document with the paths to all these files.
+```{.sh}
+$./get_data 4
+...
+wget downloading
+...
 
+$cat local_index.txt
+/path/to/this/repo/SBD-2018/data/segment/20150218230000.gkg.csv
+/path/to/this/repo/SBD-2018/data/segment/20150218231500.gkg.csv
+/path/to/this/repo/SBD-2018/data/segment/20150218233000.gkg.csv
+/path/to/this/repo/SBD-2018/data/segment/20150218234500.gkg.csv
+```
+The script will put all downloaded files in the `segment` folder. `wget`
+timestamps the downloads, so it will not update the files when you want to
+generate a local index for 20 files if you had 10 before. 
+
+You can use these local files for the first lab assignment to test your
+application, and build some understanding of the scaling behaviour on a single
+machine. 
+
+An example output of this system based on 10 segments would be.
+```
+DateResult(2015-02-19,List((United States,1497), (Islamic State,1233), (New
+York,1058), (United Kingdom,735), (White House,723), (Los Angeles,620), (New
+Zealand,590), (Associated Press,498), (San Francisco,479), (Practice Wrestling
+Room,420)))
+DateResult(2015-02-18,List((Islamic State,1787), (United States,1210), (New
+York,727), (White House,489), (Los Angeles,424), (Associated Press,385), (New
+Zealand,353), (United Kingdom,325), (Jeb Bush,298), (Practice Wrestling
+Room,280)))
+```
+
+Or in JSON.
+```{.json}
+{"data":"2015-02-19","result":[{"topic":"United
+States","count":1497},{"topic":"Islamic State","count":1233},{"topic":"New
+York","count":1058},{"topic":"United Kingdom","count":735},{"topic":"White
+House","count":723},{"topic":"Los Angeles","count":620},{"topic":"New
+Zealand","count":590},{"topic":"Associated Press","count":498},{"topic":"San
+Francisco","count":479},{"topic":"Practice Wrestling Room","count":420}]}
+{"data":"2015-02-18","result":[{"topic":"Islamic
+State","count":1787},{"topic":"United States","count":1210},{"topic":"New
+York","count":727},{"topic":"White House","count":489},{"topic":"Los
+Angeles","count":424},{"topic":"Associated Press","count":385},{"topic":"New
+Zealand","count":353},{"topic":"United Kingdom","count":325},{"topic":"Jeb
+Bush","count":298},{"topic":"Practice Wrestling Room","count":280}]}
+```
+
+The exact counts can vary depending on how you count, for instance if a name
+is mentioned multiple times per article, do you count it once or multiple
+times? Something in between? Do you filter out some names that are false
+positives ("ParentCategory" seems to be a particular common one)? You are free
+to implement it whatever you think is best, and are encouraged to experiment
+with this. Document your choices in your report.
 
 ## Deliverables
 
 The deliverables for the first lab are:
 
-1. An RDD-based implementation,
-2. A Dataframe/Dataset-based implementation,
-3. A report outlining your approach and answers to the questions listed below.
+1.  An RDD-based implementation of the GDelt analysis,
+2.  A Dataframe/Dataset-based implementation of the GDelt analysis,
+3.  A report outlining your approach and implementation and answers to the
+    questions listed below.
 
 Your report and code will be discussed in a brief oral examination during the
 lab, the schedule of which will be posted on Brightspace.
-
 
 ## Questions
 
@@ -894,16 +954,18 @@ Implementation analysis questions:
 1.  Do you expect and observe big performance differences between the RDD and
     Dataframe/Dataset implementation of the GDelt analysis?
 2.  How will your application scale when increasing the amount of analyzed
-    files? What will the progression in execution time be for, 100, 1000, 10000
-    files?
-3.  If you extrapolate the scaling behavior on your machine to the entire
-    dataset, how much time will it take to process the entire dataset? Is this
-    extrapolation reasonable on a single machine?
-4.  Now suppose you had a cluster of identical machines that you performed the
+    segments? What do you expect the progression in execution time be for, 100,
+    1000, 10000 files?
+3.  If you extrapolate the scaling behavior on your machine (for instance for
+    10, 50, 100 segments) to the entire dataset, how much time will it take to
+    process the entire dataset? Is this extrapolation reasonable for a single
+    machine?
+4.  Now suppose you had a cluster of identical machines with that you performed the
     analysis on. How many machines do you think you would need to process the
-    entire dataset in under an hour?
+    entire dataset in under an hour? Do you think this is a valid
+    extrapolation?
 5.  Suppose you would run this analysis for a company. What do you think would
-    be a appropriate way to measure the performance? Would it be the time it
+    be an appropriate way to measure the performance? Would it be the time it
     takes to execute? The amount of money it takes to perform the analysis on
     the cluster? A combination of these two, or something else? Pick something
     you think would be an interesting metric, as this is the metric you will be
