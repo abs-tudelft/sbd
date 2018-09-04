@@ -659,8 +659,8 @@ SBT
 We showed how to run Spark in interactive mode. Now we will explain how to
 build applications, that can be submitted using the `spark-submit` command.
 
-First, we will explain how to structure a Scala project, using SBT. The typical project
-structure is
+First, we will explain how to structure a Scala project, using the [SBT build
+tool](https://www.scala-sbt.org). The typical project structure is
 
     ├── build.sbt
     ├── project
@@ -670,8 +670,8 @@ structure is
             └── scala
                 └── example.scala
 
-This is typical for JVM languages. Typically more directories are added under
-the `scala` folder to resemble the package structure.
+This is typical for JVM languages. More directories are added under the `scala`
+folder to resemble the package structure.
 
 The project’s name, dependencies, and versioning is defined in the `build.sbt`
 file. An example `build.sbt` file is
@@ -960,39 +960,42 @@ The deliverables for the first lab are:
 
 1.  An RDD-based implementation of the GDelt analysis,
 2.  A Dataframe/Dataset-based implementation of the GDelt analysis,
-3.  A report outlining your approach and implementation and answers to the
-    questions listed below.
+3.  A report containing:
+    1.  Outline of your implementation and approach (½–1 page);
+    2.  Pointwise answers to the questions listed below.
 
 Your report and code will be discussed in a brief oral examination during the
 lab, the schedule of which will be posted on Brightspace.
+
+The deadline of this lab will be announced on Brightspace.
 
 Questions
 ---------
 
 General questions:
 
-1.  Can you think of a problem/computation that does not fit Spark’s
-    MapReduce-esque programming model efficiently.
-2.  In typical use, what kind of operation would be more expensive, a narrow
+1.  In typical use, what kind of operation would be more expensive, a narrow
     dependency or a wide dependency? Why?
-3.  Why do you think the MapReduce paradigm is such a widely utilized
-    abstraction for distributed shared memory processing and fault-tolerance?
-4.  What is the shuffle operation and why is it such an important topic in
+2.  What is the shuffle operation and why is it such an important topic in
     Spark optimization?
-5.  In what way can Dataframes and Datasets improve performance both in
+3.  In what way can Dataframes and Datasets improve performance both in
     compute, but also in the distributing of data compared to RDDs? Will
     Dataframes and Datasets always perform better than RDDs?
-6.  Consider the following scenario. You are running a Spark program on a big
+4.  Consider the following scenario. You are running a Spark program on a big
     data cluster with 10 worker nodes and a single master node. One of the
     worker nodes fails. In what way does Spark’s programming model help you
     recover the lost work? (Think about the directed acyclic graph!)
+5.  Can you think of a problem/computation that does not fit Spark’s
+    MapReduce-esque programming model efficiently.
+6.  Why do you think the MapReduce paradigm is such a widely utilized
+    abstraction for distributed shared memory processing and fault-tolerance?
 
 Implementation analysis questions:
 
 1.  Do you expect and observe big performance differences between the RDD and
     Dataframe/Dataset implementation of the GDelt analysis?
 2.  How will your application scale when increasing the amount of analyzed
-    segments? What do you expect the progression in execution time be for, 100,
+    segments? What do you expect the progression in execution time will be for, 100,
     1000, 10000 files?
 3.  If you extrapolate the scaling behavior on your machine (for instance for
     10, 50, 100 segments) to the entire dataset, how much time will it take to
