@@ -146,7 +146,9 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in [@fig:ganglia].
 
-![Example workload overview on Apache Ganglia](./fig/ganglia){#fig:ganglia}
+![Example workload overview on Apache
+Ganglia, taken from [this post][Ganglia
+screenshot]](./images/ganglia.png){#fig:ganglia}
 
 It's not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
@@ -215,3 +217,5 @@ and why they improved your metric.
   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
   [Amazon web interfaces]:
   https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html
+  [Ganglia screenshot]:
+  http://timstaley.co.uk/posts/why-ganglia/
