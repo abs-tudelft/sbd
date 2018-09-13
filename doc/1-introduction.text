@@ -1,0 +1,93 @@
+---
+title:
+- Supercomputing for Big Data -- Lab Manual
+
+author:
+- R.P. Hes
+- T.C. Leliveld
+---
+
+Introduction {#introduction .unnumbered}
+============
+
+In this lab we will put the concepts that are central to Supercomputing with
+Big Data in some practical context. We will analyze a large open data set and
+identify a way of processing it efficiently using [Apache Spark] and the
+[Amazon Web Services] (AWS). The data set in question is the [GDelt 2.0 Global
+Knowledge Graph] (GKG), which indexes persons, organizations, companies,
+locations, themes, and even emotions from live news reports in print, broadcast
+and internet sources all over the world. We will use this data to construct a
+histogram of the topics that are most popular on a given day, hopefully giving
+us some interesting insights into the most important themes in recent history.
+
+Feedback is appreciated! The lab files will be hosted on [GitHub]. Feel free to
+make issues and/or pull requests to suggest or implement improvements.
+
+Before You Start
+----------------
+
+The complete data set we will be looking at in lab 2 weighs in at
+several terabytes, so we need some kind of compute and storage infrastructure
+to run the pipeline. In this lab we will use Amazon AWS to facilitate this. As
+a student you are eligible for credits on this platform. We would like you to
+register for the [GitHub Student Developer Pack], as soon as you decide to
+take this course. This gives you access to around 100 dollars worth of credits.
+This should be ample to complete lab 2. Note that you need a credit card
+to apply[^credit_card]. Don't forget to follow to register on AWS using the
+referral link from Github.
+
+[^credit_card]: In case you don't have a credit card: In previous years, students have 
+used prepaid credit cards (available online) to register. 
+
+**Make sure you register for these credits as soon as possible! You can always
+send an email to the TAs if you run into any trouble.**
+
+**Before the end of the first week (Sunday 09/09/18), please send your TUDelft
+email address to the TAs to register for the lab**
+
+Goal of this Lab
+----------------
+
+The goal of this lab is to:
+
+-   familiarize yourself with Apache Spark, the MapReduce programming model,
+    and Scala as a programming language;
+-   learn how to characterize your big data problem analytically and
+    practically and what machines best fit this profile;
+-   get hands-on experience with cloud-based systems;
+-   learn about the existing infrastructure for big data and the difficulties
+    with these; and
+-   learn how an existing application should be modified to function in a
+    streaming data context.
+
+You will work in groups of two. In this lab manual we will introduce a big data
+pipeline for identifying important events from the GDelt Global Knowledge Graph
+(GKG). 
+
+In lab 1, you will start by writing a Spark application that processes the
+GDelt dataset. You will run this application on a small subset of data on 
+your local computer. You will use this to 
+
+1.  get familiar with the Spark APIs,
+2.  analyze the application's scaling behavior, and
+3.  draw some conclusions on how to run it efficiently in the cloud.
+
+It is up to you how you want to define *efficiently*, which can be in terms of 
+performance, cost, or a combination of the two.
+
+You may have noticed that the first lab does not contain any supercomputing,
+let alone big data. For lab 2, you will deploy your code on AWS, in an actual
+big data cluster, in an effort to scale up your application to process the
+complete dataset, which measures several terabytes. It is up to you to find the
+configuration that will get you the most efficiency, as per your definition in
+lab 1.
+
+For the final lab, we will modify the code from lab 1 to work in a streaming
+data context. You will attempt to rewrite the application to process events in
+real-time, in a way that is still scalable over many machines.
+
+  [Amazon Web Services]: https://aws.amazon.com
+  [GitHub]: https://github.com/Tclv/SBD-2018
+  [GDelt 2.0 Global Knowledge Graph]:
+  https://blog.gdeltproject.org/introducing-gkg-2-0-the-next-generation-of-the-gdelt-global-knowledge-graph/
+  [Apache Spark]: https://spark.apache.org
