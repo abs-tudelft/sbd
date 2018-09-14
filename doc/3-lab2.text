@@ -91,7 +91,7 @@ single application. You can choose to add steps in the creation of the cluster,
 but this can also be done at a later time. Press *next*.
 
 In the *Hardware Configuration* screen, we can configure the arrangement and
-selection of the machines. We suggest starting out with *m4.large* machines on
+selection of the machines. We suggest starting out with `m4.large` machines on
 spot pricing. You should be fine running a small example workload with a single
 master node and two core nodes.[^1][^2] Be sure to select *spot pricing* and
 place an appropriate bid. Remember that you can always check the current prices
@@ -100,7 +100,7 @@ selecting the machines, press *next*.
 
 [^1]: You always need a master node, which is tasked with distributing
     resources and managing tasks for the core nodes. We recommend always using
-    the cheap *m4.large* instance. If you start to notice unexplained
+    the cheap `m4.large` instance. If you start to notice unexplained
     bottlenecks for tasks with many machines and a lot of data, you might want
     to try a larger master node, but we don't expect that to be necessary.
 
@@ -173,40 +173,48 @@ to AWS, here are some general clues:
 
 ## Assignment
 
-For this lab, we would like you to find the best configuration possible on AWS
-for your
-chosen metric, given you want to process the entire dataset using your
-application from lab 1. You are free to change anything, but some suggestions
-are (you don't have to do all these!):
+For this lab, we would like you to process the entire dataset, meaning all
+segments, with `m4.8xlarge` core nodes, in under an hour, using your
+solution from lab 1. This should cost you less than 12 dollars.
 
--   Find bottlenecks using Apache Ganglia (need more network I/O, or more CPU?,
-    more memory?)
+Note that this means that you should evaluate whether you application scales
+well enough to achieve this before attempting to run it on the entire dataset.
+Your answers to the questions in lab 1 should help you to determine this, but
+to reiterate: consider e.g. how long it will take to run
+
+1. 1000 segments compared to 10000 segments?
+2. on 4 virtual cores compared to 8, and what about 32?
+
+If your application is not efficient enough right away, you should analyze its
+bottlenecks and modify it accordingly, or try to gain some extra performance by
+modifying the way Spark is configured.
+You can try a couple of runs on the entire dataset when you have a good
+understanding of what might happen on the entire dataset.
+
+For extra points, we challenge you to come up with an even quicker or more
+cost-effective solution. You are free to change anything, but some suggestions
+are:
+
+-   Find additional bottlenecks using Apache Ganglia (need more network I/O, or
+    more CPU?, more memory?)
 -   Tuning the kind and number of machines you use on AWS, based on these
     bottlenecks
 -   Modifying the application to increase performance
 -   Tuning Yarn/Spark configuration flags to best match the problem
 
-The best way to achieve this is to build an understanding of the scaling
-behavior of the problem, e.g. how long does it take to run
-
-1. 1000 segments compared to 10000 segments?
-2. on 4 virtual cores compared to 8?
-
-You can try a couple of runs on the entire dataset when you have a good
-understanding of what might happen on the entire dataset.
 
 ## Deliverables
 
 -   A report outlining your choices in terms of configuration and your results.
 -   A presentation (maximum 5 slides/minutes) in which you present your work
-    (and metric) and results to the class. Try to put an emphasis on the
+    and results to the class. Try to put an emphasis on the
     improvements you found, what kind of settings/configurations/changes had
-    the most impact for your metric.
+    the most impact.
 
 In the report, there should be a justification for why you chose the cluster
 configuration you did. If you have measurements for multiple cluster
 configurations please include them. Also detail all the improvements you found,
-and why they improved your metric.
+and why they improved effectiveness.
 
   [EC2]: https://aws.amazon.com/ec2/
   [EMR]: https://aws.amazon.com/emr/

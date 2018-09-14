@@ -28,4 +28,4 @@ manual.md : $(INPUT)
 all : $(EXPORTED_DOCS)
 
 clean:
-	rm $(EXPORTED_DOCS)
+	rm -f $(EXPORTED_DOCS)
