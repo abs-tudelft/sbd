@@ -99,10 +99,11 @@ in the information popup or on the [Amazon website][EC2 website]. After
 selecting the machines, press *next*.
 
 [^1]: You always need a master node, which is tasked with distributing
-    resources and managing tasks for the core nodes. We recommend always using
+    resources and managing tasks for the core nodes. We recommend using
     the cheap `m4.large` instance. If you start to notice unexplained
     bottlenecks for tasks with many machines and a lot of data, you might want
-    to try a larger master node, but we don't expect that to be necessary.
+    to try a larger master node. Ganglia should provide you with some insights
+    regarding this matter.
 
 [^2]: By default, there are some limitations on the number of spot instances
     your account is allowed to provision. If you don't have access to enough
@@ -131,7 +132,7 @@ of argument to the application, spark-submit, as well as your action on
 failure.
 
 **Make sure you do not try to process the entire dataset in your
-initial run, but similarly to lab 1 start with a few files, to confirm that the
+initial run, but, similar to lab 1, start with a few files, to confirm that the
 application works as intended**
 
 The setup will take some time to finish, so in the meantime you should
@@ -146,9 +147,7 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in [@fig:ganglia].
 
-![Example workload overview on Apache
-Ganglia, taken from [this post][Ganglia
-screenshot]](./images/ganglia.png){#fig:ganglia}
+![Ganglia screenshot](./images/ganglia.png){#fig:ganglia}
 
 It's not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
@@ -174,8 +173,9 @@ to AWS, here are some general clues:
 ## Assignment
 
 For this lab, we would like you to process the entire dataset, meaning all
-segments, with `m4.8xlarge` core nodes, in under an hour, using your
-solution from lab 1. This should cost you less than 12 dollars.
+segments, with 20 `c4.8xlarge` core nodes, in under an hour, using your
+solution from lab 1. This should cost you less than 12 dollars and is the
+minimum requirement.
 
 Note that this means that you should evaluate whether you application scales
 well enough to achieve this before attempting to run it on the entire dataset.
@@ -191,9 +191,9 @@ modifying the way Spark is configured.
 You can try a couple of runs on the entire dataset when you have a good
 understanding of what might happen on the entire dataset.
 
-For extra points, we challenge you to come up with an even quicker or more
-cost-effective solution. You are free to change anything, but some suggestions
-are:
+For extra points, we challenge you to come up with an even better solution
+according to the metric you defined in lab 1. You are free to change anything,
+but some suggestions are:
 
 -   Find additional bottlenecks using Apache Ganglia (need more network I/O, or
     more CPU?, more memory?)
@@ -225,5 +225,3 @@ and why they improved effectiveness.
   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
   [Amazon web interfaces]:
   https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html
-  [Ganglia screenshot]:
-  http://timstaley.co.uk/posts/why-ganglia/
