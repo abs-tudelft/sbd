@@ -11,7 +11,9 @@ PANDOC_OPTIONS_LATEX=--pdf-engine=xelatex --variable papersize=a4 --variable doc
 
 PANDOC_OPTIONS_MD= -t markdown_github --wrap=preserve --default-image-extension=png
 
-EXPORTED_DOCS=manual.pdf manual.md
+EXPORTED_DOCS=manual.md manual.pdf
+
+all : $(EXPORTED_DOCS)
 
 manual.pdf : $(INPUT)
 	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_OPTIONS_LATEX) -o $@ $(INPUT)
@@ -25,7 +27,6 @@ manual.md : $(INPUT)
 
 .PHONY: all clean
 
-all : $(EXPORTED_DOCS)
 
 clean:
 	rm -f $(EXPORTED_DOCS)
