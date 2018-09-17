@@ -1210,6 +1210,8 @@ but some suggestions are:
 -   Modifying the application to increase performance
 -   Tuning Yarn/Spark configuration flags to best match the problem
 
+There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tuning.html) tuning on the Spark website
+
 Deliverables
 ------------
 

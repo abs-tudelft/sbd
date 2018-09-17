@@ -202,6 +202,8 @@ but some suggestions are:
 -   Modifying the application to increase performance
 -   Tuning Yarn/Spark configuration flags to best match the problem
 
+There is a [guide to Spark performance] tuning on the Spark website.
+
 
 ## Deliverables
 
@@ -225,3 +227,4 @@ and why they improved effectiveness.
   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
   [Amazon web interfaces]:
   https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html
+  [guide to Spark performance]: https://spark.apache.org/docs/latest/tuning.html
