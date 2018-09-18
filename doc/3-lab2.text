@@ -173,7 +173,7 @@ to AWS, here are some general clues:
 ## Assignment
 
 For this lab, we would like you to process the entire dataset, meaning all
-segments, with 20 `c4.8xlarge` core nodes, in under an hour, using your
+segments, with 20 `c4.8xlarge` core nodes, in under half an hour, using your
 solution from lab 1. This should cost you less than 12 dollars and is the
 minimum requirement.
 

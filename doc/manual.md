@@ -1181,7 +1181,7 @@ Assignment
 ----------
 
 For this lab, we would like you to process the entire dataset, meaning all
-segments, with 20 `c4.8xlarge` core nodes, in under an hour, using your
+segments, with 20 `c4.8xlarge` core nodes, in under half an hour, using your
 solution from lab 1. This should cost you less than 12 dollars and is the
 minimum requirement.
 
@@ -1210,7 +1210,7 @@ but some suggestions are:
 -   Modifying the application to increase performance
 -   Tuning Yarn/Spark configuration flags to best match the problem
 
-There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tuning.html) tuning on the Spark website
+There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tuning.html) tuning on the Spark website.
 
 Deliverables
 ------------
