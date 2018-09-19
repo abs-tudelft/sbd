@@ -119,8 +119,6 @@ a *EC2 keypair*, it is recommended that you do so now. This will allow you to
 access the Yarn, Spark, and Ganglia web interfaces in your browser. This makes
 debugging and monitoring the execution of your Spark Job much more manageable.
 To create a *EC2 keypair*, follow [these instructions][keypair instructions].
-To use the newly created keypair to acess the AWS web interfaces, see [this
-link][Amazon web interfaces].
 
 After this has all been completed you are ready to spin up your first cluster
 by pressing *Create cluster*. Once the cluster has been created, AWS will start
