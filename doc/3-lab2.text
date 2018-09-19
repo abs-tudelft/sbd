@@ -171,7 +171,7 @@ to AWS, here are some general clues:
 ## Assignment
 
 For this lab, we would like you to process the entire dataset, meaning all
-segments, with 20 `c4.8xlarge` core nodes, in under an hour, using your
+segments, with 20 `c4.8xlarge` core nodes, in under half an hour, using your
 solution from lab 1. This should cost you less than 12 dollars and is the
 minimum requirement.
 
@@ -200,6 +200,8 @@ but some suggestions are:
 -   Modifying the application to increase performance
 -   Tuning Yarn/Spark configuration flags to best match the problem
 
+There is a [guide to Spark performance] tuning on the Spark website.
+
 
 ## Deliverables
 
@@ -223,3 +225,4 @@ and why they improved effectiveness.
   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
   [Amazon web interfaces]:
   https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html
+  [guide to Spark performance]: https://spark.apache.org/docs/latest/tuning.html
