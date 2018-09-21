@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     xz = x
     xaxis = d3.axisBottom(xz)
+
+    xaxis.tickFormat(d3.timeFormat("%e %b %Y"))
+
     drawPoints(x.ticks())
     xAxisPath = svg.append("g")
       .attr("transform", "translate(0," + String(height-40) + ")")
