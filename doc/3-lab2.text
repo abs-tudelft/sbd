@@ -65,13 +65,13 @@ aws s3 cp path/to/file s3://destination-bucket/path/to/file
 To copy a directory recursively
 
 ``` {.bash}
-aws 3 cp --recursive s3://origin-bucket/path/to/file
+aws s3 cp --recursive s3://origin-bucket/path/to/file
 ```
 
 To move a file
 
 ``` {.bash}
-aws 3 mv path/to/file s3://destination-bucket/path/to/file
+aws s3 mv path/to/file s3://destination-bucket/path/to/file
 ```
 
 The aws-cli contains much more functionality, which can be found on the
