@@ -1,6 +1,6 @@
-const margin = ({top: 20, right: 0, bottom: 80, left: 40})
-const height = 500
-const width = 800
+const margin = ({top: 20, right: 0, bottom: 180, left: 100})
+const height = 700
+const width = 1280
 
 let ws = undefined
 
