@@ -2,6 +2,8 @@ const margin = ({top: 20, right: 0, bottom: 80, left: 40})
 const height = 500
 const width = 800
 
+let ws = undefined
+
 let enabled = false
 
 const testButton = document.querySelector("#test")
@@ -22,28 +24,11 @@ const y = d3.scaleLinear()
 
 function toggle(event) {
   if (event.target.id === "test") {
-    if (enabled) {
-      testButton.innerHTML = "Start test"
-      clearInterval(intervalId)
-    }
-    else {
-      testButton.innerHTML = "Stop test"
-      intervalId = window.setInterval(sendUpdate, 1000)
-    }
-    websocketButton.disabled = !enabled
+    toggleTest()
   }
 
   if (event.target.id === "websocket") {
-    if (enabled) {
-      websocketButton.innerHTML = "Start websocket"
-      ws.close()
-    }
-    else {
-      websocketButton.innerHTML = "Stop websocket"
-      let ws = new WebSocket("ws://localhost:1337")
-      ws.onmessage = (event) => onUpdate(event.data)
-    }
-    testButton.diabled = !enabled
+    toggleWebSocket()
   }
 
   if (!enabled) {
@@ -53,6 +38,40 @@ function toggle(event) {
 
   enabled = !enabled
 }
+
+function toggleTest() {
+
+  if (enabled) {
+    testButton.innerHTML = "Start test"
+    clearInterval(intervalId)
+  }
+  else {
+    testButton.innerHTML = "Stop test"
+    intervalId = window.setInterval(sendUpdate, 1000)
+  }
+  websocketButton.disabled = !enabled
+}
+
+function toggleWebSocket() {
+  if (enabled) {
+    websocketButton.innerHTML = "Start websocket"
+    ws.close()
+  }
+  else {
+    websocketButton.innerHTML = "Stop websocket"
+    ws = new WebSocket("ws://localhost:1337")
+    ws.onmessage = (event) => onUpdate("websocket", JSON.parse(event.data))
+    ws.onclose = onClose
+  }
+  testButton.diabled = !enabled
+}
+
+function onClose() {
+  websocketButton.innerHTML = "Start websocket"
+  testButton.disabled = false
+  enabled = false
+}
+
 
 function randInt(min, max) {
   // Sample a random integer from [min, max)
@@ -99,9 +118,9 @@ const updateChart = () => {
 
   xAxis.attr("transform", `translate(0,${height - margin.bottom})`)
     .selectAll("text")
-      .attr("dx", -9)
-      .attr("transform", "rotate(-45)")
-      .style("text-anchor", "end");
+    .attr("dx", -9)
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end");
 
   // Set up y-axis
   y.domain([0, d3.max(data.values())])
@@ -136,17 +155,27 @@ const updateChart = () => {
   bars.selectAll("rect").exit().remove()
 }
 
-const onUpdate = (payload) => {
-  const updates = Array.isArray(payload) ? payload : [ payload ]
+const onUpdate = (type, update) => {
+  let value = 0
+  if (type === "websocket") {
+    value = update.count
+  }
+  else if (type === "test") {
+    value = data.get(update.name) + update.increment || update.increment
+  }
 
-  for (const update of updates) {
+  if (value === 0) {
+    data.remove(update.name)
+  }
+  else {
     data.set(
       update.name,
-      data.get(update.name) + update.increment || update.increment
+      value
     )
   }
+
   updateChart()
 }
 
 const svg = chart()
-document.addEventListener("testUpdate", (event) => onUpdate(event.detail) )
+document.addEventListener("testUpdate", (event) => onUpdate("test", event.detail) )
