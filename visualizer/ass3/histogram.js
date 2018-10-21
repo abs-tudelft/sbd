@@ -60,7 +60,7 @@ function toggleWebSocket() {
   else {
     websocketButton.innerHTML = "Stop websocket"
     ws = new WebSocket("ws://localhost:1337")
-    ws.onmessage = (event) => onUpdate("websocket", JSON.parse(event.data))
+    ws.onmessage = (event) => {console.log(event.data); onUpdate("websocket", JSON.parse(event.data)) }
     ws.onclose = onClose
   }
   testButton.diabled = !enabled
@@ -155,23 +155,26 @@ const updateChart = () => {
   bars.selectAll("rect").exit().remove()
 }
 
-const onUpdate = (type, update) => {
-  let value = 0
-  if (type === "websocket") {
-    value = update.count
-  }
-  else if (type === "test") {
-    value = data.get(update.name) + update.increment || update.increment
-  }
+const onUpdate = (type, payload) => {
+  payload = Array.isArray(payload) ? payload : [ payload ]
+  for (const update of payload) {
+    let value = 0
+    if (type === "websocket") {
+      value = update.count
+    }
+    else if (type === "test") {
+      value = data.get(update.name) + update.increment || update.increment
+    }
 
-  if (value === 0) {
-    data.remove(update.name)
-  }
-  else {
-    data.set(
-      update.name,
-      value
-    )
+    if (value === 0) {
+      data.remove(update.name)
+    }
+    else {
+      data.set(
+        update.name,
+        value
+      )
+    }
   }
 
   updateChart()
