@@ -1016,13 +1016,13 @@ aws s3 cp path/to/file s3://destination-bucket/path/to/file
 To copy a directory recursively
 
 ``` bash
-aws 3 cp --recursive s3://origin-bucket/path/to/file
+aws s3 cp --recursive s3://origin-bucket/path/to/file
 ```
 
 To move a file
 
 ``` bash
-aws 3 mv path/to/file s3://destination-bucket/path/to/file
+aws s3 mv path/to/file s3://destination-bucket/path/to/file
 ```
 
 The aws-cli contains much more functionality, which can be found on the
@@ -1152,6 +1152,130 @@ In the report, there should be a justification for why you chose the cluster
 configuration you did. If you have measurements for multiple cluster
 configurations please include them. Also detail all the improvements you found,
 and why they improved effectiveness.
+
+# Lab 3
+
+In the third and final lab of SBD we will be implementing a streaming
+application. As many of you have noted in the first lab questions, Spark is not
+well suited for real-time streaming, because of its batch-processing nature.
+Therefore, we will be using *Apache Kafka* for this lab. You will be provided
+with a Kafka stream of GDELT records, for which we want you to create a
+histogram of the most popular topics of the last hour that will continuously
+update. We included another visualizer for this lab that you can see in
+fig. 3.
+
+Apache Kafka is a distributed streaming platform. The core abstraction is that
+of a message queue, to which you can both publish and subscribe to streams of
+records. Each queue is named by means of a topic. Apache Kafka is:
+
+  - Resilient by means of replication;
+  - Scalable on a cluster;
+  - High-throughput and low-latency; and
+  - A persistent store.
+
+Kafka consists of 4 APIs, from the Kafka docs:
+
+  - The Producer API  
+    allows an application to publish a stream of records to one or more Kafka
+    topics.
+  - The Consumer API  
+    allows an application to subscribe to one or more topics and process the
+    stream of records produced to them.
+  - The Streams API  
+    allows an application to act as a stream processor, consuming an input
+    stream from one or more topics and producing an output stream to one or
+    more output topics, effectively transforming the input streams to output
+    streams.
+  - The Connector API  
+    allows building and running reusable producers or consumers that connect
+    Kafka topics to existing applications or data systems. For example, a
+    connector to a relational database might capture every change to a table.
+
+Before you start with the lab, please read the [Introduction to Kafka on the Kafka
+website](https://kafka.apache.org/intro), to become familiar with the Apache
+Kafka abstraction and internals. You can find instructions on how to [install
+Kafka on your machine here](https://kafka.apache.org/quickstart). A good
+introduction to the [Kafka stream API can be found
+here](https://docs.confluent.io/current/streams/quickstart.html). We recommend
+you go through the code and examples.
+
+![Figure 3: Visualizer for the streaming
+application](./images/stream_visualizer.png)
+
+In the lab’s repository you will find a template for your solution. There are a
+bunch of scripts (`.sh` for MacOS/Linux, `.bat` for Windows). For these scripts
+to work you first will have to define a `KAFKA_HOME` environment variable to
+the root of the Kafka installation directory. The Kafka installation directory
+should contain the following directories:
+
+    $ tree .
+    ├── bin
+    │   └── windows
+    ├── config
+    ├── libs
+    └── site-docs
+
+Once that has been set up, copy the lab files from the GitHub repository. Try
+to run the `kafka_start.sh` or `kafka_start.bat` depending on your OS. If you
+receive an error about being unable to find a `java` binary, make sure you have
+Java installed and it is in your path.
+
+The `kafka_start` script does a number of things:
+
+1.  Start a Zookeeper server, which acts as a naming, configuration and task
+    coordination server, on port 2181
+2.  Start a single Kafka broker on port 9092
+
+Navigate to the GDELTProducer directory, and run `sbt run` to start the GDelt
+stream.
+
+We can now inspect the output of the `gdelt` topic by running the following
+command on MacOS/Linux
+
+    $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+        --topic gdelt --property print.key=true --property key.separator=-
+
+or on Windows
+
+    %KAFKA_HOME%/bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 \
+            --topic gdelt --property print.key=true --property key.separator=-
+
+If you see output appearing, you are now ready to start on the assignment.
+
+You are now tasked with writing an implementation of the histogram server.
+In the file `GDELTStream/GDELTStream.scala` you will have to implement the
+following
+
+  - `Gdelt row processing`  
+    In the main function you will first have to write a function that filters
+    the GDELT lines to a stream of allNames column. You can achieve this using
+    the high-level API of Kafka Streams, on the `KStream` object.
+  - `HistogramTransformer`  
+    You will have to implement the HistogramTransformer using the
+    processor/transformer API of kafka streams, to convert the stream of
+    allNames into a histogram of the last hour. We suggest you look at [state
+    store for Kafka streaming](https://kafka.apache.org/20/documentation/streams/developer-guide/processor-api.html).
+
+You will have to write the result of this stream to a new topic called
+`gdelt-histogram`.
+
+To run the visualizer, first start the websocket server by navigating to the
+GDELTConsumer directory and running `sbt run`. Next, navigate to the
+visualization directory in the root of the GitHub repository, under assignment
+3, open index.html. Once that is opened, press open web socket to start
+the visualization.
+
+## Deliverables
+
+  - A complete zip of the entire project, including your implementation of
+    `GDELTStream.scala` (please remove all data files from the zip\!)
+  - A report containing
+      - Outline of the code (less than 1/2 a page)
+      - Answers to the questions listed below
+
+## Questions
+
+To be posted later\!
 
 1.  In case you don’t have a credit card: In previous years, students have
     used prepaid credit cards (available online) to register.

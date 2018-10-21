@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: sans-serif;
+}
+button {
+  vertical-align: middle;
+}
+input[type=checkbox],
+input[type=radio] {
+  position: relative;
+  bottom: 4px;
+}
+</style>
+<head>
+  <title>Supercomputing for Big Data &mdash; Lab 3 Visualizer</title>
+</head>
+<body>
+  <h1>Supercomputing for Big Data &mdash; Lab 3 Visualizer</h1>
+  <p>
+    <button id="test">Start test</button>
+    <button id="websocket">Start websocket</button>
+  </p>
+  <p>
+    <b>Sort by: </b>
+    <label>name <input type="radio" name="sortBy" class="sortBy" value="key" checked/></label>
+    <label>count <input type="radio" name="sortBy" class="sortBy" value="value"/></label>
+  </p>
+  <p>
+    <b>Order: </b>
+    <label>ascending <input type="radio" name="sortOrder" class="sortOrder" value="asc" checked/></label>
+    <label>descending <input type="radio" name="sortOrder" class="sortOrder" value="desc"/></label>
+  </p>
+<body>
+<script src="http://d3js.org/d3.v5.js"></script>
+<script src="./histogram.js"></script>
+<script src="./tester.js"></script>
