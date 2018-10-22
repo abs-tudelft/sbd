@@ -80,16 +80,22 @@ Navigate to the GDELTProducer directory, and run `sbt run` to start the GDelt
 stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
-command on MacOS/Linux
+command on MacOS/Linux:
 ```
 $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
     --topic gdelt --property print.key=true --property key.separator=-
 ```
 
-or on Windows
+Or on Windows PowerShell:
 
 ```
-%KAFKA_HOME%/bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 \
+$env:KAFKA_HOME\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 `
+        --topic gdelt --property print.key=true --property key.separator=-
+```
+
+Or on Windows cmd:
+```
+%KAFKA_HOME%\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 ^
         --topic gdelt --property print.key=true --property key.separator=-
 ```
 
