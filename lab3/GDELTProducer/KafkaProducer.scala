@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.{StringSerializer, StringDeserializ
 import scala.io.{Codec, Source}
 import scala.collection.mutable.Queue
 import scala.math.max;
+import scala.util.{Try, Success, Failure}
 
 import java.util.{Calendar, Properties};
 import java.io.File;
@@ -62,8 +63,14 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
   } 
 
   def parseTimeStamp(ts: String) : (Long, Long) = {
-    val Array(a, b) = ts.split("-").map(_.toLong)
-    (a, b)
+    val parse = Try( {
+      val Array(a, b) = ts.split("-").map(_.toLong)
+      (a, b)
+    })
+    parse match {
+      case Success(a) => a
+      case Failure(_) => (0, 0)
+    }
   }
 
 
