@@ -51,13 +51,14 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
     val newPos = position - 1
     if (newPos >= 0) {
       consumer.seek(topicPart, newPos)
+      val lastRecord = consumer.poll(pollDelay).records(topic).toSeq.last
+      consumer.close()
+      lastRecord.key
+    } else {
+      consumer.close()
+      return "20150218230000-0"
     }
 
-    val lastRecord = consumer.poll(pollDelay).records(topic).toSeq.last
-
-    consumer.close()
-
-    lastRecord.key
   } 
 
   def parseTimeStamp(ts: String) : (Long, Long) = {
