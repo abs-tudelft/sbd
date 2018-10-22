@@ -112,8 +112,7 @@ object GDELTProducer{
 
   def main(args: Array[String]): Unit = {
     val credentialProviderChain = new DefaultAWSCredentialsProviderChain()
-    val s3 = AmazonS3ClientBuilder.defaultClient
-      .setRegion("us-east-1")
+    val s3 = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build
     val tx = TransferManagerBuilder
       .standard()
       .withS3Client(s3)
