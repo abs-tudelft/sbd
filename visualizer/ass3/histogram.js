@@ -182,3 +182,4 @@ const onUpdate = (type, payload) => {
 
 const svg = chart()
 document.addEventListener("testUpdate", (event) => onUpdate("test", event.detail) )
+document.querySelectorAll("input[type=radio]").forEach((el) => el.addEventListener('change', updateChart))
