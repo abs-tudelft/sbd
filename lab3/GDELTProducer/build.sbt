@@ -11,7 +11,7 @@ lazy val example = (project in file("."))
         sys.props += "packaging.type" -> "jar"
         "org.apache.kafka" %% "kafka-streams-scala" % "2.0.0"
         },
-        "com.amazonaws" % "aws-java-sdk-s3" % "1.11.425"
+        "com.amazonaws" % "aws-java-sdk-s3" % "1.11.432"
       )
   )
 

@@ -1,9 +1,9 @@
 import com.amazonaws.auth._;
-import com.amazonaws.services.s3.model._;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.transfer._;
-import com.amazonaws.client.builder._
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3._;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import java.util.concurrent.{LinkedBlockingQueue, ScheduledThreadPoolExecutor, TimeUnit};
 import java.io.File;
