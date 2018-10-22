@@ -15,6 +15,8 @@
     -   [Assignment](#assignment)
     -   [Deliverables](#deliverables-1)
 -   [Lab 3](#lab-3)
+    -   [Setting up](#setting-up)
+    -   [Assignment](#assignment-1)
     -   [Deliverables](#deliverables-2)
     -   [Questions](#questions-1)
 
@@ -165,9 +167,10 @@ We will consider both here shortly.
 
 ### Resilient Distributed Datasets
 
-<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" />
-
-RDDs are the original data abstraction used in Spark. Conceptually one can
+<figure>
+<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" /><figcaption>Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
+integers as elements.</figcaption>
+</figure>RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
 call these objects elements. This list of elements is divided in partitions
 (which may still contain multiple elements), which can reside on different
@@ -185,11 +188,11 @@ instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in fig. 1 as the arrows between
 elements.
 
-<table style="width:60%;">
+<table style="width:61%;">
 <caption>Table 1: List of wide and narrow dependencies for (pair) RDD operations</caption>
 <colgroup>
 <col style="width: 37%" />
-<col style="width: 22%" />
+<col style="width: 23%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1156,9 +1159,9 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in fig. 2.
 
-<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" />
-
-It’s not uncommon to run into problems when you first deploy your application
+<figure>
+<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" /><figcaption>Figure 2: Ganglia screenshot</figcaption>
+</figure>It’s not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
 
 -   You can access S3 files directly using Spark, so via
@@ -1277,7 +1280,11 @@ introduction to the [Kafka stream API can be found
 here](https://docs.confluent.io/current/streams/quickstart.html). We recommend
 you go through the code and examples.
 
-<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" />
+<figure>
+<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" /><figcaption>Figure 3: Visualizer for the streaming
+application</figcaption>
+</figure>Setting up
+----------
 
 In the lab’s repository you will find a template for your solution. There are a
 bunch of scripts (`.sh` for MacOS/Linux, `.bat` for Windows). For these scripts
@@ -1303,7 +1310,7 @@ The `kafka_start` script does a number of things:
     coordination server, on port 2181
 2.  Start a single Kafka broker on port 9092
 
-Navigate to the GDELTProducer directory, and run `sbt run` to start the GDelt
+Navigate to the GDELTProducer directory, and run `sbt run` to start the GDELT
 stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
@@ -1324,11 +1331,47 @@ Or on Windows cmd:
 
 If you see output appearing, you are now ready to start on the assignment.
 
-You are now tasked with writing an implementation of the histogram server.
+Assignment
+----------
+
+As mentioned before, for this assignment, we will no longer batch process the
+GDELT Global Knowledge Graph, but rather stream it into a pipeline that
+computes a histogram of the last hour. This pipeline is depicted by
+fig. 4. We will give a small description of the individual parts
+below.
+
+<figure>
+<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" /><figcaption>Figure 4: GDELT streaming pipeline</figcaption>
+</figure>`Producer`  
+The producer, contained in the `GDELTProducer` Scala project, starts by
+downloading all segments of the previous hour (minus a 15 minute offset), and
+immediately start streaming records (rows) to a Kafka topic called `gdelt`.
+Simultaneously, it will schedule a new download step at the next quarter of the
+hour. The frequency by which the records are streamed is determined as the current
+amount of queued records over the time left until new data is downloaded from
+S3.
+
+`Transformer`  
+The transformer receives GDELT records on the `gdelt` topic and should use
+them to construct a histogram of the names from the “allNames” column of the
+dataset, but only for the last hour. This is very similar to the application
+you wrote in Lab 1, but it happens in real-time and you should take care to
+also decrement/remove names that are older than an hour (relative to your input
+data). Finally, the transformer’s output should appear on a Kafka topic called
+`gdelt-histogram`.
+
+`Consumer`  
+The consumer finally acts as a *sink*, and will process the incoming
+histogram updates from the transformer into a smaller histogram of only the 100
+most occurring names for display [5]. It will finally stream this
+histogram to
+our visualizer over a WebSocket connection.
+
+You are now tasked with writing an implementation of the histogram transformer.
 In the file `GDELTStream/GDELTStream.scala` you will have to implement the
 following
 
-`Gdelt row processing`  
+`GDELT row processing`  
 In the main function you will first have to write a function that filters
 the GDELT lines to a stream of allNames column. You can achieve this using
 the high-level API of Kafka Streams, on the `KStream` object.
@@ -1380,3 +1423,7 @@ regarding this matter.
 your account is allowed to provision. If you don’t have access to enough
 spot instances, the procedure to request additional can be found in the
 [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
+
+[5] It might turn out that this is too much for your browser to
+handle. If this is the case, you may change it manually in the
+`HistogramProcessor` contained in `GDELTConsumer.scala`.

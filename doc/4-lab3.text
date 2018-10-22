@@ -50,6 +50,8 @@ you go through the code and examples.
 ![Visualizer for the streaming
 application](./images/stream_visualizer){#fig:stream_visualizer}
 
+## Setting up
+
 In the lab's repository you will find a template for your solution. There are a
 bunch of scripts (`.sh` for MacOS/Linux, `.bat` for Windows). For these scripts
 to work you first will have to define a `KAFKA_HOME` environment variable to
@@ -76,7 +78,7 @@ The `kafka_start` script does a number of things:
    coordination server, on port 2181
 2. Start a single Kafka broker on port 9092
 
-Navigate to the GDELTProducer directory, and run `sbt run` to start the GDelt
+Navigate to the GDELTProducer directory, and run `sbt run` to start the GDELT
 stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
@@ -99,13 +101,52 @@ Or on Windows cmd:
         --topic gdelt --property print.key=true --property key.separator=-
 ```
 
-If you see output appearing, you are now ready to start on the assignment. 
+If you see output appearing, you are now ready to start on the assignment.
 
-You are now tasked with writing an implementation of the histogram server.
+## Assignment
+
+As mentioned before, for this assignment, we will no longer batch process the
+GDELT Global Knowledge Graph, but rather stream it into a pipeline that
+computes a histogram of the last hour. This pipeline is depicted by
+[@fig:kafka_pipeline]. We will give a small description of the individual parts
+below.
+
+![GDELT streaming pipeline](./images/kafka_pipeline){#fig:kafka_pipeline}
+
+`Producer`
+:   The producer, contained in the `GDELTProducer` Scala project, starts by
+downloading all segments of the previous hour (minus a 15 minute offset), and
+immediately start streaming records (rows) to a Kafka topic called `gdelt`.
+Simultaneously, it will schedule a new download step at the next quarter of the
+hour. The frequency by which the records are streamed is determined as the current
+amount of queued records over the time left until new data is downloaded from
+S3.
+
+`Transformer`
+:   The transformer receives GDELT records on the `gdelt` topic and should use
+them to construct a histogram of the names from the "allNames" column of the
+dataset, but only for the last hour. This is very similar to the application
+you wrote in Lab 1, but it happens in real-time and you should take care to
+also decrement/remove names that are older than an hour (relative to your input
+data). Finally, the transformer's output should appear on a Kafka topic called
+`gdelt-histogram`.
+
+`Consumer`
+:   The consumer finally acts as a _sink_, and will process the incoming
+histogram updates from the transformer into a smaller histogram of only the 100
+most occurring names for display [^downsample]. It will finally stream this
+histogram to
+our visualizer over a WebSocket connection.
+
+[^downsample]: It might turn out that this is too much for your browser to
+handle. If this is the case, you may change it manually in the
+`HistogramProcessor` contained in `GDELTConsumer.scala`.
+
+You are now tasked with writing an implementation of the histogram transformer.
 In the file `GDELTStream/GDELTStream.scala` you will have to implement the
 following
 
-`Gdelt row processing`
+`GDELT row processing`
 :   In the main function you will first have to write a function that filters
     the GDELT lines to a stream of allNames column. You can achieve this using
     the high-level API of Kafka Streams, on the `KStream` object.
