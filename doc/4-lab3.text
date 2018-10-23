@@ -9,6 +9,9 @@ histogram of the most popular topics of the last hour that will continuously
 update. We included another visualizer for this lab that you can see in
 [@fig:stream_visualizer].
 
+![Visualizer for the streaming
+application](./images/stream_visualizer){#fig:stream_visualizer}
+
 Apache Kafka is a distributed streaming platform. The core abstraction is that
 of a message queue, to which you can both publish and subscribe to streams of
 records. Each queue is named by means of a topic. Apache Kafka is:
@@ -46,9 +49,6 @@ Kafka on your machine here](https://kafka.apache.org/quickstart). A good
 introduction to the [Kafka stream API can be found
 here](https://docs.confluent.io/current/streams/quickstart.html). We recommend
 you go through the code and examples.
-
-![Visualizer for the streaming
-application](./images/stream_visualizer){#fig:stream_visualizer}
 
 ## Setting up
 
