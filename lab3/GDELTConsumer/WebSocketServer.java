@@ -34,6 +34,7 @@ public class WebSocketServer implements Runnable
             wscontainer.addEndpoint(WebSocket.class);
 
             server.start();
+            WebSocket.messenger.start();
             // server.dump(System.err);
             server.join();
         }

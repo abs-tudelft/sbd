@@ -30,7 +30,7 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
     p.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
     p
   }
-  
+
   val producerProps: Properties = {
     val p = new Properties()
     p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server)
@@ -60,7 +60,7 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
       return "20150218230000-0"
     }
 
-  } 
+  }
 
   def parseTimeStamp(ts: String) : (Long, Long) = {
     val parse = Try( {
@@ -78,10 +78,6 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
     import scala.math.Ordering.Implicits._
     var linesToFeed: Queue[(Long, String)] = Queue()
 
-    
-    val lastTimeStamp = findLastKey()
-
-    println("Continuing from line " + lastTimeStamp)
     try {
       while (true) {
         var files : Array[File] = Array()
@@ -93,10 +89,8 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
         var codec = new Codec(Charset.forName("UTF-8"))
         codec.onMalformedInput(CodingErrorAction.IGNORE)
         linesToFeed ++= files
-          .flatMap(a => HelperFunctions.buildTimeStamps(Source.fromFile(a)(codec).getLines.toSeq, 
+          .flatMap(a => HelperFunctions.buildTimeStamps(Source.fromFile(a)(codec).getLines.toSeq,
                                                         fileUploadInterval))
-        
-          .filter{case (_, a) => parseTimeStamp(a.split("\t", -1).head) > parseTimeStamp(lastTimeStamp) }
 
         val now = Calendar.getInstance
         val nextQuarter = HelperFunctions.nextMinuteInterval(fileUploadInterval)

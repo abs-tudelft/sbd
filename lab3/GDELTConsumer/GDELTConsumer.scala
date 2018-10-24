@@ -40,6 +40,7 @@ object GDELTConsumer extends App {
 
   val serverThread = new Thread(new WebSocketServer)
   serverThread.start()
+
   println("Server running.")
 
   sys.ShutdownHookThread {
@@ -62,7 +63,7 @@ class HistogramProcessor extends Processor[String, Long] {
   }
 
   def process(name: String, count: Long) {
-    WebSocket.messageQueue.synchronized {
+    WebSocket.messenger.messageQueue.synchronized {
       val existing = Option(this.reduced.get(name))
 
       if (existing == None) {
@@ -88,12 +89,14 @@ class HistogramProcessor extends Processor[String, Long] {
 
   private def putReducedHist(name: String, count: Long) {
     this.reduced.put(name, count)
-    WebSocket.messageQueue.put(name, count)
+    WebSocket.messenger.messageQueue.put(name, count)
+    WebSocket.messenger.histogram.put(name, count)
   }
 
   private def deleteReducedHist(name: String) {
     this.reduced.delete(name)
-    WebSocket.messageQueue.put(name, 0L)
+    WebSocket.messenger.messageQueue.put(name, 0L)
+    WebSocket.messenger.histogram.put(name, 0L)
   }
 
   private def getMinimum(): KeyValue[String, Long] = {

@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.util.{Calendar, TimeZone};
 
 
+
 object GDELTProducer{
 
   val interval = 15
@@ -22,6 +23,7 @@ object GDELTProducer{
   val timeFormat = new SimpleDateFormat("HH:mm")
   val timeStampFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
   var fileNameFormat = new SimpleDateFormat("yyyyMMddHHmm00")
+  var lastFile: String = "20150218230000"
   fileNameFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
 
@@ -70,7 +72,10 @@ object GDELTProducer{
         }
       }
       else {
-        fileQueue.offer(localFile)
+        if (lastFile < localFile.getName) {
+          fileQueue.offer(localFile)
+          lastFile = localFile.getName
+        }
       }
     }
 
@@ -84,7 +89,7 @@ object GDELTProducer{
       print(msg)
 
       val df = new DecimalFormat("##0.0")
-      for ((file, download) <- files.zip(downloads)) {
+      for (download <- downloads) {
         while(!download.isDone) {
           var progress = 0d
           for (download2 <- downloads) {
@@ -93,7 +98,12 @@ object GDELTProducer{
           print("\r" + msg + df.format(progress / downloads.size) + "%")
           Thread.sleep(100)
         }
-        fileQueue.offer(file)
+      }
+      for (file <- files) {
+        if (lastFile < file.getName) {
+          fileQueue.offer(file)
+          lastFile = file.getName
+        }
       }
       print("\r" + msg + "Done. \n")
     }
@@ -139,7 +149,7 @@ object GDELTProducer{
 
     val now = Calendar.getInstance
     val nextInterval = HelperFunctions.nextMinuteInterval(interval)
-    val delay = nextInterval.getTimeInMillis() - now.getTimeInMillis() + Duration.ofMinutes(1).toMillis()
+    val delay = nextInterval.getTimeInMillis() - now.getTimeInMillis() + Duration.ofSeconds(5).toMillis()
 
     println("\nFinished initial download. Scheduling the next download at " + timeFormat.format(nextInterval.getTime) + " and every following " + interval.toString + " minutes...")
     println("Press enter at any time to cancel...\n")
