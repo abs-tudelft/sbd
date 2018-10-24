@@ -19,6 +19,8 @@
     -   [Assignment](#assignment-1)
     -   [Deliverables](#deliverables-2)
     -   [Questions](#questions-1)
+        -   [General Kafka questions](#general-kafka-questions)
+        -   [Questions specific to the assignment](#questions-specific-to-the-assignment)
 
 Introduction
 ============
@@ -167,10 +169,9 @@ We will consider both here shortly.
 
 ### Resilient Distributed Datasets
 
-<figure>
-<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" /><figcaption>Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
-integers as elements.</figcaption>
-</figure>RDDs are the original data abstraction used in Spark. Conceptually one can
+<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" />
+
+RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
 call these objects elements. This list of elements is divided in partitions
 (which may still contain multiple elements), which can reside on different
@@ -188,11 +189,11 @@ instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in fig. 1 as the arrows between
 elements.
 
-<table style="width:61%;">
+<table style="width:60%;">
 <caption>Table 1: List of wide and narrow dependencies for (pair) RDD operations</caption>
 <colgroup>
 <col style="width: 37%" />
-<col style="width: 23%" />
+<col style="width: 22%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1159,9 +1160,9 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in fig. 2.
 
-<figure>
-<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" /><figcaption>Figure 2: Ganglia screenshot</figcaption>
-</figure>It’s not uncommon to run into problems when you first deploy your application
+<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" />
+
+It’s not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
 
 -   You can access S3 files directly using Spark, so via
@@ -1242,10 +1243,9 @@ histogram of the most popular topics of the last hour that will continuously
 update. We included another visualizer for this lab that you can see in
 fig. 3.
 
-<figure>
-<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" /><figcaption>Figure 3: Visualizer for the streaming
-application</figcaption>
-</figure>Apache Kafka is a distributed streaming platform. The core abstraction is that
+<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" />
+
+Apache Kafka is a distributed streaming platform. The core abstraction is that
 of a message queue, to which you can both publish and subscribe to streams of
 records. Each queue is named by means of a topic. Apache Kafka is:
 
@@ -1347,9 +1347,9 @@ computes a histogram of the last hour. This pipeline is depicted by
 fig. 4. We will give a small description of the individual parts
 below.
 
-<figure>
-<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" /><figcaption>Figure 4: GDELT streaming pipeline</figcaption>
-</figure>Producer  
+<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" />
+
+Producer  
 The producer, contained in the `GDELTProducer` Scala project, starts by
 downloading all segments of the previous hour (minus a 15 minute offset), and
 immediately start streaming records (rows) to a Kafka topic called `gdelt`.
@@ -1410,7 +1410,39 @@ Deliverables
 Questions
 ---------
 
-To be posted later!
+Try to be concise with your answers. Some questions have a maximum number of
+words you can use, but you are welcome to use fewer if you can.
+
+### General Kafka questions
+
+1.  What is the difference, in terms of data processing, between Kafka and Spark?
+2.  What is the difference between replications and partitions?
+3.  What is Zookeeper’s role in the Kafka cluster? Why do we need a separate
+    entity for this? (max. 50 words)
+4.  Why does Kafka by default not guarantee *exactly once* delivery semantics
+    on producers? (max. 100 words)
+5.  Kafka is a binary protocol (with a reference implementation in Java),
+    whereas Spark is a framework. Name two (of the many) advantages of Kafka
+    being a binary protocol in the context of Big Data. (max. 100 words)
+
+### Questions specific to the assignment
+
+1.  On average, how many bytes per second does the stream transformer have to
+    consume? How many does it produce?
+2.  Could you use a Java/Scala data structure instead of a Kafka State Store to
+    manage your state in a processor/transformer? Why, or why not?
+    (max. 50 words)
+3.  Given that the histogram is stored in a Kafka `StateStore`, how would you
+    extract the top 100 topics? Is this efficient? (max. 75 words)
+4.  The visualizer draws the histogram in your web browser. A Kafka consumer
+    has to communicate the current ‘state’ of the histogram to this visualizer.
+    What do you think is an efficient way of streaming the ‘state’ of the
+    histogram to the webserver?
+    (max. 75 words)
+5.  What are the two ways you can scale your Kafka implementation over multiple
+    nodes? (max. 100 words)
+6.  How could you use Kafka’s partitioning to compute the histogram in
+    parallel? (max. 100 words)
 
 [1] In case you don’t have a credit card: In previous years, students have
 used prepaid credit cards (available online) to register.
