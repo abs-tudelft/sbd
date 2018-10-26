@@ -168,6 +168,15 @@ HistogramTransformer
 
 You will have to write the result of this stream to a new topic called
 `gdelt-histogram`.
+This stream should consist of records (key-value pairs) of the form `(name,
+count)` and type `(String, Long)`, where the value of name was extracted from
+the "allNames" column.
+
+This means that whenever the transformer reads a name from the "allNames"
+column, it should publish an updated, i.e. incremented, (name, count) pair on
+the output topic, so that the visualizer can update accordingly. When you
+decrement a name, because its occurrence is older than an hour, remember to
+publish an update as well!
 
 To run the visualizer, first start the websocket server by navigating to the
 GDELTConsumer directory and running `sbt run`. Next, navigate to the
@@ -219,4 +228,5 @@ words you can use, but you are welcome to use fewer if you can.
     nodes? (max. 100 words)
 6.  How could you use Kafka's partitioning to compute the histogram in
     parallel? (max. 100 words)
+
 

@@ -169,9 +169,10 @@ We will consider both here shortly.
 
 ### Resilient Distributed Datasets
 
-<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" />
-
-RDDs are the original data abstraction used in Spark. Conceptually one can
+<figure>
+<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" /><figcaption>Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
+integers as elements.</figcaption>
+</figure>RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
 call these objects elements. This list of elements is divided in partitions
 (which may still contain multiple elements), which can reside on different
@@ -189,11 +190,11 @@ instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in fig. 1 as the arrows between
 elements.
 
-<table style="width:60%;">
+<table style="width:61%;">
 <caption>Table 1: List of wide and narrow dependencies for (pair) RDD operations</caption>
 <colgroup>
 <col style="width: 37%" />
-<col style="width: 22%" />
+<col style="width: 23%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1160,9 +1161,9 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in fig. 2.
 
-<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" />
-
-It’s not uncommon to run into problems when you first deploy your application
+<figure>
+<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" /><figcaption>Figure 2: Ganglia screenshot</figcaption>
+</figure>It’s not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
 
 -   You can access S3 files directly using Spark, so via
@@ -1243,9 +1244,10 @@ histogram of the most popular topics of the last hour that will continuously
 update. We included another visualizer for this lab that you can see in
 fig. 3.
 
-<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" />
-
-Apache Kafka is a distributed streaming platform. The core abstraction is that
+<figure>
+<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" /><figcaption>Figure 3: Visualizer for the streaming
+application</figcaption>
+</figure>Apache Kafka is a distributed streaming platform. The core abstraction is that
 of a message queue, to which you can both publish and subscribe to streams of
 records. Each queue is named by means of a topic. Apache Kafka is:
 
@@ -1347,9 +1349,9 @@ computes a histogram of the last hour. This pipeline is depicted by
 fig. 4. We will give a small description of the individual parts
 below.
 
-<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" />
-
-Producer  
+<figure>
+<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" /><figcaption>Figure 4: GDELT streaming pipeline</figcaption>
+</figure>Producer  
 The producer, contained in the `GDELTProducer` Scala project, starts by
 downloading all segments of the previous hour (minus a 15 minute offset), and
 immediately start streaming records (rows) to a Kafka topic called `gdelt`.
@@ -1391,6 +1393,14 @@ store for Kafka streaming](https://kafka.apache.org/20/documentation/streams/dev
 
 You will have to write the result of this stream to a new topic called
 `gdelt-histogram`.
+This stream should consist of records (key-value pairs) of the form `(name, count)` and type `(String, Long)`, where the value of name was extracted from
+the “allNames” column.
+
+This means that whenever the transformer reads a name from the “allNames”
+column, it should publish an updated, i.e. incremented, (name, count) pair on
+the output topic, so that the visualizer can update accordingly. When you
+decrement a name, because its occurrence is older than an hour, remember to
+publish an update as well!
 
 To run the visualizer, first start the websocket server by navigating to the
 GDELTConsumer directory and running `sbt run`. Next, navigate to the
