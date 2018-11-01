@@ -1321,6 +1321,7 @@ The `kafka_start` script does a number of things:
 
 Navigate to the GDELTProducer directory, and run `sbt run` to start the GDELT
 stream.
+(As [this](https://github.com/sbt/sbt/issues/3618) issue suggests, you might need to run `sbt run` twice to make it work when running the producer for the first time)
 
 We can now inspect the output of the `gdelt` topic by running the following
 command on MacOS/Linux:
