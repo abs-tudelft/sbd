@@ -172,7 +172,9 @@ We will consider both here shortly.
 <figure>
 <img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" /><figcaption>Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
 integers as elements.</figcaption>
-</figure>RDDs are the original data abstraction used in Spark. Conceptually one can
+</figure>
+
+RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
 call these objects elements. This list of elements is divided in partitions
 (which may still contain multiple elements), which can reside on different
@@ -1163,7 +1165,9 @@ times. An example of its interface is shown in fig. 2.
 
 <figure>
 <img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" /><figcaption>Figure 2: Ganglia screenshot</figcaption>
-</figure>It’s not uncommon to run into problems when you first deploy your application
+</figure>
+
+It’s not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
 
 -   You can access S3 files directly using Spark, so via
@@ -1247,7 +1251,9 @@ fig. 3.
 <figure>
 <img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" /><figcaption>Figure 3: Visualizer for the streaming
 application</figcaption>
-</figure>Apache Kafka is a distributed streaming platform. The core abstraction is that
+</figure>
+
+Apache Kafka is a distributed streaming platform. The core abstraction is that
 of a message queue, to which you can both publish and subscribe to streams of
 records. Each queue is named by means of a topic. Apache Kafka is:
 
@@ -1319,8 +1325,8 @@ The `kafka_start` script does a number of things:
     coordination server, on port 2181
 2.  Start a single Kafka broker on port 9092
 
-Navigate to the GDELTProducer directory, and run `sbt run` to start the GDELT
-stream.
+Navigate to the GDELTProducer directory, and run `sbt run` to
+start[5] the GDELT stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
 command on MacOS/Linux:
@@ -1351,7 +1357,9 @@ below.
 
 <figure>
 <img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" /><figcaption>Figure 4: GDELT streaming pipeline</figcaption>
-</figure>Producer  
+</figure>
+
+Producer  
 The producer, contained in the `GDELTProducer` Scala project, starts by
 downloading all segments of the previous hour (minus a 15 minute offset), and
 immediately start streaming records (rows) to a Kafka topic called `gdelt`.
@@ -1372,7 +1380,7 @@ data). Finally, the transformer’s output should appear on a Kafka topic called
 Consumer  
 The consumer finally acts as a *sink*, and will process the incoming
 histogram updates from the transformer into a smaller histogram of only the 100
-most occurring names for display [5]. It will finally stream this
+most occurring names for display [6]. It will finally stream this
 histogram to
 our visualizer over a WebSocket connection.
 
@@ -1473,6 +1481,10 @@ your account is allowed to provision. If you don’t have access to enough
 spot instances, the procedure to request additional can be found in the
 [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
 
-[5] It might turn out that this is too much for your browser to
+[5] As this [issue](https://github.com/sbt/sbt/issues/3618)
+suggests, you might need to run `sbt run` twice when starting the producer for
+the first time.
+
+[6] It might turn out that this is too much for your browser to
 handle. If this is the case, you may change it manually in the
 `HistogramProcessor` contained in `GDELTConsumer.scala`.

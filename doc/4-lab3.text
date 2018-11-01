@@ -85,8 +85,13 @@ The `kafka_start` script does a number of things:
    coordination server, on port 2181
 2. Start a single Kafka broker on port 9092
 
-Navigate to the GDELTProducer directory, and run `sbt run` to start the GDELT
-stream.
+Navigate to the GDELTProducer directory, and run `sbt run` to
+start[^start_twice] the GDELT stream.
+
+[^start_twice]: As this [issue](https://github.com/sbt/sbt/issues/3618)
+suggests, you might need to run `sbt run` twice when starting the producer for
+the first time.
+
 
 We can now inspect the output of the `gdelt` topic by running the following
 command on MacOS/Linux:
@@ -228,5 +233,3 @@ words you can use, but you are welcome to use fewer if you can.
     nodes? (max. 100 words)
 6.  How could you use Kafka's partitioning to compute the histogram in
     parallel? (max. 100 words)
-
-
