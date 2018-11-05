@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+set -e
+[[ -v KAFKA_HOME ]] || echo "Warning: \$KAFKA_HOME variable not set"
+
 logdir=logs/
 
 test -d ${logdir} || mkdir ${logdir}
