@@ -67,8 +67,8 @@ problem fit into this paradigm?
 
 Modern Spark exposes two APIs around this programming model:
 
-1. Resilient Distributed Datasets 
-2. Spark SQL Dataframe/Datasets 
+1. Resilient Distributed Datasets
+2. Spark SQL Dataframe/Datasets
 
 We will consider both here shortly.
 
@@ -93,7 +93,7 @@ delayed until results are requested (an action in Spark terminology). When
 applying transformations, these will form a directed acyclic graph (DAG), that
 instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in [@fig:rdd_diagram] as the arrows between
-elements. 
+elements.
 
   -------------------------------------------
   Narrow Dependency          Wide Dependency
@@ -132,7 +132,7 @@ code. Hit `ctrl+D` to stop pasting._
 
 ``` {.scala}
 $ spark-shell
-2018-08-29 12:56:07 WARN  NativeCodeLoader:62 - Unable to load native-hadoop... 
+2018-08-29 12:56:07 WARN  NativeCodeLoader:62 - Unable to load native-hadoop...
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR,...
 Spark context Web UI available at http://
@@ -150,14 +150,14 @@ Type in expressions to have them evaluated.
 Type :help for more information.
 
 scala> spark
-res2: org.apache.spark.sql.SparkSession = 
+res2: org.apache.spark.sql.SparkSession =
                                     org.apache.spark.sql.SparkSession@48a32c4f
 ```
 
 When opening a Spark Shell, by default you get a SparkSession and SparkContext
 object. This object contains the configuration of your session, i.e. whether
 you are running in local or cluster mode, the name of your application, the
-logging level etc. 
+logging level etc.
 
 Going back to our shell, let's first create some sample data that we can
 demonstrate the RDD API around. Here we create an infinite list of repeating
@@ -172,7 +172,7 @@ Now we build a collection with the first 200000 integers, zipped with the
 character stream. We display the first 30 results.
 ```{.scala}
 scala> val rdd = sc.parallelize(chars.zip(1 to 200000), numSlices=20)
-rdd: org.apache.spark.rdd.RDD[(Char, Int)] = 
+rdd: org.apache.spark.rdd.RDD[(Char, Int)] =
                     ParallelCollectionRDD[0] at parallelize at <console>:26
 
 scala> rdd.take(30)
@@ -190,7 +190,7 @@ we indicate in how many partitions we want to subdivide the sequence.
 Let's apply some (lazily evaluated) transformations to this RDD.
 ```{.scala}
 scala> val mappedRDD = rdd.map({case (chr, num) => (chr, num+1)})
-mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = 
+mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
                             MapPartitionsRDD[5] at map at <console>:25
 ```
 We apply a `map` to the RDD, applying a function to all the elements in the
@@ -205,12 +205,12 @@ an action is applied.
 
 ```{.scala}
 scala> val reducedRDD = rdd.reduceByKey(_ + _)
-reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = 
+reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
                             ShuffledRDD[6] at reduceByKey at <console>:25
 
 ```
 Now we apply a `reduceByKey` operation, grouping all of the identical keys together and
-merging the results with the specified function, in this case the `+` operator. 
+merging the results with the specified function, in this case the `+` operator.
 
 Now we will perform an action, which will trigger the computation of the
 transformations on the data. We will use the collect action, which means to
@@ -224,7 +224,7 @@ res3: Array[(Char, Int)] = Array((d,769300000), (x,769253844), (e,769307693),
 (i,769138464), (j,769146156), (k,769153848), (l,769161540), (m,769169232),
 (n,769176924), (o,769184616), (p,769192308), (q,769200000), (r,769207692),
 (s,769215384), (t,769223076), (a,769276921), (u,769230768), (b,769284614),
-(v,769238460), (w,769246152), (c,769292307)) 
+(v,769238460), (w,769246152), (c,769292307))
 ```
 
 Typically, we don't build the data first, but we actually load it from a
@@ -234,8 +234,8 @@ folder). We can load it as follows
 
 ```{.scala}
 // sc.textFile can take multiple files as argument!
-scala> val raw_data = sc.textFile("sensordata.csv") 
-raw_data: org.apache.spark.rdd.RDD[String] = 
+scala> val raw_data = sc.textFile("sensordata.csv")
+raw_data: org.apache.spark.rdd.RDD[String] =
                 sensordata.csv MapPartitionsRDD[1] at textFile at <console>:24
 scala> raw_data.take(10).foreach(println)
 COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
@@ -327,9 +327,9 @@ val schema =
 If we import types first, and then enter this in our interactive shell we get
 the following:
 ```{.scala}
-scala> :paste 
+scala> :paste
 // Entering paste mode (ctrl-D to finish)
-import org.apache.spark.sql.types._ 
+import org.apache.spark.sql.types._
 
 val schema =
   StructType(
@@ -369,7 +369,7 @@ val df = spark.read
               .option("timestampFormat", "MM/dd/yy:hh:mm")
               .csv("./sensordata.csv")
 // Exiting paste mode, now interpreting.
-df: org.apache.spark.sql.DataFrame = 
+df: org.apache.spark.sql.DataFrame =
         [sensorname: string, timestamp: date ... 6 more fields]
 
 scala> df.printSchema
@@ -382,7 +382,7 @@ root
  |-- numD: double (nullable = true)
  |-- numE: long (nullable = true)
  |-- numF: double (nullable = true
- 
+
 scala> df.take(10).foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
@@ -404,10 +404,10 @@ minutes to get right).
 ```{.scala}
 scala> df.createOrReplaceTempView("sensor")
 
-scala> val dfFilter = spark.sql("SELECT * FROM sensor  
-WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")") 
+scala> val dfFilter = spark.sql("SELECT * FROM sensor
+WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")")
 // I think the newline in the multiline string breaks it if you paste it
-dfFilter: org.apache.spark.sql.DataFrame = 
+dfFilter: org.apache.spark.sql.DataFrame =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dfFilter.collect.foreach(println)
@@ -426,7 +426,7 @@ scala> dfFilter.collect.foreach(println)
 A slightly more sane and type-safe way would be to do the following.
 ```{.scala}
 scala> val dfFilter = df.filter("timestamp = TIMESTAMP(\"2014-03-10 01:01:00\")")
-dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = 
+dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] =
                     [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dfFilter.collect.foreach(println)
@@ -493,16 +493,16 @@ val ds = spark.read .schema(schema)
 
 // Exiting paste mode, now interpreting.
 
-ds: org.apache.spark.sql.Dataset[SensorData] = 
+ds: org.apache.spark.sql.Dataset[SensorData] =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 ```
 
 Now we can apply compile time type-checked operations.
 
 ```{.scala}
-scala> val dsFilter = ds.filter(a => a.timestamp == 
+scala> val dsFilter = ds.filter(a => a.timestamp ==
                                 new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
-dsFilter: org.apache.spark.sql.Dataset[SensorData] = 
+dsFilter: org.apache.spark.sql.Dataset[SensorData] =
                 [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dsFilter.collect.foreach(println)
@@ -560,7 +560,7 @@ lazy val example = (project in file("."))
 This specifies the Scala version of the project (2.11.12) and the name of the
 project.
 
-If you run `sbt` in this folder it will generate the project directory and 
+If you run `sbt` in this folder it will generate the project directory and
 `build.properties`. `build.properties` contains the SBT version that is
 used to build the project with, for backwards compatibility.
 
@@ -650,7 +650,7 @@ lazy val example = (project in file("."))
     name := "Example project",
 
     libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.1",
-    libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1" 
+    libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1"
   )
 ```
 
@@ -665,9 +665,9 @@ import java.sql.Timestamp
 
 
 object ExampleSpark {
-  case class SensorData ( 
-    sensorName: String, 
-    timestamp: Timestamp, 
+  case class SensorData (
+    sensorName: String,
+    timestamp: Timestamp,
     numA: Double,
     numB: Double,
     numC: Long,
@@ -698,8 +698,8 @@ object ExampleSpark {
 
     import spark.implicits._
 
-    val ds = spark.read 
-                  .schema(schema) 
+    val ds = spark.read
+                  .schema(schema)
                   .option("timestampFormat", "MM/dd/yy:hh:mm")
                   .csv("./sensordata.csv")
                   .as[SensorData]
@@ -762,7 +762,7 @@ Now that we have introduced the different technologies, we can start talking
 about the goal of the first lab. In this lab you will write the application in
 Spark that analyzes GDelt and constructs the 10 most talked about topics per
 day. For the first lab you will write the prototype that you check on your
-local machine. 
+local machine.
 
 We will use the GDelt version 2 GKG files. The format these files are in is tab
 separated values. The exact specification of each columns and details can be
@@ -787,11 +787,11 @@ $cat local_index.txt
 ```
 The script will put all downloaded files in the `segment` folder. `wget`
 timestamps the downloads, so it will not update the files when you want to
-generate a local index for 20 files if you had 10 before. 
+generate a local index for 20 files if you had 10 before.
 
 You can use these local files for the first lab assignment to test your
 application, and build some understanding of the scaling behaviour on a single
-machine. 
+machine.
 
 An example output of this system based on 10 segments would be.
 ```
@@ -838,10 +838,10 @@ The deliverables for the first lab are:
     1.  Outline of your implementation and approach (½–1 page);
     2.  Pointwise answers to the questions listed below.
 
-Your report and code will be discussed in a brief oral examination during the
-lab, the schedule of which will be posted on Brightspace.
+The deadline of this lab will be announced on Brightspace. Your report and code
+will be discussed in a brief oral examination during the lab, the schedule of
+which will become available later.
 
-The deadline of this lab will be announced on Brightspace.
 
 ## Questions
 
@@ -899,7 +899,7 @@ Implementation analysis questions:
   [Scala language site]: https://docs.scala-lang.org/tour/tour-of-scala.html
   [lazy evaluation]: https://en.wikipedia.org/wiki/Lazy_evaluation
   [Spark SQL, DataFrames and Datasets Guide]: https://spark.apache.org/docs/latest/sql-programming-guide.html#overview
-  [Spark SQL types]: https://spark.apache.org/docs/2.3.1/api/java/org/apache/spark/sql/types/package-frame.html 
+  [Spark SQL types]: https://spark.apache.org/docs/2.3.1/api/java/org/apache/spark/sql/types/package-frame.html
   [Java date format]: https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
   [case class]: https://docs.scala-lang.org/tour/case-classes.html
   [RDDs]: https://spark.apache.org/docs/latest/rdd-programming-guide.html

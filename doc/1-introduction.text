@@ -20,30 +20,31 @@ and internet sources all over the world. We will use this data to construct a
 histogram of the topics that are most popular on a given day, hopefully giving
 us some interesting insights into the most important themes in recent history.
 
-Feedback is appreciated! The lab files will be hosted on [GitHub]. Feel free to
+Feedback is appreciated! The lab files will be hosted on [GitHub]. You can
+also find the most up-to-date version of this manual over there. Feel free to
 make issues and/or pull requests to suggest or implement improvements.
 
 Before You Start
 ----------------
 
-The complete data set we will be looking at in lab 2 weighs in at
+All assignments are completed in groups of two, so you and your prospective
+team mate should enroll in a group via Brightspace.
+
+Furthermore, the complete data set we will be looking at in lab 2 weighs in at
 several terabytes, so we need some kind of compute and storage infrastructure
 to run the pipeline. In this lab we will use Amazon AWS to facilitate this. As
 a student you are eligible for credits on this platform. We would like you to
 register for the [GitHub Student Developer Pack], as soon as you decide to
 take this course. This gives you access to around 100 dollars worth of credits.
-This should be ample to complete lab 2. Note that you need a credit card
-to apply[^credit_card]. Don't forget to follow to register on AWS using the
-referral link from Github.
-
-[^credit_card]: In case you don't have a credit card: In previous years, students have 
-used prepaid credit cards (available online) to register. 
+This should be ample to complete lab 2. Don't forget to follow to register on
+AWS using the referral link from GitHub. Use the "AWS Account ID" option
+(requiring a credit card), if you can.
 
 **Make sure you register for these credits as soon as possible! You can always
 send an email to the TAs if you run into any trouble.**
 
-**Before the end of the first week (Sunday 09/09/18), please send your TUDelft
-email address to the TAs to register for the lab**
+Finally, be sure to keep an eye on the Brightspace page for course updates and
+the tentative schedule and deadlines.
 
 Goal of this Lab
 ----------------
@@ -62,17 +63,17 @@ The goal of this lab is to:
 
 You will work in groups of two. In this lab manual we will introduce a big data
 pipeline for identifying important events from the GDelt Global Knowledge Graph
-(GKG). 
+(GKG).
 
 In lab 1, you will start by writing a Spark application that processes the
-GDelt dataset. You will run this application on a small subset of data on 
-your local computer. You will use this to 
+GDelt dataset. You will run this application on a small subset of data on
+your local computer. You will use this to
 
 1.  get familiar with the Spark APIs,
 2.  analyze the application's scaling behavior, and
 3.  draw some conclusions on how to run it efficiently in the cloud.
 
-It is up to you how you want to define *efficiently*, which can be in terms of 
+It is up to you how you want to define *efficiently*, which can be in terms of
 performance, cost, or a combination of the two.
 
 You may have noticed that the first lab does not contain any supercomputing,
@@ -87,7 +88,7 @@ data context. You will attempt to rewrite the application to process events in
 real-time, in a way that is still scalable over many machines.
 
   [Amazon Web Services]: https://aws.amazon.com
-  [GitHub]: https://github.com/Tclv/SBD-2018
+  [GitHub]: https://github.com/Tclv/SBD-tudelft
   [GDelt 2.0 Global Knowledge Graph]:
   https://blog.gdeltproject.org/introducing-gkg-2-0-the-next-generation-of-the-gdelt-global-knowledge-graph/
   [Apache Spark]: https://spark.apache.org
