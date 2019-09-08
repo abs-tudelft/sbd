@@ -26,3 +26,9 @@ project/plugins/project/
 
 
 # End of https://www.gitignore.io/api/scala
+
+# Docker cache
+.ivy2
+.sbt
+.cache
+spark-events
