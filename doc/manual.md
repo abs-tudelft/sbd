@@ -1,29 +1,32 @@
--   [Introduction](#introduction)
-    -   [Before You Start](#before-you-start)
-    -   [Goal of this Lab](#goal-of-this-lab)
--   [Lab 1](#lab-1)
-    -   [Scala](#scala)
-    -   [Apache Spark](#apache-spark)
-        -   [Resilient Distributed Datasets](#resilient-distributed-datasets)
-        -   [Dataframe and Dataset](#dataframe-and-dataset)
-    -   [SBT](#sbt)
-    -   [The GDelt Project](#the-gdelt-project)
-    -   [Deliverables](#deliverables)
-    -   [Questions](#questions)
--   [Lab 2](#lab-2)
-    -   [Amazon Web Services](#amazon-web-services)
-    -   [Assignment](#assignment)
-    -   [Deliverables](#deliverables-1)
--   [Lab 3](#lab-3)
-    -   [Setting up](#setting-up)
-    -   [Assignment](#assignment-1)
-    -   [Deliverables](#deliverables-2)
-    -   [Questions](#questions-1)
-        -   [General Kafka questions](#general-kafka-questions)
-        -   [Questions specific to the assignment](#questions-specific-to-the-assignment)
+  - [Introduction](#introduction)
+      - [Before You Start](#before-you-start)
+      - [Goal of this Lab](#goal-of-this-lab)
+  - [Guide](#guide)
+      - [The GDelt project](#the-gdelt-project)
+      - [Docker](#docker)
+          - [Setting up Spark in Docker](#setting-up-spark-in-docker)
+      - [Scala](#scala)
+      - [Apache Spark](#apache-spark)
+          - [Resilient Distributed Datasets](#resilient-distributed-datasets)
+          - [Dataframe and Dataset](#dataframe-and-dataset)
+          - [Packaging your application using SBT](#packaging-your-application-using-sbt)
+  - [Lab 1](#lab-1)
+      - [Assignment](#assignment)
+      - [Deliverables](#deliverables)
+      - [Questions](#questions)
+  - [Lab 2](#lab-2)
+      - [Amazon Web Services](#amazon-web-services)
+      - [Assignment](#assignment-1)
+      - [Deliverables](#deliverables-1)
+  - [Lab 3](#lab-3)
+      - [Setting up](#setting-up)
+      - [Assignment](#assignment-2)
+      - [Deliverables](#deliverables-2)
+      - [Questions](#questions-1)
+          - [General Kafka questions](#general-kafka-questions)
+          - [Questions specific to the assignment](#questions-specific-to-the-assignment)
 
-Introduction
-============
+# Introduction
 
 In this lab we will put the concepts that are central to Supercomputing with
 Big Data in some practical context. We will analyze a large open data set and
@@ -35,41 +38,43 @@ and internet sources all over the world. We will use this data to construct a
 histogram of the topics that are most popular on a given day, hopefully giving
 us some interesting insights into the most important themes in recent history.
 
-Feedback is appreciated! The lab files will be hosted on [GitHub](https://github.com/Tclv/SBD-2018). Feel free to
+Feedback is appreciated\! The lab files will be hosted on [GitHub](https://github.com/Tclv/SBD-tudelft). You can
+also find the most up-to-date version of this manual over there. Feel free to
 make issues and/or pull requests to suggest or implement improvements.
 
-Before You Start
-----------------
+## Before You Start
 
-The complete data set we will be looking at in lab 2 weighs in at
+All assignments are completed in groups of two, so you and your prospective
+team mate should enroll in a group via Brightspace.
+
+Furthermore, the complete data set we will be looking at in lab 2 weighs in at
 several terabytes, so we need some kind of compute and storage infrastructure
 to run the pipeline. In this lab we will use Amazon AWS to facilitate this. As
 a student you are eligible for credits on this platform. We would like you to
 register for the [GitHub Student Developer Pack](https://education.github.com/pack), as soon as you decide to
 take this course. This gives you access to around 100 dollars worth of credits.
-This should be ample to complete lab 2. Note that you need a credit card
-to apply[1]. Don’t forget to follow to register on AWS using the
-referral link from Github.
+This should be ample to complete lab 2. Don’t forget to follow to register on
+AWS using the referral link from GitHub. Use the “AWS Account ID” option
+(requiring a credit card), if you can.
 
-**Make sure you register for these credits as soon as possible! You can always
+**Make sure you register for these credits as soon as possible\! You can always
 send an email to the TAs if you run into any trouble.**
 
-**Before the end of the first week (Sunday 09/09/18), please send your TUDelft
-email address to the TAs to register for the lab**
+Finally, be sure to keep an eye on the Brightspace page for course updates and
+the tentative schedule and deadlines.
 
-Goal of this Lab
-----------------
+## Goal of this Lab
 
 The goal of this lab is to:
 
--   familiarize yourself with Apache Spark, the MapReduce programming model,
+  - familiarize yourself with Apache Spark, the MapReduce programming model,
     and Scala as a programming language;
--   learn how to characterize your big data problem analytically and
+  - learn how to characterize your big data problem analytically and
     practically and what machines best fit this profile;
--   get hands-on experience with cloud-based systems;
--   learn about the existing infrastructure for big data and the difficulties
+  - get hands-on experience with cloud-based systems;
+  - learn about the existing infrastructure for big data and the difficulties
     with these; and
--   learn how an existing application should be modified to function in a
+  - learn how an existing application should be modified to function in a
     streaming data context.
 
 You will work in groups of two. In this lab manual we will introduce a big data
@@ -98,16 +103,167 @@ For the final lab, we will modify the code from lab 1 to work in a streaming
 data context. You will attempt to rewrite the application to process events in
 real-time, in a way that is still scalable over many machines.
 
-Lab 1
-=====
+# Guide
 
-In this lab, we will design and develop the code in Spark to process GDelt
-data, which will be used in lab 2 to scale the analysis to the entire dataset.
-We will first give a brief introduction to the various technologies used in
-this lab.
+In this first chapter, we will cover some of the concepts and technologies that
+are used during the course. We will introduce the following topics (in a
+different order):
 
-Scala
------
+  - *The GDELT project*, a large database of “human society”, constructed of
+    mentions of “people, organizations, locations, themes, counts, images and
+    emotions” around the planet. As mentioned before, will use the GDELT
+    database to construct a histogram of the most important themes during a
+    certain timespan.
+  - *Apache Spark*, a framework for processing large amounts of data on
+    multiple machines in a robust way. We will build our application for labs 1
+    and 2 using Spark.
+  - *Amazon Web Services*, or AWS, which provide theoretically unlimited
+    compute infrastructure, allowing us to process a dataset as large as the
+    entire GDelt database in lab 2.
+  - *Apache Kafka*, a framework for building so-called data pipelines, in which
+    potentially many producers and consumers process real-time, streaming data.
+    In lab 3, we will take the application from labs 1 and 2 and modify it to
+    process data in real-time, using Kafka.
+  - *Scala*, a programming language that runs on the Java Virtual Machine
+    (JVM). This is our (mandatory\!) language of choice during the lab
+    assignments. We will use it to program for both Apache Spark and Apache
+    Kafka.
+  - *Docker*, an application that allows the user to package and run software
+    (like Spark and Kafka and the programs we write for them) in an isolated
+    environment: a container.
+
+## The GDelt project
+
+During the lab, we will use the GDELT Global Knowledge Graph version 2.0 (GKG
+v2.0). This database is basically a massive table that “connects every person,
+organization, location, count, theme, news source, and event across the planet
+into a single massive network that captures what’s happening around the world,
+what its context is and who’s involved, and how the world is feeling about it,
+every single day.”
+
+The GKG is updated every 15 minutes and published as a series of compressed
+comma-separated values (CSV) files (in which the columns are actually separated
+using tabs). The first segment of the version 2 database was published back in
+2015 and at the time of writing (September 2019) it contains 157378 segments
+with a total compressed file size of 1.4 terabytes (TiB). Uncompressed, this
+comes down to about 4.2 terabytes of raw data.
+
+Read [this article](https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/) for a general introduction to the dataset, [this table](https://github.com/linwoodc3/gdelt2HeaderRows/blob/master/schema_csvs/GDELT_2.0_gdeltKnowledgeGraph_Column_Labels_Header_Row_Sep2016.tsv) for
+a quick overview of its columns and what they mean, and [this document](http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf) for a
+more in depth description.
+
+During the labs, we will use the `AllNames` column, which lists all “proper
+names” (people, organizations, countries, etcetera) mentioned. It can be seen
+as a summary of many of the other columns.
+
+## Docker
+
+According to the [Docker Documentation](https://docs.docker.com/get-started)
+
+> Docker is a platform for developers and sysadmins to develop, deploy, and run
+> applications with containers. The use of Linux containers to deploy
+> applications is called containerization. Containers are not new, but their
+> use for easily deploying applications is. Containerization is increasingly
+> popular because containers are:
+> 
+>   - Flexible: Even the most complex applications can be containerized.
+>   - Lightweight: Containers leverage and share the host kernel.
+>   - Interchangeable: You can deploy updates and upgrades on-the-fly.
+>   - Portable: You can build locally, deploy to the cloud, and run anywhere.
+>   - Scalable: You can increase and automatically distribute container
+>     replicas.
+>   - Stackable: You can stack services vertically and on-the-fly.
+
+For this course, we use Docker primarily to ensure every student is using the
+exact same platform for their applications, and to avoid certain
+platform-specific issues and peculiarities.
+
+A basic understanding of some [Docker](https://docs.docker.com/) concepts helps in getting started with
+this course. [Part 1: Orientation and setup](https://docs.docker.com/get-started/) of the [Get Started Guide](https://docs.docker.com/get-started/) covers the basic [Docker](https://docs.docker.com/) concepts used in this course.
+
+Before trying the lab assignments and tutorials in the next sections, make sure
+you [Install Docker (stable)](https://docs.docker.com/install/#supported-platforms) and test your installation by running the simple
+[Hello World image](https://hub.docker.com/_/hello-world).
+
+``` bash
+docker run hello-world
+```
+
+### Setting up Spark in Docker
+
+In order to run Spark in a container, a `Dockerfile` is provided which can be
+used to build images for `spark-submit` to run your Spark application,
+`spark-shell` to run a Spark interactive shell, and the Spark history server to
+view event logs from application runs. You need to build these images before
+you get started.
+
+To build a docker image from the `Dockerfile`, we use `docker build`:
+
+``` bash
+docker build \
+  --build-target <target> `# Select a target from the Dockerfile \
+  -t <tag>                `# Set a tag for the resulting image \
+  -f Dockerfile          ` # Read the Dockerfile
+```
+
+Run `docker build` three times to build the required images:
+
+  - `spark-submit`
+    
+    ``` bash
+    docker build --build-target spark-submit -t spark-submit - < Dockerfile
+    ```
+
+  - `spark-shell`
+    
+    ``` bash
+    docker build --build-target spark-shell -t spark-shell - < Dockerfile
+    ```
+
+  - `spark-history-server`
+    
+    ``` bash
+    docker build --build-target spark-history-server -t spark-history-server -
+    < Dockerfile
+    ```
+
+You can then run the following commands from the Spark application root
+(the folder containing the `build.sbt` file). Please make sure to use the
+provided template project.
+
+  - Build your Spark application (`sbt package`)
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt package
+    ```
+
+  - Run your Spark application (`spark-submit`) (fill in the class name of your
+    application and the name of your project\!)
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
+    spark-submit --class <YOUR_CLASSNAME>
+    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
+    ```
+
+  - Spawn the history server to view event logs, accessible at
+    <localhost:18080>
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/spark-events:/spark-events -p 18080:18080 spark-history-server
+    ```
+
+  - Start a Spark shell (`spark-shell`)
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/io spark-shell
+    ```
+
+The rest of the manual will not generally mention these Docker commands again,
+so know that if we mention e.g. `spark-shell`, you should run the corresponding
+`docker run` command listed above.
+
+## Scala
 
 Apache Spark, our big data framework of choice for this lab, is implemented in
 Scala, a compiled language on the JVM that supports a mix between functional
@@ -119,11 +275,12 @@ reasons why Spark was written in Scala are:
     **J**ava **AR**chive format, or JAR). This simplifies deploying to cloud
     provider big data platforms as we don’t need specific knowledge of the
     operating system, or even the underlying architecture.
+
 2.  Compared to Java, Scala has some advantages in supporting more complex
-    types, type inference, and anonymous functions[2]. Matei
+    types, type inference, and anonymous functions\[1\]. Matei
     Zaharia, Apache Spark’s original author, has said the following about why
     Spark was implemented in Scala in a [Reddit AMA](https://www.reddit.com/r/IAmA/comments/31bkue/im_matei_zaharia_creator_of_spark_and_cto_at/):
-
+    
     > At the time we started, I really wanted a PL that supports a
     > language-integrated interface (where people write functions inline, etc),
     > because I thought that was the way people would want to program these
@@ -142,8 +299,7 @@ using Scala to program in this lab. An introduction to Scala can be found on
 the [Scala language site](https://docs.scala-lang.org/tour/tour-of-scala.html). You can have a brief look at it, but you can also
 pick up topics as you go through the lab.
 
-Apache Spark
-------------
+## Apache Spark
 
 Apache Spark provides a programming model for a resilient distributed
 shared memory model. To elaborate on this, Spark allows you to program against
@@ -165,14 +321,13 @@ Modern Spark exposes two APIs around this programming model:
 1.  Resilient Distributed Datasets
 2.  Spark SQL Dataframe/Datasets
 
-We will consider both here shortly.
+In the rest of this section, we will demonstrate a simple application with
+implementations using both APIs.
 
 ### Resilient Distributed Datasets
 
-<figure>
-<img src="./images/RDD.png" alt="Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." id="fig:rdd_diagram" /><figcaption>Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
-integers as elements.</figcaption>
-</figure>
+![Figure 1: Illustration of RDD abstraction of an RDD with a tuple of characters and
+integers as elements.](./images/RDD.png)
 
 RDDs are the original data abstraction used in Spark. Conceptually one can
 think of these as a large, unordered list of Java/Scala/Python objects, let’s
@@ -192,65 +347,25 @@ instructs workers what operations to perform, on which elements to find a
 specific result. This can be seen in fig. 1 as the arrows between
 elements.
 
-<table style="width:61%;">
-<caption>Table 1: List of wide and narrow dependencies for (pair) RDD operations</caption>
-<colgroup>
-<col style="width: 37%" />
-<col style="width: 23%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Narrow Dependency</th>
-<th style="text-align: left;">Wide Dependency</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>map</code></td>
-<td style="text-align: left;"><code>coGroup</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>mapValues</code></td>
-<td style="text-align: left;"><code>flatMap</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>flatMap</code></td>
-<td style="text-align: left;"><code>groupByKey</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>filter</code></td>
-<td style="text-align: left;"><code>reduceByKey</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>mapPartitions</code></td>
-<td style="text-align: left;"><code>combineByKey</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>mapPartitionsWithIndex</code></td>
-<td style="text-align: left;"><code>distinct</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>join</code> with sorted keys</td>
-<td style="text-align: left;"><code>join</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>intersection</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>repartition</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>coalesce</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>sort</code></td>
-</tr>
-</tbody>
-</table>
+<div id="tbl:narrow_wide_dependency">
+
+| Narrow Dependency        | Wide Dependency |
+| :----------------------- | :-------------- |
+| `map`                    | `coGroup`       |
+| `mapValues`              | `flatMap`       |
+| `flatMap`                | `groupByKey`    |
+| `filter`                 | `reduceByKey`   |
+| `mapPartitions`          | `combineByKey`  |
+| `mapPartitionsWithIndex` | `distinct`      |
+| `join` with sorted keys  | `join`          |
+|                          | `intersection`  |
+|                          | `repartition`   |
+|                          | `coalesce`      |
+|                          | `sort`          |
+
+Table 1: List of wide and narrow dependencies for (pair) RDD operations
+
+</div>
 
 Now that you have an idea of what the abstraction is about, let’s demonstrate
 some example code with the Spark shell. *If you want to paste pieces of code
@@ -260,7 +375,7 @@ code. Hit `ctrl+D` to stop pasting.*
 
 ``` scala
 $ spark-shell
-2018-08-29 12:56:07 WARN  NativeCodeLoader:62 - Unable to load native-hadoop... 
+2018-08-29 12:56:07 WARN  NativeCodeLoader:62 - Unable to load native-hadoop...
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR,...
 Spark context Web UI available at http://
@@ -278,7 +393,7 @@ Type in expressions to have them evaluated.
 Type :help for more information.
 
 scala> spark
-res2: org.apache.spark.sql.SparkSession = 
+res2: org.apache.spark.sql.SparkSession =
                                     org.apache.spark.sql.SparkSession@48a32c4f
 ```
 
@@ -303,7 +418,7 @@ character stream. We display the first 30 results.
 
 ``` scala
 scala> val rdd = sc.parallelize(chars.zip(1 to 200000), numSlices=20)
-rdd: org.apache.spark.rdd.RDD[(Char, Int)] = 
+rdd: org.apache.spark.rdd.RDD[(Char, Int)] =
                     ParallelCollectionRDD[0] at parallelize at <console>:26
 
 scala> rdd.take(30)
@@ -323,7 +438,7 @@ Let’s apply some (lazily evaluated) transformations to this RDD.
 
 ``` scala
 scala> val mappedRDD = rdd.map({case (chr, num) => (chr, num+1)})
-mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = 
+mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
                             MapPartitionsRDD[5] at map at <console>:25
 ```
 
@@ -339,7 +454,7 @@ an action is applied.
 
 ``` scala
 scala> val reducedRDD = rdd.reduceByKey(_ + _)
-reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = 
+reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
                             ShuffledRDD[6] at reduceByKey at <console>:25
 ```
 
@@ -359,7 +474,7 @@ res3: Array[(Char, Int)] = Array((d,769300000), (x,769253844), (e,769307693),
 (i,769138464), (j,769146156), (k,769153848), (l,769161540), (m,769169232),
 (n,769176924), (o,769184616), (p,769192308), (q,769200000), (r,769207692),
 (s,769215384), (t,769223076), (a,769276921), (u,769230768), (b,769284614),
-(v,769238460), (w,769246152), (c,769292307)) 
+(v,769238460), (w,769246152), (c,769292307))
 ```
 
 Typically, we don’t build the data first, but we actually load it from a
@@ -369,8 +484,8 @@ folder). We can load it as follows
 
 ``` scala
 // sc.textFile can take multiple files as argument!
-scala> val raw_data = sc.textFile("sensordata.csv") 
-raw_data: org.apache.spark.rdd.RDD[String] = 
+scala> val raw_data = sc.textFile("sensordata.csv")
+raw_data: org.apache.spark.rdd.RDD[String] =
                 sensordata.csv MapPartitionsRDD[1] at textFile at <console>:24
 scala> raw_data.take(10).foreach(println)
 COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
@@ -466,9 +581,9 @@ If we import types first, and then enter this in our interactive shell we get
 the following:
 
 ``` scala
-scala> :paste 
+scala> :paste
 // Entering paste mode (ctrl-D to finish)
-import org.apache.spark.sql.types._ 
+import org.apache.spark.sql.types._
 
 val schema =
   StructType(
@@ -509,7 +624,7 @@ val df = spark.read
               .option("timestampFormat", "MM/dd/yy:hh:mm")
               .csv("./sensordata.csv")
 // Exiting paste mode, now interpreting.
-df: org.apache.spark.sql.DataFrame = 
+df: org.apache.spark.sql.DataFrame =
         [sensorname: string, timestamp: date ... 6 more fields]
 
 scala> df.printSchema
@@ -522,7 +637,7 @@ root
  |-- numD: double (nullable = true)
  |-- numE: long (nullable = true)
  |-- numF: double (nullable = true
- 
+
 scala> df.take(10).foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
@@ -544,10 +659,10 @@ minutes to get right).
 ``` scala
 scala> df.createOrReplaceTempView("sensor")
 
-scala> val dfFilter = spark.sql("SELECT * FROM sensor  
-WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")") 
+scala> val dfFilter = spark.sql("SELECT * FROM sensor
+WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")")
 // I think the newline in the multiline string breaks it if you paste it
-dfFilter: org.apache.spark.sql.DataFrame = 
+dfFilter: org.apache.spark.sql.DataFrame =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dfFilter.collect.foreach(println)
@@ -567,7 +682,7 @@ A slightly more sane and type-safe way would be to do the following.
 
 ``` scala
 scala> val dfFilter = df.filter("timestamp = TIMESTAMP(\"2014-03-10 01:01:00\")")
-dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = 
+dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] =
                     [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dfFilter.collect.foreach(println)
@@ -635,16 +750,16 @@ val ds = spark.read .schema(schema)
 
 // Exiting paste mode, now interpreting.
 
-ds: org.apache.spark.sql.Dataset[SensorData] = 
+ds: org.apache.spark.sql.Dataset[SensorData] =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 ```
 
 Now we can apply compile time type-checked operations.
 
 ``` scala
-scala> val dsFilter = ds.filter(a => a.timestamp == 
+scala> val dsFilter = ds.filter(a => a.timestamp ==
                                 new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
-dsFilter: org.apache.spark.sql.Dataset[SensorData] = 
+dsFilter: org.apache.spark.sql.Dataset[SensorData] =
                 [sensorname: string, timestamp: timestamp ... 6 more fields]
 
 scala> dsFilter.collect.foreach(println)
@@ -667,11 +782,10 @@ This was a brief overview of the 2 (or 3) different Spark APIs. You can always
 find more information on the programming guides for [RDDs](https://spark.apache.org/docs/latest/rdd-programming-guide.html) and
 [Dataframes/Datasets](https://spark.apache.org/docs/latest/sql-programming-guide.html) and in the [Spark documentation](https://spark.apache.org/docs/2.3.1/api/scala/index.html#package)
 
-SBT
----
+### Packaging your application using SBT
 
 We showed how to run Spark in interactive mode. Now we will explain how to
-build applications, that can be submitted using the `spark-submit` command.
+build applications that can be submitted using the `spark-submit` command.
 
 First, we will explain how to structure a Scala project, using the [SBT build
 tool](https://www.scala-sbt.org). The typical project structure is
@@ -691,7 +805,7 @@ The project’s name, dependencies, and versioning is defined in the `build.sbt`
 file. An example `build.sbt` file is
 
     ThisBuild / scalaVersion := "2.11.12"
-
+    
     lazy val example = (project in file("."))
       .settings(
         name := "Example project",
@@ -770,10 +884,10 @@ We can also open an interactive session using SBT.
     [info] Starting scala interpreter...
     Welcome to Scala 2.11.12 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_102).
     Type in expressions for evaluation. Or try :help.
-
+    
     scala> example.Example.addOne('a', 1)
     res1: (Char, Int) = (a,2)
-
+    
     scala> println("Interactive environment")
     Interactive environment
 
@@ -781,13 +895,13 @@ To build Spark applications with SBT we need to include dependencies (Spark
 most notably) to build the project. Modify your `build.sbt` file like so
 
     ThisBuild / scalaVersion := "2.11.12"
-
+    
     lazy val example = (project in file("."))
       .settings(
         name := "Example project",
-
+    
         libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.1",
-        libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1" 
+        libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1"
       )
 
 We can now use Spark in the script. Modify `example.scala`.
@@ -801,9 +915,9 @@ import java.sql.Timestamp
 
 
 object ExampleSpark {
-  case class SensorData ( 
-    sensorName: String, 
-    timestamp: Timestamp, 
+  case class SensorData (
+    sensorName: String,
+    timestamp: Timestamp,
     numA: Double,
     numB: Double,
     numC: Long,
@@ -834,8 +948,8 @@ object ExampleSpark {
 
     import spark.implicits._
 
-    val ds = spark.read 
-                  .schema(schema) 
+    val ds = spark.read
+                  .schema(schema)
                   .option("timestampFormat", "MM/dd/yy:hh:mm")
                   .csv("./sensordata.csv")
                   .as[SensorData]
@@ -881,8 +995,8 @@ set to change the log levels programmatically, if desired.
 
     import org.apache.log4j.{Level, Logger}
     ...
-
-
+    
+    
     def main(args: Array[String]) {
         ...
         Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
@@ -892,8 +1006,16 @@ set to change the log levels programmatically, if desired.
 You can also use this logger to log your application which might be helpful for
 debugging on the AWS cluster later on.
 
-The GDelt Project
------------------
+    [GitHub Student Developer Pack]: https://education.github.com/pack
+
+# Lab 1
+
+In this lab, we will design and develop the code in Spark to process GDelt
+data, which will be used in lab 2 to scale the analysis to the entire dataset.
+We will first give a brief introduction to the various technologies used in
+this lab.
+
+## Assignment
 
 Now that we have introduced the different technologies, we can start talking
 about the goal of the first lab. In this lab you will write the application in
@@ -932,7 +1054,7 @@ You can use these local files for the first lab assignment to test your
 application, and build some understanding of the scaling behaviour on a single
 machine.
 
-An example output of this system based on 10 segments would be.
+An example output of this system based on 10 segments would be:
 
     DateResult(2015-02-19,List((United States,1497), (Islamic State,1233), (New
     York,1058), (United Kingdom,735), (White House,723), (Los Angeles,620), (New
@@ -943,7 +1065,7 @@ An example output of this system based on 10 segments would be.
     Zealand,353), (United Kingdom,325), (Jeb Bush,298), (Practice Wrestling
     Room,280)))
 
-Or in JSON.
+Or in JSON:
 
 ``` json
 {"data":"2015-02-19","result":[{"topic":"United
@@ -967,67 +1089,76 @@ positives (“ParentCategory” seems to be a particular common one)? You are fr
 to implement it whatever you think is best, and are encouraged to experiment
 with this. Document your choices in your report.
 
-Deliverables
-------------
+## Deliverables
 
 The deliverables for the first lab are:
 
-1.  An RDD-based implementation of the GDelt analysis,
-2.  A Dataframe/Dataset-based implementation of the GDelt analysis,
+1.  A Dataframe/Dataset-based implementation of the GDelt analysis,
+2.  An RDD-based implementation of the GDelt analysis,
 3.  A report containing:
     1.  Outline of your implementation and approach (½–1 page);
-    2.  Pointwise answers to the questions listed below.
+    2.  Answers to the questions listed below. Be as concise as you can\!
 
-Your report and code will be discussed in a brief oral examination during the
-lab, the schedule of which will be posted on Brightspace.
+The deadline of this lab will be announced on Brightspace. Your report and code
+will be discussed in a brief oral examination during the lab, the schedule of
+which will become available later.
 
-The deadline of this lab will be announced on Brightspace.
-
-Questions
----------
+## Questions
 
 General questions:
 
 1.  In typical use, what kind of operation would be more expensive, a narrow
-    dependency or a wide dependency? Why?
+    dependency or a wide dependency? Why? (max. 50 words)
+
 2.  What is the shuffle operation and why is it such an important topic in
-    Spark optimization?
+    Spark optimization? (max. 100 words)
+
 3.  In what way can Dataframes and Datasets improve performance both in
-    compute, but also in the distributing of data compared to RDDs? Will
-    Dataframes and Datasets always perform better than RDDs?
+    compute, but also in the distributing of data compared to RDDs? Under what
+    conditions will Dataframes perform better than RDDs? (max. 100 words)
+
 4.  Consider the following scenario. You are running a Spark program on a big
     data cluster with 10 worker nodes and a single master node. One of the
     worker nodes fails. In what way does Spark’s programming model help you
-    recover the lost work? (Think about the directed acyclic graph!)
-5.  Can you think of a problem/computation that does not fit Spark’s
-    MapReduce-esque programming model efficiently.
-6.  Why do you think the MapReduce paradigm is such a widely utilized
-    abstraction for distributed shared memory processing and fault-tolerance?
+    recover the lost work? (Think about the execution plan or DAG) (max. 50
+    words)
+
+5.  We might distinguish the following five conceptual parallel programming
+    models:
+    
+    1.  farmer/worker
+    2.  divide and conquer
+    3.  data parallelism
+    4.  function parallelism
+    5.  bulk-synchronous
+    
+    Pick one of these models and explain why it does or does not fit Spark’s
+    programming model. (max. 100 words)
 
 Implementation analysis questions:
 
-1.  Do you expect and observe big performance differences between the RDD and
-    Dataframe/Dataset implementation of the GDelt analysis?
+1.  Measure the execution times for 10, 20, 50, 100 and 150 segments. Do you
+    observe a difference in execution time between your Dataframe and RDD
+    implementations? Is this what you expect and why? (max. 50 words)
 2.  How will your application scale when increasing the amount of analyzed
     segments? What do you expect the progression in execution time will be for, 100,
-    1000, 10000 files?
-3.  If you extrapolate the scaling behavior on your machine (for instance for
-    10, 50, 100 segments) to the entire dataset, how much time will it take to
+    1000, 10000 segments? (max. 50 words)
+3.  If you extrapolate the scaling behavior on your machine, using your results
+    from question 1, to the entire dataset, how much time will it take to
     process the entire dataset? Is this extrapolation reasonable for a single
-    machine?
+    machine? (max. 50 words)
 4.  Now suppose you had a cluster of identical machines with that you performed the
     analysis on. How many machines do you think you would need to process the
     entire dataset in under an hour? Do you think this is a valid
-    extrapolation?
+    extrapolation? (max. 50 words)
 5.  Suppose you would run this analysis for a company. What do you think would
     be an appropriate way to measure the performance? Would it be the time it
     takes to execute? The amount of money it takes to perform the analysis on
     the cluster? A combination of these two, or something else? Pick something
     you think would be an interesting metric, as this is the metric you will be
-    optimizing in the 2nd lab!
+    optimizing in the 2nd lab\! (max. 100 words)
 
-Lab 2
-=====
+# Lab 2
 
 In the first lab you built an application for a small dataset to analyze the
 most common topics in the news according to the GDelt dataset. In this lab we
@@ -1036,7 +1167,7 @@ dataset (several terabytes). You are free to pick either your RDD, or
 Dataframe/Dataset implementation.
 
 **We assume everybody has access to AWS credits via both the GitHub developer
-pack and the AWS classroom in their lab group! If this is not the case, please
+pack and the AWS classroom in their lab group\! If this is not the case, please
 ask for help, or send us an email.**
 
 **You pay for cluster per commissioned minute. After you are done working with
@@ -1045,24 +1176,21 @@ a cluster, please terminate the cluster, to avoid unnecessary costs.**
 Like last lab, we will first give you a short description of the different
 technologies you will be using before we give the actual assignment.
 
-Amazon Web Services
--------------------
+## Amazon Web Services
 
 AWS consists of a variety of different services, the ones relevant for this lab
 are listed below:
 
-[EC2](https://aws.amazon.com/ec2/)  
-Elastic Compute Cloud allows you to provision a variety of different
-machines that can be used to run a computation. An overview of the
-different machines and their use cases can be found on the EC2 website.
-
-[EMR](https://aws.amazon.com/emr/)  
-Elastic MapReduce is a layer on top of EC2, that allows you to quickly
-deploy MapReduce-like applications, for instance Apache Spark.
-
-[S3](https://aws.amazon.com/s3/)  
-Simple Storage Server is an object based storage system that is easy to
-interact with from different AWS services.
+  - [EC2](https://aws.amazon.com/ec2/)  
+    Elastic Compute Cloud allows you to provision a variety of different
+    machines that can be used to run a computation. An overview of the
+    different machines and their use cases can be found on the EC2 website.
+  - [EMR](https://aws.amazon.com/emr/)  
+    Elastic MapReduce is a layer on top of EC2, that allows you to quickly
+    deploy MapReduce-like applications, for instance Apache Spark.
+  - [S3](https://aws.amazon.com/s3/)  
+    Simple Storage Server is an object based storage system that is easy to
+    interact with from different AWS services.
 
 Note that the GDelt GKG is hosted on AWS S3 in the [US east region](https://aws.amazon.com/public-datasets/common-crawl/), so any
 EC2/EMR instances interacting with this data set should also be provisioned
@@ -1123,7 +1251,7 @@ but this can also be done at a later time. Press *next*.
 In the *Hardware Configuration* screen, we can configure the arrangement and
 selection of the machines. We suggest starting out with `m4.large` machines on
 spot pricing. You should be fine running a small example workload with a single
-master node and two core nodes.[3][4] Be sure to select *spot pricing* and
+master node and two core nodes.\[2\]\[3\] Be sure to select *spot pricing* and
 place an appropriate bid. Remember that you can always check the current prices
 in the information popup or on the [Amazon website](https://aws.amazon.com/ec2/spot/pricing/). After
 selecting the machines, press *next*.
@@ -1163,32 +1291,29 @@ outgoing network, CPU load, memory pressure, and other useful metrics. They can
 help to characterize the workload at hand, and help optimizing computation
 times. An example of its interface is shown in fig. 2.
 
-<figure>
-<img src="./images/ganglia.png" alt="Figure 2: Ganglia screenshot" id="fig:ganglia" /><figcaption>Figure 2: Ganglia screenshot</figcaption>
-</figure>
+![Figure 2: Ganglia screenshot](./images/ganglia.png)
 
 It’s not uncommon to run into problems when you first deploy your application
 to AWS, here are some general clues:
 
--   You can access S3 files directly using Spark, so via
+  - You can access S3 files directly using Spark, so via
     `SparkContext.textFile` and `SparkSession.read.csv`, but not using the OS,
     so using an ordinary `File` java class will not work. If you want to load a
     file to the environment, you will have to figure out a workaround.
 
--   You can monitor the (log) output of your master and worker nodes in Yarn,
+  - You can monitor the (log) output of your master and worker nodes in Yarn,
     which you can access in the web interfaces. It might help you to insert
     some helpful logging messages in your Application.
 
--   Scale your application by increasing the workload by an order of magnitude
+  - Scale your application by increasing the workload by an order of magnitude
     at a time, some bugs only become apparent when you have a sufficient load
     on your cluster and a sufficient cluster size. In terms of cost, it’s also
     much cheaper if you do your debugging incrementally on smaller clusters.
 
--   Ensure that your cluster is running in actual cluster mode (can be visually
+  - Ensure that your cluster is running in actual cluster mode (can be visually
     confirmed by checking the load on the non-master nodes in Ganglia).
 
-Assignment
-----------
+## Assignment
 
 For this lab, we would like you to process the entire dataset, meaning all
 segments, with 20 `c4.8xlarge` core nodes, in under half an hour, using your
@@ -1213,20 +1338,19 @@ For extra points, we challenge you to come up with an even better solution
 according to the metric you defined in lab 1. You are free to change anything,
 but some suggestions are:
 
--   Find additional bottlenecks using Apache Ganglia (need more network I/O, or
+  - Find additional bottlenecks using Apache Ganglia (need more network I/O, or
     more CPU?, more memory?)
--   Tuning the kind and number of machines you use on AWS, based on these
+  - Tuning the kind and number of machines you use on AWS, based on these
     bottlenecks
--   Modifying the application to increase performance
--   Tuning Yarn/Spark configuration flags to best match the problem
+  - Modifying the application to increase performance
+  - Tuning Yarn/Spark configuration flags to best match the problem
 
 There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tuning.html) tuning on the Spark website.
 
-Deliverables
-------------
+## Deliverables
 
--   A report outlining your choices in terms of configuration and your results.
--   A presentation (maximum 5 slides/minutes) in which you present your work
+  - A report outlining your choices in terms of configuration and your results.
+  - A presentation (maximum 5 slides/minutes) in which you present your work
     and results to the class. Try to put an emphasis on the
     improvements you found, what kind of settings/configurations/changes had
     the most impact.
@@ -1236,8 +1360,7 @@ configuration you did. If you have measurements for multiple cluster
 configurations please include them. Also detail all the improvements you found,
 and why they improved effectiveness.
 
-Lab 3
-=====
+# Lab 3
 
 In the third and final lab of SBD we will be implementing a streaming
 application. As many of you have noted in the first lab questions, Spark is not
@@ -1248,40 +1371,35 @@ histogram of the most popular topics of the last hour that will continuously
 update. We included another visualizer for this lab that you can see in
 fig. 3.
 
-<figure>
-<img src="./images/stream_visualizer.png" alt="Figure 3: Visualizer for the streaming application" id="fig:stream_visualizer" /><figcaption>Figure 3: Visualizer for the streaming
-application</figcaption>
-</figure>
+![Figure 3: Visualizer for the streaming
+application](./images/stream_visualizer.png)
 
 Apache Kafka is a distributed streaming platform. The core abstraction is that
 of a message queue, to which you can both publish and subscribe to streams of
 records. Each queue is named by means of a topic. Apache Kafka is:
 
--   Resilient by means of replication;
--   Scalable on a cluster;
--   High-throughput and low-latency; and
--   A persistent store.
+  - Resilient by means of replication;
+  - Scalable on a cluster;
+  - High-throughput and low-latency; and
+  - A persistent store.
 
 Kafka consists of 4 APIs, from the Kafka docs:
 
-The Producer API  
-allows an application to publish a stream of records to one or more Kafka
-topics.
-
-The Consumer API  
-allows an application to subscribe to one or more topics and process the
-stream of records produced to them.
-
-The Streams API  
-allows an application to act as a stream processor, consuming an input
-stream from one or more topics and producing an output stream to one or
-more output topics, effectively transforming the input streams to output
-streams.
-
-The Connector API  
-allows building and running reusable producers or consumers that connect
-Kafka topics to existing applications or data systems. For example, a
-connector to a relational database might capture every change to a table.
+  - The Producer API  
+    allows an application to publish a stream of records to one or more Kafka
+    topics.
+  - The Consumer API  
+    allows an application to subscribe to one or more topics and process the
+    stream of records produced to them.
+  - The Streams API  
+    allows an application to act as a stream processor, consuming an input
+    stream from one or more topics and producing an output stream to one or
+    more output topics, effectively transforming the input streams to output
+    streams.
+  - The Connector API  
+    allows building and running reusable producers or consumers that connect
+    Kafka topics to existing applications or data systems. For example, a
+    connector to a relational database might capture every change to a table.
 
 Before you start with the lab, please read the [Introduction to Kafka on the Kafka
 website](https://kafka.apache.org/intro), to become familiar with the Apache
@@ -1298,8 +1416,7 @@ convenience. You can find the Scala KStreams documentation
 for API docs on the different parts of Kafka, like `StateStores`, please refer
 to [this link](https://kafka.apache.org/20/javadoc/overview-summary.html).
 
-Setting up
-----------
+## Setting up
 
 In the lab’s repository you will find a template for your solution. There are a
 bunch of scripts (`.sh` for MacOS/Linux, `.bat` for Windows). For these scripts
@@ -1326,7 +1443,7 @@ The `kafka_start` script does a number of things:
 2.  Start a single Kafka broker on port 9092
 
 Navigate to the GDELTProducer directory, and run `sbt run` to
-start[5] the GDELT stream.
+start\[4\] the GDELT stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
 command on MacOS/Linux:
@@ -1346,8 +1463,7 @@ Or on Windows cmd:
 
 If you see output appearing, you are now ready to start on the assignment.
 
-Assignment
-----------
+## Assignment
 
 As mentioned before, for this assignment, we will no longer batch process the
 GDELT Global Knowledge Graph, but rather stream it into a pipeline that
@@ -1355,49 +1471,44 @@ computes a histogram of the last hour. This pipeline is depicted by
 fig. 4. We will give a small description of the individual parts
 below.
 
-<figure>
-<img src="./images/kafka_pipeline.png" alt="Figure 4: GDELT streaming pipeline" id="fig:kafka_pipeline" /><figcaption>Figure 4: GDELT streaming pipeline</figcaption>
-</figure>
+![Figure 4: GDELT streaming pipeline](./images/kafka_pipeline.png)
 
-Producer  
-The producer, contained in the `GDELTProducer` Scala project, starts by
-downloading all segments of the previous hour (minus a 15 minute offset), and
-immediately start streaming records (rows) to a Kafka topic called `gdelt`.
-Simultaneously, it will schedule a new download step at the next quarter of the
-hour. The frequency by which the records are streamed is determined as the current
-amount of queued records over the time left until new data is downloaded from
-S3.
-
-Transformer  
-The transformer receives GDELT records on the `gdelt` topic and should use
-them to construct a histogram of the names from the “allNames” column of the
-dataset, but only for the last hour. This is very similar to the application
-you wrote in Lab 1, but it happens in real-time and you should take care to
-also decrement/remove names that are older than an hour (relative to your input
-data). Finally, the transformer’s output should appear on a Kafka topic called
-`gdelt-histogram`.
-
-Consumer  
-The consumer finally acts as a *sink*, and will process the incoming
-histogram updates from the transformer into a smaller histogram of only the 100
-most occurring names for display [6]. It will finally stream this
-histogram to
-our visualizer over a WebSocket connection.
+  - Producer  
+    The producer, contained in the `GDELTProducer` Scala project, starts by
+    downloading all segments of the previous hour (minus a 15 minute offset), and
+    immediately start streaming records (rows) to a Kafka topic called `gdelt`.
+    Simultaneously, it will schedule a new download step at the next quarter of the
+    hour. The frequency by which the records are streamed is determined as the current
+    amount of queued records over the time left until new data is downloaded from
+    S3.
+  - Transformer  
+    The transformer receives GDELT records on the `gdelt` topic and should use
+    them to construct a histogram of the names from the “allNames” column of the
+    dataset, but only for the last hour. This is very similar to the application
+    you wrote in Lab 1, but it happens in real-time and you should take care to
+    also decrement/remove names that are older than an hour (relative to your input
+    data). Finally, the transformer’s output should appear on a Kafka topic called
+    `gdelt-histogram`.
+  - Consumer  
+    The consumer finally acts as a *sink*, and will process the incoming
+    histogram updates from the transformer into a smaller histogram of only the 100
+    most occurring names for display \[5\]. It will finally stream this
+    histogram to
+    our visualizer over a WebSocket connection.
 
 You are now tasked with writing an implementation of the histogram transformer.
 In the file `GDELTStream/GDELTStream.scala` you will have to implement the
 following
 
-GDELT row processing  
-In the main function you will first have to write a function that filters
-the GDELT lines to a stream of allNames column. You can achieve this using
-the high-level API of Kafka Streams, on the `KStream` object.
-
-HistogramTransformer  
-You will have to implement the `HistogramTransformer` using the
-processor/transformer API of kafka streams, to convert the stream of
-allNames into a histogram of the last hour. We suggest you look at [state
-store for Kafka streaming](https://kafka.apache.org/20/documentation/streams/developer-guide/processor-api.html).
+  - GDELT row processing  
+    In the main function you will first have to write a function that filters
+    the GDELT lines to a stream of allNames column. You can achieve this using
+    the high-level API of Kafka Streams, on the `KStream` object.
+  - HistogramTransformer  
+    You will have to implement the `HistogramTransformer` using the
+    processor/transformer API of kafka streams, to convert the stream of
+    allNames into a histogram of the last hour. We suggest you look at [state
+    store for Kafka streaming](https://kafka.apache.org/20/documentation/streams/developer-guide/processor-api.html).
 
 You will have to write the result of this stream to a new topic called
 `gdelt-histogram`.
@@ -1408,7 +1519,7 @@ This means that whenever the transformer reads a name from the “allNames”
 column, it should publish an updated, i.e. incremented, (name, count) pair on
 the output topic, so that the visualizer can update accordingly. When you
 decrement a name, because its occurrence is older than an hour, remember to
-publish an update as well!
+publish an update as well\!
 
 To run the visualizer, first start the websocket server by navigating to the
 GDELTConsumer directory and running `sbt run`. Next, navigate to the
@@ -1416,17 +1527,15 @@ visualization directory in the root of the GitHub repository, under assignment
 3, open index.html. Once that is opened, press open web socket to start
 the visualization.
 
-Deliverables
-------------
+## Deliverables
 
--   A complete zip of the entire project, including your implementation of
-    `GDELTStream.scala` (please remove all data files from the zip!)
--   A report containing
-    -   Outline of the code (less than 1/2 a page)
-    -   Answers to the questions listed below
+  - A complete zip of the entire project, including your implementation of
+    `GDELTStream.scala` (please remove all data files from the zip\!)
+  - A report containing
+      - Outline of the code (less than 1/2 a page)
+      - Answers to the questions listed below
 
-Questions
----------
+## Questions
 
 Try to be concise with your answers. Some questions have a maximum number of
 words you can use, but you are welcome to use fewer if you can.
@@ -1462,29 +1571,28 @@ words you can use, but you are welcome to use fewer if you can.
 6.  How could you use Kafka’s partitioning to compute the histogram in
     parallel? (max. 100 words)
 
-[1] In case you don’t have a credit card: In previous years, students have
-used prepaid credit cards (available online) to register.
+<!-- end list -->
 
-[2] Since Java 8, Java also supports anonymous functions, or
-lambda expression, but this version wasn’t released at the time of Spark’s
-initial release.
+1.  Since Java 8, Java also supports anonymous functions, or
+    lambda expression, but this version wasn’t released at the time of Spark’s
+    initial release.
 
-[3] You always need a master node, which is tasked with distributing
-resources and managing tasks for the core nodes. We recommend using
-the cheap `m4.large` instance. If you start to notice unexplained
-bottlenecks for tasks with many machines and a lot of data, you might want
-to try a larger master node. Ganglia should provide you with some insights
-regarding this matter.
+2.  You always need a master node, which is tasked with distributing
+    resources and managing tasks for the core nodes. We recommend using
+    the cheap `m4.large` instance. If you start to notice unexplained
+    bottlenecks for tasks with many machines and a lot of data, you might want
+    to try a larger master node. Ganglia should provide you with some insights
+    regarding this matter.
 
-[4] By default, there are some limitations on the number of spot instances
-your account is allowed to provision. If you don’t have access to enough
-spot instances, the procedure to request additional can be found in the
-[AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
+3.  By default, there are some limitations on the number of spot instances
+    your account is allowed to provision. If you don’t have access to enough
+    spot instances, the procedure to request additional can be found in the
+    [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
 
-[5] As this [issue](https://github.com/sbt/sbt/issues/3618)
-suggests, you might need to run `sbt run` twice when starting the producer for
-the first time.
+4.  As this [issue](https://github.com/sbt/sbt/issues/3618)
+    suggests, you might need to run `sbt run` twice when starting the producer for
+    the first time.
 
-[6] It might turn out that this is too much for your browser to
-handle. If this is the case, you may change it manually in the
-`HistogramProcessor` contained in `GDELTConsumer.scala`.
+5.  It might turn out that this is too much for your browser to
+    handle. If this is the case, you may change it manually in the
+    `HistogramProcessor` contained in `GDELTConsumer.scala`.

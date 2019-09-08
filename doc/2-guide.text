@@ -1,11 +1,168 @@
-
-Lab 1 {#lab-1 .unnumbered}
+Guide {#guide .unnumbered}
 =====
 
-In this lab, we will design and develop the code in Spark to process GDelt
-data, which will be used in lab 2 to scale the analysis to the entire dataset.
-We will first give a brief introduction to the various technologies used in
-this lab.
+In this first chapter, we will cover some of the concepts and technologies that
+are used during the course. We will introduce the following topics (in a
+different order):
+
+-   *The GDELT project*, a large database of "human society", constructed of
+    mentions of "people, organizations, locations, themes, counts, images and
+    emotions" around the planet. As mentioned before, will use the GDELT
+    database to construct a histogram of the most important themes during a
+    certain timespan.
+-   *Apache Spark*, a framework for processing large amounts of data on
+    multiple machines in a robust way. We will build our application for labs 1
+    and 2 using Spark.
+-   *Amazon Web Services*, or AWS, which provide theoretically unlimited
+    compute infrastructure, allowing us to process a dataset as large as the
+    entire GDelt database in lab 2.
+-   *Apache Kafka*, a framework for building so-called data pipelines, in which
+    potentially many producers and consumers process real-time, streaming data.
+    In lab 3, we will take the application from labs 1 and 2 and modify it to
+    process data in real-time, using Kafka.
+-   *Scala*, a programming language that runs on the Java Virtual Machine
+    (JVM). This is our (mandatory!) language of choice during the lab
+    assignments. We will use it to program for both Apache Spark and Apache
+    Kafka.
+-   *Docker*, an application that allows the user to package and run software
+    (like Spark and Kafka and the programs we write for them) in an isolated
+    environment: a container.
+
+The GDelt project
+-----------------
+
+During the lab, we will use the GDELT Global Knowledge Graph version 2.0 (GKG
+v2.0). This database is basically a massive table that "connects every person,
+organization, location, count, theme, news source, and event across the planet
+into a single massive network that captures what's happening around the world,
+what its context is and who's involved, and how the world is feeling about it,
+every single day."
+
+The GKG is updated every 15 minutes and published as a series of compressed
+comma-separated values (CSV) files (in which the columns are actually separated
+using tabs). The first segment of the version 2 database was published back in
+2015 and at the time of writing (September 2019) it contains 157378 segments
+with a total compressed file size of 1.4 terabytes (TiB). Uncompressed, this
+comes down to about 4.2 terabytes of raw data.
+
+Read [this article] for a general introduction to the dataset, [this table] for
+a quick overview of its columns and what they mean, and [this document] for a
+more in depth description.
+
+During the labs, we will use the `AllNames` column, which lists all "proper
+names" (people, organizations, countries, etcetera) mentioned. It can be seen
+as a summary of many of the other columns.
+
+Docker
+------
+
+According to the [Docker Documentation]
+
+> Docker is a platform for developers and sysadmins to develop, deploy, and run
+> applications with containers. The use of Linux containers to deploy
+> applications is called containerization. Containers are not new, but their
+> use for easily deploying applications is. Containerization is increasingly
+> popular because containers are:
+>
+> -   Flexible: Even the most complex applications can be containerized.
+> -   Lightweight: Containers leverage and share the host kernel.
+> -   Interchangeable: You can deploy updates and upgrades on-the-fly.
+> -   Portable: You can build locally, deploy to the cloud, and run anywhere.
+> -   Scalable: You can increase and automatically distribute container
+>     replicas.
+> -   Stackable: You can stack services vertically and on-the-fly.
+
+For this course, we use Docker primarily to ensure every student is using the
+exact same platform for their applications, and to avoid certain
+platform-specific issues and peculiarities.
+
+A basic understanding of some [Docker] concepts helps in getting started with
+this course. [Part 1: Orientation and setup] of the [Get Started Guide][Part 1:
+Orientation and setup] covers the basic [Docker] concepts used in this course.
+
+Before trying the lab assignments and tutorials in the next sections, make sure
+you [Install Docker (stable)] and test your installation by running the simple
+[Hello World image].
+
+``` {.bash}
+docker run hello-world
+```
+
+### Setting up Spark in Docker
+
+In order to run Spark in a container, a `Dockerfile` is provided which can be
+used to build images for `spark-submit` to run your Spark application,
+`spark-shell` to run a Spark interactive shell, and the Spark history server to
+view event logs from application runs. You need to build these images before
+you get started.
+
+To build a docker image from the `Dockerfile`, we use `docker build`:
+
+``` {.bash}
+docker build \
+  --build-target <target> `# Select a target from the Dockerfile \
+  -t <tag>                `# Set a tag for the resulting image \
+  -f Dockerfile          ` # Read the Dockerfile
+```
+
+Run `docker build` three times to build the required images:
+
+-   `spark-submit`
+
+    ``` {.bash}
+    docker build --build-target spark-submit -t spark-submit -f Dockerfile
+    ```
+
+-   `spark-shell`
+
+    ``` {.bash}
+    docker build --build-target spark-shell -t spark-shell -f Dockerfile
+    ```
+
+-   `spark-history-server`
+
+    ``` {.bash}
+    docker build --build-target spark-history-server -t spark-history-server -f
+    Dockerfile
+    ```
+
+You can then run the following commands from the Spark application root
+(the folder containing the `build.sbt` file). Please make sure to use the
+provided template project.
+
+-   Build your Spark application (`sbt package`)
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt package
+    ```
+
+-   Run your Spark application (`spark-submit`) (fill in the class name of your
+    application and the name of your project!)
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
+    spark-submit --class <YOUR_CLASSNAME>
+    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
+    ```
+
+-   Spawn the history server to view event logs, accessible at
+    <localhost:18080>
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/spark-events:/spark-events -p 18080:18080 spark-history-server
+    ```
+
+-   Start a Spark shell (`spark-shell`)
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/io spark-shell
+    ```
+
+The rest of the manual will not generally mention these Docker commands again,
+so know that if we mention e.g. `spark-shell`, you should run the corresponding
+`docker run` command listed above. You can create scripts or aliases for your
+favorite shell to avoid having to type a lot.
+
 
 Scala
 -----
@@ -20,10 +177,10 @@ reasons why Spark was written in Scala are:
     **J**ava **AR**chive format, or JAR). This simplifies deploying to cloud
     provider big data platforms as we don't need specific knowledge of the
     operating system, or even the underlying architecture.
-2. Compared to Java, Scala has some advantages in supporting more complex
-   types, type inference, and anonymous functions[^java_lambdas]. Matei
-   Zaharia, Apache Spark's original author, has said the following about why
-   Spark was implemented in Scala in a [Reddit AMA]:
+2.  Compared to Java, Scala has some advantages in supporting more complex
+    types, type inference, and anonymous functions[^java_lambdas]. Matei
+    Zaharia, Apache Spark's original author, has said the following about why
+    Spark was implemented in Scala in a [Reddit AMA]:
 
     > At the time we started, I really wanted a PL that supports a
     > language-integrated interface (where people write functions inline, etc),
@@ -70,7 +227,8 @@ Modern Spark exposes two APIs around this programming model:
 1. Resilient Distributed Datasets
 2. Spark SQL Dataframe/Datasets
 
-We will consider both here shortly.
+In the rest of this section, we will demonstrate a simple application with
+implementations using both APIs.
 
 ### Resilient Distributed Datasets
 
@@ -162,6 +320,7 @@ logging level etc.
 Going back to our shell, let's first create some sample data that we can
 demonstrate the RDD API around. Here we create an infinite list of repeating
 characters from 'a' tot 'z'.
+
 ```{.scala}
 scala> val charsOnce = ('a' to 'z').toStream
 charsOnce: scala.collection.immutable.Stream[Char] = Stream(a, ?)
@@ -170,6 +329,7 @@ chars: Stream[Char] = Stream(a, ?)
 ```
 Now we build a collection with the first 200000 integers, zipped with the
 character stream. We display the first 30 results.
+
 ```{.scala}
 scala> val rdd = sc.parallelize(chars.zip(1 to 200000), numSlices=20)
 rdd: org.apache.spark.rdd.RDD[(Char, Int)] =
@@ -188,6 +348,7 @@ us to enter Spark's programming model. With the optional parameter `numSlices`
 we indicate in how many partitions we want to subdivide the sequence.
 
 Let's apply some (lazily evaluated) transformations to this RDD.
+
 ```{.scala}
 scala> val mappedRDD = rdd.map({case (chr, num) => (chr, num+1)})
 mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
@@ -217,6 +378,7 @@ transformations on the data. We will use the collect action, which means to
 gather all the results to the master, going out of the Spark programming model,
 back to a Scala sequence. How many elements do you expect there to be in this
 sequence after the previous transformations?
+
 ```{.scala}
 scala> reducedRDD.collect
 res3: Array[(Char, Int)] = Array((d,769300000), (x,769253844), (e,769307693),
@@ -249,7 +411,9 @@ COHUTTA,3/10/14:1:11,10.49,1.739,886,1.51,81,1.83
 COHUTTA,3/10/14:1:12,9.79,1.739,886,1.74,82,1.91
 COHUTTA,3/10/14:1:13,10.02,1.739,886,1.24,86,1.79
 ```
+
 We can process this data to filter only measurements on `3/10/14:1:01`.
+
 ```{.scala}
 scala> val filterRDD = raw_data.map(_.split(","))
                     .filter(x => x(1) == "3/10/14:1:01")
@@ -303,11 +467,14 @@ optimizations because of the (structured) format.
 
 Let's do the same analysis as last time using this API. First we will define a
 schema. Let's take a look at a single row of the csv:
+
 ```
 COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
 ```
+
 So first a string field, a date, a timestamp, and some numeric information.
 We can thus define the schema as such:
+
 ```{.scala}
 val schema =
   StructType(
@@ -326,6 +493,7 @@ val schema =
 
 If we import types first, and then enter this in our interactive shell we get
 the following:
+
 ```{.scala}
 scala> :paste
 // Entering paste mode (ctrl-D to finish)
@@ -361,6 +529,7 @@ An overview of the different [Spark SQL types] can be found online. For the
 timestamp field we need to specify the format according to the [Java
 date format]—in our case `MM/dd/yy:hh:mm`. Tying this
 all together we can build a Dataframe like so.
+
 ```{.scala}
 scala> :paste
 // Entering paste mode (ctrl-D to finish)
@@ -424,6 +593,7 @@ scala> dfFilter.collect.foreach(println)
 ```
 
 A slightly more sane and type-safe way would be to do the following.
+
 ```{.scala}
 scala> val dfFilter = df.filter("timestamp = TIMESTAMP(\"2014-03-10 01:01:00\")")
 dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] =
@@ -479,6 +649,7 @@ case class SensorData (
 
 defined class SensorData
 ```
+
 Now we can convert a Dataframe (which actually is just an untyped Dataset) to a
 typed Dataset using the `as` method.
 
@@ -525,10 +696,10 @@ This was a brief overview of the 2 (or 3) different Spark APIs. You can always
 find more information on the programming guides for [RDDs] and
 [Dataframes/Datasets] and in the [Spark documentation]
 
-## SBT
+### Packaging your application using SBT
 
 We showed how to run Spark in interactive mode. Now we will explain how to
-build applications, that can be submitted using the `spark-submit` command.
+build applications that can be submitted using the `spark-submit` command.
 
 First, we will explain how to structure a Scala project, using the [SBT build
 tool]. The typical project structure is
@@ -557,6 +728,7 @@ lazy val example = (project in file("."))
     name := "Example project",
   )
 ```
+
 This specifies the Scala version of the project (2.11.12) and the name of the
 project.
 
@@ -592,6 +764,7 @@ sbt:Example project> compile
 ```
 
 We can try to run the application by typing `run`.
+
 ```
 sbt:Example project> run
 [info] Running example.Example
@@ -600,6 +773,7 @@ Hello world!
 ```
 
 Now let's add a function to `example.scala`.
+
 ```{.scala}
 object Example {
   def addOne(tuple: (Char, Int)) : (Char, Int) = tuple match {
@@ -611,8 +785,10 @@ object Example {
   }
 }
 ```
+
 In your SBT session we can prepend any command with a tilde (`~`) to make them
 run automatically on source changes.
+
 ```
 sbt:Example project> ~run
 [info] Compiling 1 Scala source to ...
@@ -627,6 +803,7 @@ Hello world!
 ```
 
 We can also open an interactive session using SBT.
+
 ```
 sbt:Example project> console
 [info] Starting scala interpreter...
@@ -642,6 +819,7 @@ Interactive environment
 
 To build Spark applications with SBT we need to include dependencies (Spark
 most notably) to build the project. Modify your `build.sbt` file like so
+
 ```
 ThisBuild / scalaVersion := "2.11.12"
 
@@ -717,6 +895,7 @@ You can build a JAR using the `package` command in SBT. This JAR will be
 located in the `target/scala-version/project_name_version.jar`.
 
 You can run the JAR via `spark-submit` (which will run on local mode).
+
 ```
 $ spark-submit target/scala-2.11/example-project_2.11-0.1.0-SNAPSHOT.jar
 INFO:...
@@ -732,6 +911,7 @@ SensorData(MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75)
 SensorData(BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28)
 INFO:...
 ```
+
 By default, Spark's logging is quite assertive. You can change the [log levels
 to warn] to reduce the output.
 
@@ -741,6 +921,7 @@ threads and these don't exit gracefully when SBT closes its main thread. This
 can be solved by running the application in a forked process, which can be
 enabled by setting `fork in run := true` in `build.sbt`. You will also have to
 set to change the log levels programmatically, if desired.
+
 ```
 import org.apache.log4j.{Level, Logger}
 ...
@@ -756,145 +937,16 @@ def main(args: Array[String]) {
 You can also use this logger to log your application which might be helpful for
 debugging on the AWS cluster later on.
 
-## The GDelt Project
 
-Now that we have introduced the different technologies, we can start talking
-about the goal of the first lab. In this lab you will write the application in
-Spark that analyzes GDelt and constructs the 10 most talked about topics per
-day. For the first lab you will write the prototype that you check on your
-local machine.
-
-We will use the GDelt version 2 GKG files. The format these files are in is tab
-separated values. The exact specification of each columns and details can be
-found in the [GKG codebook]. The schema of the files can be read in
-`headers.csv` in the `data` folder. The columns that are most relevant are the
-"date" column and the "allNames" column.
-
-In the `data` folder you will also find a script called `get_data`. This script
-will download a number of sample files to your computer, and generate a
-document with the paths to all these files.
-```{.sh}
-$./get_data 4
-...
-wget downloading
-...
-
-$cat local_index.txt
-/path/to/this/repo/SBD-2018/data/segment/20150218230000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218231500.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218233000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218234500.gkg.csv
-```
-The script will put all downloaded files in the `segment` folder. `wget`
-timestamps the downloads, so it will not update the files when you want to
-generate a local index for 20 files if you had 10 before.
-
-You can use these local files for the first lab assignment to test your
-application, and build some understanding of the scaling behaviour on a single
-machine.
-
-An example output of this system based on 10 segments would be.
-```
-DateResult(2015-02-19,List((United States,1497), (Islamic State,1233), (New
-York,1058), (United Kingdom,735), (White House,723), (Los Angeles,620), (New
-Zealand,590), (Associated Press,498), (San Francisco,479), (Practice Wrestling
-Room,420)))
-DateResult(2015-02-18,List((Islamic State,1787), (United States,1210), (New
-York,727), (White House,489), (Los Angeles,424), (Associated Press,385), (New
-Zealand,353), (United Kingdom,325), (Jeb Bush,298), (Practice Wrestling
-Room,280)))
-```
-
-Or in JSON.
-```{.json}
-{"data":"2015-02-19","result":[{"topic":"United
-States","count":1497},{"topic":"Islamic State","count":1233},{"topic":"New
-York","count":1058},{"topic":"United Kingdom","count":735},{"topic":"White
-House","count":723},{"topic":"Los Angeles","count":620},{"topic":"New
-Zealand","count":590},{"topic":"Associated Press","count":498},{"topic":"San
-Francisco","count":479},{"topic":"Practice Wrestling Room","count":420}]}
-{"data":"2015-02-18","result":[{"topic":"Islamic
-State","count":1787},{"topic":"United States","count":1210},{"topic":"New
-York","count":727},{"topic":"White House","count":489},{"topic":"Los
-Angeles","count":424},{"topic":"Associated Press","count":385},{"topic":"New
-Zealand","count":353},{"topic":"United Kingdom","count":325},{"topic":"Jeb
-Bush","count":298},{"topic":"Practice Wrestling Room","count":280}]}
-```
-
-The exact counts can vary depending on how you count, for instance if a name
-is mentioned multiple times per article, do you count it once or multiple
-times? Something in between? Do you filter out some names that are false
-positives ("ParentCategory" seems to be a particular common one)? You are free
-to implement it whatever you think is best, and are encouraged to experiment
-with this. Document your choices in your report.
-
-## Deliverables
-
-The deliverables for the first lab are:
-
-1.  A Dataframe/Dataset-based implementation of the GDelt analysis,
-2.  An RDD-based implementation of the GDelt analysis,
-3.  A report containing:
-    1.  Outline of your implementation and approach (½–1 page);
-    2.  Answers to the questions listed below. Be as concise as you can!
-
-The deadline of this lab will be announced on Brightspace. Your report and code
-will be discussed in a brief oral examination during the lab, the schedule of
-which will become available later.
-
-
-## Questions
-
-General questions:
-
-1.  In typical use, what kind of operation would be more expensive, a narrow
-    dependency or a wide dependency? Why? (max. 50 words)
-2.  What is the shuffle operation and why is it such an important topic in
-    Spark optimization? (max. 100 words)
-3.  In what way can Dataframes and Datasets improve performance both in
-    compute, but also in the distributing of data compared to RDDs? Under what
-    conditions will Dataframes perform better than RDDs? (max. 100 words)
-4.  Consider the following scenario. You are running a Spark program on a big
-    data cluster with 10 worker nodes and a single master node. One of the
-    worker nodes fails. In what way does Spark's programming model help you
-    recover the lost work? (Think about the execution plan or DAG) (max. 50
-    words)
-5.  We might distinguish the following five conceptual parallel programming
-    models:
-
-    1.  farmer/worker
-    2.  divide and conquer
-    3.  data parallelism
-    4.  function parallelism
-    5.  bulk-synchronous
-
-    Pick one of these models and explain why it does or does not fit Spark's
-    programming model. (max. 100 words)
-
-Implementation analysis questions:
-
-1.  Measure the execution times for 10, 20, 50, 100 and 150 segments. Do you
-    observe a difference in execution time between your Dataframe and RDD
-    implementations? Is this what you expect and why? (max. 50 words)
-2.  How will your application scale when increasing the amount of analyzed
-    segments? What do you expect the progression in execution time will be for, 100,
-    1000, 10000 segments? (max. 50 words)
-3.  If you extrapolate the scaling behavior on your machine, using your results
-    from question 1, to the entire dataset, how much time will it take to
-    process the entire dataset? Is this extrapolation reasonable for a single
-    machine? (max. 50 words)
-4.  Now suppose you had a cluster of identical machines with that you performed the
-    analysis on. How many machines do you think you would need to process the
-    entire dataset in under an hour? Do you think this is a valid
-    extrapolation? (max. 50 words)
-5.  Suppose you would run this analysis for a company. What do you think would
-    be an appropriate way to measure the performance? Would it be the time it
-    takes to execute? The amount of money it takes to perform the analysis on
-    the cluster? A combination of these two, or something else? Pick something
-    you think would be an interesting metric, as this is the metric you will be
-    optimizing in the 2nd lab! (max. 100 words)
-
-  [GitHub Student Developer Pack]: https://education.github.com/pack
+  [this article]: https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/
+  [this table]: https://github.com/linwoodc3/gdelt2HeaderRows/blob/master/schema_csvs/GDELT_2.0_gdeltKnowledgeGraph_Column_Labels_Header_Row_Sep2016.tsv
+  [this document]: http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
+  [Docker Documentation]: https://docs.docker.com/get-started
+  [Docker]: https://docs.docker.com/
+  [Part 1: Orientation and setup]: https://docs.docker.com/get-started/
+  [Install Docker (stable)]: https://docs.docker.com/install/#supported-platforms
+  [Hello World image]: https://hub.docker.com/_/hello-world
+    [GitHub Student Developer Pack]: https://education.github.com/pack
   [Spark overview page]: https://spark.apache.org/docs/latest/
   [lab's GitHub repository]: https://github.com/Tclv/SBD-Lab2/blob/master/get_dependencies.sh
   [Standard Big Data pipeline.]: ./images/big_data_stages
