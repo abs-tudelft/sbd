@@ -22,6 +22,8 @@ meaningful. Update the project name in `build.sbt`. The project folder also
 contains a `data/` directory, which will contain the data you download for
 testing, as explained in the following. The `data/` folder is automatically
 mounted in the working directory of relevant containers.
+
+
 ## Assignment
 
 We will use the GDELT version 2 GKG files. As mentioned, these files are
