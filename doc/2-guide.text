@@ -99,31 +99,31 @@ you get started.
 To build a docker image from the `Dockerfile`, we use `docker build`:
 
 ``` {.bash}
-docker build \
-  --target <target> `# Select a target from the Dockerfile \
-  -t <tag>          `# Set a tag for the resulting image \
-  - < Dockerfile    `# Read the Dockerfile from stdin
+docker build --target <target> -t <tag> .
 ```
+
+Here `<target>` selects the target from the `Dockerfile`, `<tag>` sets the tag
+for the resulting image, and the `.` sets the build context to the current
+working directory.
 
 Run `docker build` three times to build the required images:
 
 -   `spark-submit`
 
     ``` {.bash}
-    docker build --target spark-submit -t spark-submit - < Dockerfile
+    docker build --target spark-submit -t spark-submit .
     ```
 
 -   `spark-shell`
 
     ``` {.bash}
-    docker build --target spark-shell -t spark-shell - < Dockerfile
+    docker build --target spark-shell -t spark-shell .
     ```
 
 -   `spark-history-server`
 
     ``` {.bash}
-    docker build --target spark-history-server -t spark-history-server - <
-    Dockerfile
+    docker build --target spark-history-server -t spark-history-server .
     ```
 
 You can then run the following commands from the Spark application root
