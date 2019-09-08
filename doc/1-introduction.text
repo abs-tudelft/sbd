@@ -14,7 +14,7 @@ Introduction {#introduction .unnumbered}
 In this lab we will put the concepts that are central to Supercomputing with
 Big Data in some practical context. We will analyze a large open data set and
 identify a way of processing it efficiently using [Apache Spark] and the
-[Amazon Web Services] (AWS). The data set in question is the [GDelt 2.0 Global
+[Amazon Web Services] (AWS). The data set in question is the [GDELT 2.0 Global
 Knowledge Graph] (GKG), which indexes persons, organizations, companies,
 locations, themes, and even emotions from live news reports in print, broadcast
 and internet sources all over the world. We will use this data to construct a
@@ -63,11 +63,11 @@ The goal of this lab is to:
     streaming data context.
 
 You will work in groups of two. In this lab manual we will introduce a big data
-pipeline for identifying important events from the GDelt Global Knowledge Graph
+pipeline for identifying important events from the GDELT Global Knowledge Graph
 (GKG).
 
 In lab 1, you will start by writing a Spark application that processes the
-GDelt dataset. You will run this application on a small subset of data on
+GDELT dataset. You will run this application on a small subset of data on
 your local computer. You will use this to
 
 1.  get familiar with the Spark APIs,
@@ -90,6 +90,6 @@ real-time, in a way that is still scalable over many machines.
 
   [Amazon Web Services]: https://aws.amazon.com
   [GitHub]: https://github.com/Tclv/SBD-tudelft
-  [GDelt 2.0 Global Knowledge Graph]:
+  [GDELT 2.0 Global Knowledge Graph]:
   https://blog.gdeltproject.org/introducing-gkg-2-0-the-next-generation-of-the-gdelt-global-knowledge-graph/
   [Apache Spark]: https://spark.apache.org

@@ -5,30 +5,31 @@ In this first chapter, we will cover some of the concepts and technologies that
 are used during the course. We will introduce the following topics (in a
 different order):
 
--   *The GDELT project*, a large database of "human society", constructed of
+-   **The GDELT project**, a large database of "human society", constructed of
     mentions of "people, organizations, locations, themes, counts, images and
     emotions" around the planet. As mentioned before, will use the GDELT
     database to construct a histogram of the most important themes during a
     certain timespan.
--   *Apache Spark*, a framework for processing large amounts of data on
+-   **Apache Spark**, a framework for processing large amounts of data on
     multiple machines in a robust way. We will build our application for labs 1
     and 2 using Spark.
--   *Amazon Web Services*, or AWS, which provide theoretically unlimited
+-   **Amazon Web Services**, or AWS, which provide theoretically unlimited
     compute infrastructure, allowing us to process a dataset as large as the
-    entire GDelt database in lab 2.
--   *Apache Kafka*, a framework for building so-called data pipelines, in which
+    entire GDELT database in lab 2.
+-   **Apache Kafka**, a framework for building so-called data pipelines, in
+    which
     potentially many producers and consumers process real-time, streaming data.
     In lab 3, we will take the application from labs 1 and 2 and modify it to
     process data in real-time, using Kafka.
--   *Scala*, a programming language that runs on the Java Virtual Machine
+-   **Scala**, a programming language that runs on the Java Virtual Machine
     (JVM). This is our (mandatory!) language of choice during the lab
     assignments. We will use it to program for both Apache Spark and Apache
     Kafka.
--   *Docker*, an application that allows the user to package and run software
+-   **Docker**, an application that allows the user to package and run software
     (like Spark and Kafka and the programs we write for them) in an isolated
     environment: a container.
 
-The GDelt project
+The GDELT project
 -----------------
 
 During the lab, we will use the GDELT Global Knowledge Graph version 2.0 (GKG
@@ -106,18 +107,29 @@ Here `<target>` selects the target from the `Dockerfile`, `<tag>` sets the tag
 for the resulting image, and the `.` sets the build context to the current
 working directory.
 
-Run `docker build` three times to build the required images:
+We use `docker build` to build the images we need to use Spark and SBT.
 
--   `spark-submit`
+-   `sbt`[^sbt-image]
 
     ``` {.bash}
-    docker build --target spark-submit -t spark-submit .
+    docker build \
+    --build-arg BASE_IMAGE_TAG="8" \
+    --build-arg SBT_VERSION="1.2.8" \
+    --build-arg SCALA_VERSION="2.11.12" \
+    -t hseeberger/scala-sbt \
+    github.com/hseeberger/scala-sbt.git#:debian
     ```
 
 -   `spark-shell`
 
     ``` {.bash}
     docker build --target spark-shell -t spark-shell .
+    ```
+
+-   `spark-submit`
+
+    ``` {.bash}
+    docker build --target spark-submit -t spark-submit .
     ```
 
 -   `spark-history-server`
@@ -130,32 +142,33 @@ You can then run the following commands from the Spark application root
 (the folder containing the `build.sbt` file). Please make sure to use the
 provided template project.
 
--   Build your Spark application (`sbt package`)
+-   Run SBT to package or test your application (`sbt <command>`)
 
     ``` {.bash}
-    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt package
-    ```
-
--   Run your Spark application (`spark-submit`) (fill in the class name of your
-    application and the name of your project!)
-
-    ``` {.bash}
-    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
-    spark-submit --class <YOUR_CLASSNAME>
-    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
-    ```
-
--   Spawn the history server to view event logs, accessible at
-    <localhost:18080>
-
-    ``` {.bash}
-    docker run -it --rm -v `pwd`:/spark-events:/spark-events -p 18080:18080 spark-history-server
+    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt
     ```
 
 -   Start a Spark shell (`spark-shell`)
 
     ``` {.bash}
     docker run -it --rm -v `pwd`:/io spark-shell
+    ```
+
+-   Run your Spark application (`spark-submit`) (fill in the class name of your
+    application and the name of your project!)
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events \
+    spark-submit --class <YOUR_CLASSNAME> \
+    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
+    ```
+
+-   Spawn the history server to view event logs, accessible at
+    [localhost:18080](http://localhost:18080)
+
+    ``` {.bash}
+    docker run -it --rm -v `pwd`:/spark-events:/spark-events \
+    -p 18080:18080 spark-history-server
     ```
 
 The rest of the manual will not generally mention these Docker commands again,
@@ -921,9 +934,8 @@ By default, Spark's logging is quite assertive. You can change the [log levels
 to warn] to reduce the output.
 
 For development purposes you can also try running the application from SBT
-using the `run` command. This is a bit iffy, as Spark starts a number of
-threads and these don't exit gracefully when SBT closes its main thread. This
-can be solved by running the application in a forked process, which can be
+using the `run` command. You might run into some trouble with threads here,
+which can be solved by running the application in a forked process, which can be
 enabled by setting `fork in run := true` in `build.sbt`. You will also have to
 set to change the log levels programmatically, if desired.
 
@@ -949,7 +961,8 @@ and mount the `spark-events` folder in the container.
 ```
 $ docker run -it --rm -v `pwd`/spark-events/:/spark-events -p 18080:18080
     spark-history-server
-starting org.apache.spark.deploy.history.HistoryServer, logging to /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-d5dfa4949b86.out
+starting org.apache.spark.deploy.history.HistoryServer, logging to
+/spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-d5dfa4949b86.out
 Spark Command: /usr/local/openjdk-8/bin/java -cp /spark/conf/:/spark/jars/*
   -Xmx1g org.apache.spark.deploy.history.HistoryServer
 ========================================
@@ -980,7 +993,8 @@ Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
   file:/spark-events/local-1567952519905
 ```
 
-Navigate to <localhost:18080> to view detailed information about your jobs.
+Navigate to [http://localhost:18080](localhost:18080) to view detailed
+information about your jobs.
 After analysis you can shutdown the Spark history server using ctrl+C.
 
 ```
@@ -988,6 +1002,10 @@ $ ^C
 19/09/08 14:27:18 ERROR HistoryServer: RECEIVED SIGNAL INT
 19/09/08 14:27:18 INFO ShutdownHookManager: Shutdown hook called
 ```
+
+Be sure to explore the history server thoroughly! You can use it to gain an
+understanding of how Spark executes your application, as well as to debug and
+time your code, which is important for both lab 1 and 2.
 
   [this article]: https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/
   [this table]: https://github.com/linwoodc3/gdelt2HeaderRows/blob/master/schema_csvs/GDELT_2.0_gdeltKnowledgeGraph_Column_Labels_Header_Row_Sep2016.tsv
@@ -997,9 +1015,8 @@ $ ^C
   [Part 1: Orientation and setup]: https://docs.docker.com/get-started/
   [Install Docker (stable)]: https://docs.docker.com/install/#supported-platforms
   [Hello World image]: https://hub.docker.com/_/hello-world
-    [GitHub Student Developer Pack]: https://education.github.com/pack
+  [GitHub Student Developer Pack]: https://education.github.com/pack
   [Spark overview page]: https://spark.apache.org/docs/latest/
-  [lab's GitHub repository]: https://github.com/Tclv/SBD-Lab2/blob/master/get_dependencies.sh
   [Standard Big Data pipeline.]: ./images/big_data_stages
   [AWS CLI]: http://docs.aws.amazon.com/cli/latest/userguide/installing.html
   [AWS-CLI docs]: https://aws.amazon.com/cli/
@@ -1019,3 +1036,6 @@ $ ^C
   [GKG codebook]: http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf
   [log levels to warn]: https://stackoverflow.com/questions/27781187/how-to-stop-info-messages-displaying-on-spark-console
   [SBT build tool]: https://www.scala-sbt.org
+
+  [^sbt-image]: Normally the image is pulled from Docker Hub, but the tag
+  with the required version of Scala for Spark is no longer available.

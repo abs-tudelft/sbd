@@ -1,51 +1,62 @@
 Lab 1 {#lab-1 .unnumbered}
 =====
 
-In this lab, we will design and develop the code in Spark to process GDelt
-data, which will be used in lab 2 to scale the analysis to the entire dataset.
-We will first give a brief introduction to the various technologies used in
-this lab.
+In this lab, we will design and develop an application to process GDELT data.
+For a given amount of segments, the application should output the 10 most
+frequently mentioned topics contained in the `AllNames` column. The application
+will later be used in lab 2 to scale the analysis to the entire dataset.
 
+
+## Before you start
+
+We recommend you read all the relevant sections on Scala and Spark in the
+guide. Make sure you have Docker up-and-running and that you have built the
+required images for Spark and SBT, as per the instructions. You can verify your
+set-up by going through the steps of the Spark tutorial.
+
+Download the template project from [lab's GitHub repository] (contained in
+the `lab1/` folder), either by forking or cloning the repository, or
+downloading a zip file. You should execute all Docker commands from this
+project folder. Rename the Scala file and the class it contains to something
+meaningful. Update the project name in `build.sbt`. The project folder also
+contains a `data/` directory, which will contain the data you download for
+testing, as explained in the following. The `data/` folder is automatically
+mounted in the working directory of relevant containers.
 ## Assignment
 
-Now that we have introduced the different technologies, we can start talking
-about the goal of the first lab. In this lab you will write the application in
-Spark that analyzes GDelt and constructs the 10 most talked about topics per
-day. For the first lab you will write the prototype that you check on your
-local machine.
+We will use the GDELT version 2 GKG files. As mentioned, these files are
+formatted in tab-separated values. The schema of the files can be read from
+`headers.csv` in `data/`. The columns that are most relevant are
+`date` and `AllNames`.
 
-We will use the GDelt version 2 GKG files. The format these files are in is tab
-separated values. The exact specification of each columns and details can be
-found in the [GKG codebook]. The schema of the files can be read in
-`headers.csv` in the `data` folder. The columns that are most relevant are the
-"date" column and the "allNames" column.
-
-In the `data` folder you will also find a script called `get_data`. This script
-will download a number of sample files to your computer, and generate a
-document with the paths to all these files.
+In the `data/` folder you will also find a script called `get_data` and its
+Powershell equivalent `get_data.ps1`, for use on Windows. This script will
+download a number of GKG segments to your computer, and generate a file
+`local_index.txt` containing the paths to the downloaded files.
 
 ```{.sh}
-$./get_data 4
+$ ./get_data 4
 ...
 wget downloading
 ...
 
-$cat local_index.txt
-/path/to/this/repo/SBD-2018/data/segment/20150218230000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218231500.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218233000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218234500.gkg.csv
+$ cat local_index.txt
+/path/to/this/repo/lab1/data/segment/20150218230000.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218231500.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218233000.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218234500.gkg.csv
 ```
 
 The script will put all downloaded files in the `segment` folder. `wget`
-timestamps the downloads, so it will not update the files when you want to
-generate a local index for 20 files if you had 10 before.
+adds timestamps to downloads, so files will not be needlessly downloaded again.
 
 You can use these local files for the first lab assignment to test your
 application, and build some understanding of the scaling behaviour on a single
 machine.
 
-An example output of this system based on 10 segments would be:
+Your program should output a structure that maps dates to a list of 10 tuples
+containing the most mentioned topics and the amount of times they were
+mentioned. An example output of this system based on 10 segments would be:
 
 ```
 DateResult(2015-02-19,List((United States,1497), (Islamic State,1233), (New
@@ -86,11 +97,15 @@ with this. Document your choices in your report.
 
 The deliverables for the first lab are:
 
-1.  A Dataframe/Dataset-based implementation of the GDelt analysis,
-2.  An RDD-based implementation of the GDelt analysis,
+1.  A Dataframe/Dataset-based implementation of the GDELT analysis,
+2.  An RDD-based implementation of the GDELT analysis,
 3.  A report containing:
     1.  Outline of your implementation and approach (½–1 page);
     2.  Answers to the questions listed below. Be as concise as you can!
+
+For the implementations, **only** hand in your Scala files. Your code should
+run **without** changes in the rest of the project. Your submission should
+contain 2 Scala files and 1 PDF file containing your report.
 
 The deadline of this lab will be announced on Brightspace. Your report and code
 will be discussed in a brief oral examination during the lab, the schedule of
@@ -150,7 +165,7 @@ Implementation analysis questions:
 
   [GitHub Student Developer Pack]: https://education.github.com/pack
   [Spark overview page]: https://spark.apache.org/docs/latest/
-  [lab's GitHub repository]: https://github.com/Tclv/SBD-Lab2/blob/master/get_dependencies.sh
+  [lab's GitHub repository]: https://github.com/Tclv/SBD-tudelft
   [Standard Big Data pipeline.]: ./images/big_data_stages
   [AWS CLI]: http://docs.aws.amazon.com/cli/latest/userguide/installing.html
   [AWS-CLI docs]: https://aws.amazon.com/cli/

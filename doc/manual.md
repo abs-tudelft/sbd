@@ -2,7 +2,7 @@
       - [Before You Start](#before-you-start)
       - [Goal of this Lab](#goal-of-this-lab)
   - [Guide](#guide)
-      - [The GDelt project](#the-gdelt-project)
+      - [The GDELT project](#the-gdelt-project)
       - [Docker](#docker)
           - [Setting up Spark in Docker](#setting-up-spark-in-docker)
       - [Scala](#scala)
@@ -11,16 +11,16 @@
           - [Dataframe and Dataset](#dataframe-and-dataset)
           - [Packaging your application using SBT](#packaging-your-application-using-sbt)
   - [Lab 1](#lab-1)
-      - [Assignment](#assignment)
+      - [Before you start](#before-you-start-1)
       - [Deliverables](#deliverables)
       - [Questions](#questions)
   - [Lab 2](#lab-2)
       - [Amazon Web Services](#amazon-web-services)
-      - [Assignment](#assignment-1)
+      - [Assignment](#assignment)
       - [Deliverables](#deliverables-1)
   - [Lab 3](#lab-3)
       - [Setting up](#setting-up)
-      - [Assignment](#assignment-2)
+      - [Assignment](#assignment-1)
       - [Deliverables](#deliverables-2)
       - [Questions](#questions-1)
           - [General Kafka questions](#general-kafka-questions)
@@ -31,7 +31,7 @@
 In this lab we will put the concepts that are central to Supercomputing with
 Big Data in some practical context. We will analyze a large open data set and
 identify a way of processing it efficiently using [Apache Spark](https://spark.apache.org) and the
-[Amazon Web Services](https://aws.amazon.com) (AWS). The data set in question is the [GDelt 2.0 Global
+[Amazon Web Services](https://aws.amazon.com) (AWS). The data set in question is the [GDELT 2.0 Global
 Knowledge Graph](https://blog.gdeltproject.org/introducing-gkg-2-0-the-next-generation-of-the-gdelt-global-knowledge-graph/) (GKG), which indexes persons, organizations, companies,
 locations, themes, and even emotions from live news reports in print, broadcast
 and internet sources all over the world. We will use this data to construct a
@@ -78,11 +78,11 @@ The goal of this lab is to:
     streaming data context.
 
 You will work in groups of two. In this lab manual we will introduce a big data
-pipeline for identifying important events from the GDelt Global Knowledge Graph
+pipeline for identifying important events from the GDELT Global Knowledge Graph
 (GKG).
 
 In lab 1, you will start by writing a Spark application that processes the
-GDelt dataset. You will run this application on a small subset of data on
+GDELT dataset. You will run this application on a small subset of data on
 your local computer. You will use this to
 
 1.  get familiar with the Spark APIs,
@@ -109,30 +109,31 @@ In this first chapter, we will cover some of the concepts and technologies that
 are used during the course. We will introduce the following topics (in a
 different order):
 
-  - *The GDELT project*, a large database of “human society”, constructed of
+  - **The GDELT project**, a large database of “human society”, constructed of
     mentions of “people, organizations, locations, themes, counts, images and
     emotions” around the planet. As mentioned before, will use the GDELT
     database to construct a histogram of the most important themes during a
     certain timespan.
-  - *Apache Spark*, a framework for processing large amounts of data on
+  - **Apache Spark**, a framework for processing large amounts of data on
     multiple machines in a robust way. We will build our application for labs 1
     and 2 using Spark.
-  - *Amazon Web Services*, or AWS, which provide theoretically unlimited
+  - **Amazon Web Services**, or AWS, which provide theoretically unlimited
     compute infrastructure, allowing us to process a dataset as large as the
-    entire GDelt database in lab 2.
-  - *Apache Kafka*, a framework for building so-called data pipelines, in which
+    entire GDELT database in lab 2.
+  - **Apache Kafka**, a framework for building so-called data pipelines, in
+    which
     potentially many producers and consumers process real-time, streaming data.
     In lab 3, we will take the application from labs 1 and 2 and modify it to
     process data in real-time, using Kafka.
-  - *Scala*, a programming language that runs on the Java Virtual Machine
+  - **Scala**, a programming language that runs on the Java Virtual Machine
     (JVM). This is our (mandatory\!) language of choice during the lab
     assignments. We will use it to program for both Apache Spark and Apache
     Kafka.
-  - *Docker*, an application that allows the user to package and run software
+  - **Docker**, an application that allows the user to package and run software
     (like Spark and Kafka and the programs we write for them) in an isolated
     environment: a container.
 
-## The GDelt project
+## The GDELT project
 
 During the lab, we will use the GDELT Global Knowledge Graph version 2.0 (GKG
 v2.0). This database is basically a massive table that “connects every person,
@@ -200,57 +201,52 @@ you get started.
 To build a docker image from the `Dockerfile`, we use `docker build`:
 
 ``` bash
-docker build \
-  --build-target <target> `# Select a target from the Dockerfile \
-  -t <tag>                `# Set a tag for the resulting image \
-  -f Dockerfile          ` # Read the Dockerfile
+docker build --target <target> -t <tag> .
 ```
 
-Run `docker build` three times to build the required images:
+Here `<target>` selects the target from the `Dockerfile`, `<tag>` sets the tag
+for the resulting image, and the `.` sets the build context to the current
+working directory.
 
-  - `spark-submit`
+We use `docker build` to build the images we need to use Spark and SBT.
+
+  - `sbt`\[1\]
     
     ``` bash
-    docker build --build-target spark-submit -t spark-submit - < Dockerfile
+    docker build \
+    --build-arg BASE_IMAGE_TAG="8" \
+    --build-arg SBT_VERSION="1.2.8" \
+    --build-arg SCALA_VERSION="2.11.12" \
+    -t hseeberger/scala-sbt \
+    github.com/hseeberger/scala-sbt.git#:debian
     ```
 
   - `spark-shell`
     
     ``` bash
-    docker build --build-target spark-shell -t spark-shell - < Dockerfile
+    docker build --target spark-shell -t spark-shell .
+    ```
+
+  - `spark-submit`
+    
+    ``` bash
+    docker build --target spark-submit -t spark-submit .
     ```
 
   - `spark-history-server`
     
     ``` bash
-    docker build --build-target spark-history-server -t spark-history-server -
-    < Dockerfile
+    docker build --target spark-history-server -t spark-history-server .
     ```
 
 You can then run the following commands from the Spark application root
 (the folder containing the `build.sbt` file). Please make sure to use the
 provided template project.
 
-  - Build your Spark application (`sbt package`)
+  - Run SBT to package or test your application (`sbt <command>`)
     
     ``` bash
-    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt package
-    ```
-
-  - Run your Spark application (`spark-submit`) (fill in the class name of your
-    application and the name of your project\!)
-    
-    ``` bash
-    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
-    spark-submit --class <YOUR_CLASSNAME>
-    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
-    ```
-
-  - Spawn the history server to view event logs, accessible at
-    <localhost:18080>
-    
-    ``` bash
-    docker run -it --rm -v `pwd`:/spark-events:/spark-events -p 18080:18080 spark-history-server
+    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt
     ```
 
   - Start a Spark shell (`spark-shell`)
@@ -259,9 +255,27 @@ provided template project.
     docker run -it --rm -v `pwd`:/io spark-shell
     ```
 
+  - Run your Spark application (`spark-submit`) (fill in the class name of your
+    application and the name of your project\!)
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events \
+    spark-submit --class <YOUR_CLASSNAME> \
+    target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
+    ```
+
+  - Spawn the history server to view event logs, accessible at
+    [localhost:18080](http://localhost:18080)
+    
+    ``` bash
+    docker run -it --rm -v `pwd`:/spark-events:/spark-events \
+    -p 18080:18080 spark-history-server
+    ```
+
 The rest of the manual will not generally mention these Docker commands again,
 so know that if we mention e.g. `spark-shell`, you should run the corresponding
-`docker run` command listed above.
+`docker run` command listed above. You can create scripts or aliases for your
+favorite shell to avoid having to type a lot.
 
 ## Scala
 
@@ -277,7 +291,7 @@ reasons why Spark was written in Scala are:
     operating system, or even the underlying architecture.
 
 2.  Compared to Java, Scala has some advantages in supporting more complex
-    types, type inference, and anonymous functions\[1\]. Matei
+    types, type inference, and anonymous functions\[2\]. Matei
     Zaharia, Apache Spark’s original author, has said the following about why
     Spark was implemented in Scala in a [Reddit AMA](https://www.reddit.com/r/IAmA/comments/31bkue/im_matei_zaharia_creator_of_spark_and_cto_at/):
     
@@ -374,21 +388,22 @@ github version, and use the `:paste` command in the spark shell to paste the
 code. Hit `ctrl+D` to stop pasting.*
 
 ``` scala
-$ spark-shell
-2018-08-29 12:56:07 WARN  NativeCodeLoader:62 - Unable to load native-hadoop...
+$ docker run -it --rm -v `pwd`:/io spark-shell
+19/09/08 14:00:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
 Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR,...
-Spark context Web UI available at http://
-Spark context available as 'sc' (master = local[*], app id = local-1535540172727).
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://af29447c6dcd:4040
+Spark context available as 'sc' (master = local[*], app id = local-1567951261349).
 Spark session available as 'spark'.
 Welcome to
       ____              __
      / __/__  ___ _____/ /__
     _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 2.3.1
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4
       /_/
 
-Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_102)
+Using Scala version 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_222)
 Type in expressions to have them evaluated.
 Type :help for more information.
 
@@ -804,12 +819,9 @@ folder to resemble the package structure.
 The project’s name, dependencies, and versioning is defined in the `build.sbt`
 file. An example `build.sbt` file is
 
-    ThisBuild / scalaVersion := "2.11.12"
+    name := "Example"
     
-    lazy val example = (project in file("."))
-      .settings(
-        name := "Example project",
-      )
+    scalaVersion := "2.11.12"
 
 This specifies the Scala version of the project (2.11.12) and the name of the
 project.
@@ -831,24 +843,27 @@ object Example {
 }
 ```
 
-Run `sbt` in the root folder (the one where `build.sbt` is located). This puts
+Start a `scala-sbt` container in the root folder (the one where `build.sbt` is located). This puts
 you in interactive mode of SBT. We can compile the sources by writing the
 `compile` command.
 
-    $ sbt
-    [info] Loading project definition from ...
-    [info] Loading settings for project hello from build.sbt ...
-    [info] Set current project to Example project ...
-    [info] sbt server started at ...
-    sbt:Example project> compile
-    [success] Total time: 0 s, completed Sep 3, 2018 1:56:10 PM
+    $ docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt
+    Getting org.scala-sbt sbt 1.2.8  (this may take some time)...
+    ...
+    [info] Loading settings for project root from build.sbt ...
+    [info] Set current project to Example (in build file:/root/)
+    [info] sbt server started at local:///root/.sbt/1.0/server/27dc1aa3fdf4049b492d/sock
+    sbt:Example> compile
+    ...
+    [info] Done compiling.
+    [success] Total time: 0 s, completed Sep 8, 2019 2:17:14 PM
 
 We can try to run the application by typing `run`.
 
-    sbt:Example project> run
+    sbt:Example> run
     [info] Running example.Example
     Hello world!
-    [success] Total time: 1 s, completed Sep 3, 2018 2:00:08 PM
+    [success] Total time: 1 s, completed Sep 8, 2019 2:18:18 PM
 
 Now let’s add a function to `example.scala`.
 
@@ -867,7 +882,7 @@ object Example {
 In your SBT session we can prepend any command with a tilde (`~`) to make them
 run automatically on source changes.
 
-    sbt:Example project> ~run
+    sbt:Example> ~run
     [info] Compiling 1 Scala source to ...
     [info] Done compiling.
     [info] Packaging ...
@@ -875,14 +890,14 @@ run automatically on source changes.
     [info] Running example.Example
     Hello world!
     (a,2)
-    [success] Total time: 1 s, completed Sep 3, 2018 2:02:48 PM
+    [success] Total time: 1 s, completed Sep 8, 2019 2:19:03 PM
     1. Waiting for source changes in project hello... (press enter to interrupt)
 
 We can also open an interactive session using SBT.
 
-    sbt:Example project> console
+    sbt:Example> console
     [info] Starting scala interpreter...
-    Welcome to Scala 2.11.12 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_102).
+    Welcome to Scala 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_222).
     Type in expressions for evaluation. Or try :help.
     
     scala> example.Example.addOne('a', 1)
@@ -894,15 +909,16 @@ We can also open an interactive session using SBT.
 To build Spark applications with SBT we need to include dependencies (Spark
 most notably) to build the project. Modify your `build.sbt` file like so
 
-    ThisBuild / scalaVersion := "2.11.12"
+    name := "Example"
     
-    lazy val example = (project in file("."))
-      .settings(
-        name := "Example project",
+    scalaVersion := "2.11.12"
     
-        libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.1",
-        libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1"
-      )
+    val sparkVersion = "2.4.4"
+    
+    libraryDependencies ++= Seq(
+      "org.apache.spark" %% "spark-core" % sparkVersion,
+      "org.apache.spark" %% "spark-sql" % sparkVersion
+    )
 
 We can now use Spark in the script. Modify `example.scala`.
 
@@ -967,9 +983,12 @@ object ExampleSpark {
 You can build a JAR using the `package` command in SBT. This JAR will be
 located in the `target/scala-version/project_name_version.jar`.
 
-You can run the JAR via `spark-submit` (which will run on local mode).
+You can run the JAR via a `spark-submit` container (which will run on local
+mode). By mounting the `spark-events` directory the event log of the
+application run is stored to be inspected later using the Spark history server.
 
-    $ spark-submit target/scala-2.11/example-project_2.11-0.1.0-SNAPSHOT.jar
+    $ docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
+        spark-submit target/scala-2.11/example_2.11-0.1.0-SNAPSHOT.jar
     INFO:...
     SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
     SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
@@ -987,9 +1006,8 @@ By default, Spark’s logging is quite assertive. You can change the [log levels
 to warn](https://stackoverflow.com/questions/27781187/how-to-stop-info-messages-displaying-on-spark-console) to reduce the output.
 
 For development purposes you can also try running the application from SBT
-using the `run` command. This is a bit iffy, as Spark starts a number of
-threads and these don’t exit gracefully when SBT closes its main thread. This
-can be solved by running the application in a forked process, which can be
+using the `run` command. You might run into some trouble with threads here,
+which can be solved by running the application in a forked process, which can be
 enabled by setting `fork in run := true` in `build.sbt`. You will also have to
 set to change the log levels programmatically, if desired.
 
@@ -1006,55 +1024,112 @@ set to change the log levels programmatically, if desired.
 You can also use this logger to log your application which might be helpful for
 debugging on the AWS cluster later on.
 
-    [GitHub Student Developer Pack]: https://education.github.com/pack
+You can inspect the event log from the application run using the Spark history
+server. Start a `spark-history-server` container from the project root folder
+and mount the `spark-events` folder in the container.
+
+    $ docker run -it --rm -v `pwd`/spark-events/:/spark-events -p 18080:18080
+        spark-history-server
+    starting org.apache.spark.deploy.history.HistoryServer, logging to
+    /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-d5dfa4949b86.out
+    Spark Command: /usr/local/openjdk-8/bin/java -cp /spark/conf/:/spark/jars/*
+      -Xmx1g org.apache.spark.deploy.history.HistoryServer
+    ========================================
+    Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+    19/09/08 14:25:33 INFO HistoryServer: Started daemon with process name:
+      14@d5dfa4949b86
+    19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for TERM
+    19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for HUP
+    19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for INT
+    19/09/08 14:25:34 WARN NativeCodeLoader: Unable to load native-hadoop library
+      for your platform... using builtin-java classes where applicable
+    19/09/08 14:25:34 INFO SecurityManager: Changing view acls to: root
+    19/09/08 14:25:34 INFO SecurityManager: Changing modify acls to: root
+    19/09/08 14:25:34 INFO SecurityManager: Changing view acls groups to:
+    19/09/08 14:25:34 INFO SecurityManager: Changing modify acls groups to:
+    19/09/08 14:25:34 INFO SecurityManager: SecurityManager: authentication
+      disabled; ui acls disabled; users  with view permissions: Set(root); groups
+         with view permissions: Set(); users  with modify permissions: Set(root);
+          groups with modify permissions: Set()
+    19/09/08 14:25:34 INFO FsHistoryProvider: History server ui acls disabled;
+      users with admin permissions: ; groups with admin permissions
+    19/09/08 14:25:35 INFO FsHistoryProvider:
+      Parsing file:/spark-events/local-1567952519905 for listing data...
+    19/09/08 14:25:35 INFO Utils: Successfully started service on port 18080.
+    19/09/08 14:25:35 INFO HistoryServer: Bound HistoryServer to 0.0.0.0,
+      and started at http://d5dfa4949b86:18080
+    19/09/08 14:25:36 INFO FsHistoryProvider: Finished parsing
+      file:/spark-events/local-1567952519905
+
+Navigate to [http://localhost:18080](localhost:18080) to view detailed
+information about your jobs.
+After analysis you can shutdown the Spark history server using ctrl+C.
+
+    $ ^C
+    19/09/08 14:27:18 ERROR HistoryServer: RECEIVED SIGNAL INT
+    19/09/08 14:27:18 INFO ShutdownHookManager: Shutdown hook called
+
+Be sure to explore the history server thoroughly\! You can use it to gain an
+understanding of how Spark executes your application, as well as to debug and
+time your code, which is important for both lab 1 and 2.
 
 # Lab 1
 
-In this lab, we will design and develop the code in Spark to process GDelt
-data, which will be used in lab 2 to scale the analysis to the entire dataset.
-We will first give a brief introduction to the various technologies used in
-this lab.
+In this lab, we will design and develop an application to process GDELT data.
+For a given amount of segments, the application should output the 10 most
+frequently mentioned topics contained in the `AllNames` column. The application
+will later be used in lab 2 to scale the analysis to the entire dataset.
 
-## Assignment
+## Before you start
 
-Now that we have introduced the different technologies, we can start talking
-about the goal of the first lab. In this lab you will write the application in
-Spark that analyzes GDelt and constructs the 10 most talked about topics per
-day. For the first lab you will write the prototype that you check on your
-local machine.
+We recommend you read all the relevant sections on Scala and Spark in the
+guide. Make sure you have Docker up-and-running and that you have built the
+required images for Spark and SBT, as per the instructions. You can verify your
+set-up by going through the steps of the Spark tutorial.
 
-We will use the GDelt version 2 GKG files. The format these files are in is tab
-separated values. The exact specification of each columns and details can be
-found in the [GKG codebook](http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf). The schema of the files can be read in
-`headers.csv` in the `data` folder. The columns that are most relevant are the
-“date” column and the “allNames” column.
+Download the template project from [lab’s GitHub repository](https://github.com/Tclv/SBD-tudelft) (contained in
+the `lab1/` folder), either by forking or cloning the repository, or
+downloading a zip file. You should execute all Docker commands from this
+project folder. Rename the Scala file and the class it contains to something
+meaningful. Update the project name in `build.sbt`. The project folder also
+contains a `data/` directory, which will contain the data you download for
+testing, as explained in the following. The `data/` folder is automatically
+mounted in the working directory of relevant containers.
+\#\# Assignment
 
-In the `data` folder you will also find a script called `get_data`. This script
-will download a number of sample files to your computer, and generate a
-document with the paths to all these files.
+We will use the GDELT version 2 GKG files. As mentioned, these files are
+formatted in tab-separated values. The schema of the files can be read from
+`headers.csv` in `data/`. The columns that are most relevant are
+`date` and `AllNames`.
+
+In the `data/` folder you will also find a script called `get_data` and its
+Powershell equivalent `get_data.ps1`, for use on Windows. This script will
+download a number of GKG segments to your computer, and generate a file
+`local_index.txt` containing the paths to the downloaded files.
 
 ``` sh
-$./get_data 4
+$ ./get_data 4
 ...
 wget downloading
 ...
 
-$cat local_index.txt
-/path/to/this/repo/SBD-2018/data/segment/20150218230000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218231500.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218233000.gkg.csv
-/path/to/this/repo/SBD-2018/data/segment/20150218234500.gkg.csv
+$ cat local_index.txt
+/path/to/this/repo/lab1/data/segment/20150218230000.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218231500.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218233000.gkg.csv
+/path/to/this/repo/lab1/data/segment/20150218234500.gkg.csv
 ```
 
 The script will put all downloaded files in the `segment` folder. `wget`
-timestamps the downloads, so it will not update the files when you want to
-generate a local index for 20 files if you had 10 before.
+adds timestamps to downloads, so files will not be needlessly downloaded again.
 
 You can use these local files for the first lab assignment to test your
 application, and build some understanding of the scaling behaviour on a single
 machine.
 
-An example output of this system based on 10 segments would be:
+Your program should output a structure that maps dates to a list of 10 tuples
+containing the most mentioned topics and the amount of times they were
+mentioned. An example output of this system based on 10 segments would be:
 
     DateResult(2015-02-19,List((United States,1497), (Islamic State,1233), (New
     York,1058), (United Kingdom,735), (White House,723), (Los Angeles,620), (New
@@ -1093,11 +1168,15 @@ with this. Document your choices in your report.
 
 The deliverables for the first lab are:
 
-1.  A Dataframe/Dataset-based implementation of the GDelt analysis,
-2.  An RDD-based implementation of the GDelt analysis,
+1.  A Dataframe/Dataset-based implementation of the GDELT analysis,
+2.  An RDD-based implementation of the GDELT analysis,
 3.  A report containing:
     1.  Outline of your implementation and approach (½–1 page);
     2.  Answers to the questions listed below. Be as concise as you can\!
+
+For the implementations, **only** hand in your Scala files. Your code should
+run **without** changes in the rest of the project. Your submission should
+contain 2 Scala files and 1 PDF file containing your report.
 
 The deadline of this lab will be announced on Brightspace. Your report and code
 will be discussed in a brief oral examination during the lab, the schedule of
@@ -1251,7 +1330,7 @@ but this can also be done at a later time. Press *next*.
 In the *Hardware Configuration* screen, we can configure the arrangement and
 selection of the machines. We suggest starting out with `m4.large` machines on
 spot pricing. You should be fine running a small example workload with a single
-master node and two core nodes.\[2\]\[3\] Be sure to select *spot pricing* and
+master node and two core nodes.\[3\]\[4\] Be sure to select *spot pricing* and
 place an appropriate bid. Remember that you can always check the current prices
 in the information popup or on the [Amazon website](https://aws.amazon.com/ec2/spot/pricing/). After
 selecting the machines, press *next*.
@@ -1443,7 +1522,7 @@ The `kafka_start` script does a number of things:
 2.  Start a single Kafka broker on port 9092
 
 Navigate to the GDELTProducer directory, and run `sbt run` to
-start\[4\] the GDELT stream.
+start\[5\] the GDELT stream.
 
 We can now inspect the output of the `gdelt` topic by running the following
 command on MacOS/Linux:
@@ -1492,7 +1571,7 @@ below.
   - Consumer  
     The consumer finally acts as a *sink*, and will process the incoming
     histogram updates from the transformer into a smaller histogram of only the 100
-    most occurring names for display \[5\]. It will finally stream this
+    most occurring names for display \[6\]. It will finally stream this
     histogram to
     our visualizer over a WebSocket connection.
 
@@ -1573,26 +1652,29 @@ words you can use, but you are welcome to use fewer if you can.
 
 <!-- end list -->
 
-1.  Since Java 8, Java also supports anonymous functions, or
+1.  Normally the image is pulled from Docker Hub, but the tag
+    with the required version of Scala for Spark is no longer available.
+
+2.  Since Java 8, Java also supports anonymous functions, or
     lambda expression, but this version wasn’t released at the time of Spark’s
     initial release.
 
-2.  You always need a master node, which is tasked with distributing
+3.  You always need a master node, which is tasked with distributing
     resources and managing tasks for the core nodes. We recommend using
     the cheap `m4.large` instance. If you start to notice unexplained
     bottlenecks for tasks with many machines and a lot of data, you might want
     to try a larger master node. Ganglia should provide you with some insights
     regarding this matter.
 
-3.  By default, there are some limitations on the number of spot instances
+4.  By default, there are some limitations on the number of spot instances
     your account is allowed to provision. If you don’t have access to enough
     spot instances, the procedure to request additional can be found in the
     [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
 
-4.  As this [issue](https://github.com/sbt/sbt/issues/3618)
+5.  As this [issue](https://github.com/sbt/sbt/issues/3618)
     suggests, you might need to run `sbt run` twice when starting the producer for
     the first time.
 
-5.  It might turn out that this is too much for your browser to
+6.  It might turn out that this is too much for your browser to
     handle. If this is the case, you may change it manually in the
     `HistogramProcessor` contained in `GDELTConsumer.scala`.
