@@ -12,15 +12,16 @@
           - [Packaging your application using SBT](#packaging-your-application-using-sbt)
   - [Lab 1](#lab-1)
       - [Before you start](#before-you-start-1)
+      - [Assignment](#assignment)
       - [Deliverables](#deliverables)
       - [Questions](#questions)
   - [Lab 2](#lab-2)
       - [Amazon Web Services](#amazon-web-services)
-      - [Assignment](#assignment)
+      - [Assignment](#assignment-1)
       - [Deliverables](#deliverables-1)
   - [Lab 3](#lab-3)
       - [Setting up](#setting-up)
-      - [Assignment](#assignment-1)
+      - [Assignment](#assignment-2)
       - [Deliverables](#deliverables-2)
       - [Questions](#questions-1)
           - [General Kafka questions](#general-kafka-questions)
@@ -1095,7 +1096,8 @@ meaningful. Update the project name in `build.sbt`. The project folder also
 contains a `data/` directory, which will contain the data you download for
 testing, as explained in the following. The `data/` folder is automatically
 mounted in the working directory of relevant containers.
-\#\# Assignment
+
+## Assignment
 
 We will use the GDELT version 2 GKG files. As mentioned, these files are
 formatted in tab-separated values. The schema of the files can be read from
