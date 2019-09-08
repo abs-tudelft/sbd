@@ -100,9 +100,9 @@ To build a docker image from the `Dockerfile`, we use `docker build`:
 
 ``` {.bash}
 docker build \
-  --build-target <target> `# Select a target from the Dockerfile \
-  -t <tag>                `# Set a tag for the resulting image \
-  -f Dockerfile          ` # Read the Dockerfile
+  --target <target> `# Select a target from the Dockerfile \
+  -t <tag>          `# Set a tag for the resulting image \
+  - < Dockerfile    `# Read the Dockerfile from stdin
 ```
 
 Run `docker build` three times to build the required images:
@@ -110,19 +110,19 @@ Run `docker build` three times to build the required images:
 -   `spark-submit`
 
     ``` {.bash}
-    docker build --build-target spark-submit -t spark-submit -f Dockerfile
+    docker build --target spark-submit -t spark-submit - < Dockerfile
     ```
 
 -   `spark-shell`
 
     ``` {.bash}
-    docker build --build-target spark-shell -t spark-shell -f Dockerfile
+    docker build --target spark-shell -t spark-shell - < Dockerfile
     ```
 
 -   `spark-history-server`
 
     ``` {.bash}
-    docker build --build-target spark-history-server -t spark-history-server -f
+    docker build --target spark-history-server -t spark-history-server - <
     Dockerfile
     ```
 
