@@ -1,7 +1,3 @@
-
-# Created by https://www.gitignore.io/api/sbt
-
-### SBT ###
 # Simple Build Tool
 # http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
 
@@ -15,20 +11,9 @@ project/plugins/project/
 .cache
 .lib/
 
-
-# End of https://www.gitignore.io/api/sbt
-
-# Created by https://www.gitignore.io/api/scala
-
-### Scala ###
-*.class
-*.log
-
-
-# End of https://www.gitignore.io/api/scala
-
-# Docker cache
-.ivy2
+# Docker container cache
 .sbt
+.ivy2
 .cache
 spark-events
+.bash_history
