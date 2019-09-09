@@ -197,15 +197,17 @@ In order to run Spark in a container, a `Dockerfile` is provided which can be
 used to build images for `spark-submit` to run your Spark application,
 `spark-shell` to run a Spark interactive shell, and the Spark history server to
 view event logs from application runs. You need to build these images before
-you get started.
+you get started. The Dockerfiles we provide assume that you run Docker from the
+folder at which they are located. Don’t move them around\! They will stop
+working.
 
-To build a docker image from the `Dockerfile`, we use `docker build`:
+To build a docker image from the Dockerfile, we use `docker build`:
 
 ``` bash
 docker build --target <target> -t <tag> .
 ```
 
-Here `<target>` selects the target from the `Dockerfile`, `<tag>` sets the tag
+Here `<target>` selects the target from the Dockerfile, `<tag>` sets the tag
 for the resulting image, and the `.` sets the build context to the current
 working directory.
 
