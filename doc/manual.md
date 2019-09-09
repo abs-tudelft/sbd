@@ -249,20 +249,20 @@ provided template project.
   - Run SBT to package or test your application (`sbt <command>`)
     
     ``` bash
-    docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt
+    docker run -it --rm -v "`pwd`":/root hseeberger/scala-sbt sbt
     ```
 
   - Start a Spark shell (`spark-shell`)
     
     ``` bash
-    docker run -it --rm -v `pwd`:/io spark-shell
+    docker run -it --rm -v "`pwd`":/io spark-shell
     ```
 
   - Run your Spark application (`spark-submit`) (fill in the class name of your
     application and the name of your project\!)
     
     ``` bash
-    docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events \
+    docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events \
     spark-submit --class <YOUR_CLASSNAME> \
     target/scala-2.11/<YOUR_PROJECT_NAME>_2.11-1.0.jar
     ```
@@ -271,7 +271,7 @@ provided template project.
     [localhost:18080](http://localhost:18080)
     
     ``` bash
-    docker run -it --rm -v `pwd`:/spark-events:/spark-events \
+    docker run -it --rm -v "`pwd`"/spark-events:/spark-events \
     -p 18080:18080 spark-history-server
     ```
 
@@ -391,7 +391,7 @@ github version, and use the `:paste` command in the spark shell to paste the
 code. Hit `ctrl+D` to stop pasting.*
 
 ``` scala
-$ docker run -it --rm -v `pwd`:/io spark-shell
+$ docker run -it --rm -v "`pwd`":/io spark-shell
 19/09/08 14:00:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
 Setting default log level to "WARN".
@@ -850,7 +850,7 @@ Start a `scala-sbt` container in the root folder (the one where `build.sbt` is l
 you in interactive mode of SBT. We can compile the sources by writing the
 `compile` command.
 
-    $ docker run -it --rm -v `pwd`:/root hseeberger/scala-sbt sbt
+    $ docker run -it --rm -v "`pwd`":/root hseeberger/scala-sbt sbt
     Getting org.scala-sbt sbt 1.2.8  (this may take some time)...
     ...
     [info] Loading settings for project root from build.sbt ...
@@ -990,7 +990,7 @@ You can run the JAR via a `spark-submit` container (which will run on local
 mode). By mounting the `spark-events` directory the event log of the
 application run is stored to be inspected later using the Spark history server.
 
-    $ docker run -it --rm -v `pwd`:/io -v `pwd`/spark-events:/spark-events
+    $ docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events
         spark-submit target/scala-2.11/example_2.11-0.1.0-SNAPSHOT.jar
     INFO:...
     SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
@@ -1031,7 +1031,7 @@ You can inspect the event log from the application run using the Spark history
 server. Start a `spark-history-server` container from the project root folder
 and mount the `spark-events` folder in the container.
 
-    $ docker run -it --rm -v `pwd`/spark-events/:/spark-events -p 18080:18080
+    $ docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080
         spark-history-server
     starting org.apache.spark.deploy.history.HistoryServer, logging to
     /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-d5dfa4949b86.out
