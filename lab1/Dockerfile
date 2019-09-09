@@ -2,6 +2,7 @@ FROM openjdk:8 as base
 ARG SPARK_VERSION=2.4.4
 ARG SPARK_HADOOP_VERSION=2.7
 ARG SPARK_LOG_DIRECTORY=/spark-events
+ENV SPARK_LOG_DIRECTORY=${SPARK_LOG_DIRECTORY}
 WORKDIR /spark
 RUN curl -L http://apache.mirror.triple-it.nl/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${SPARK_HADOOP_VERSION}.tgz | tar xz --strip-components=1
 
