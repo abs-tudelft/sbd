@@ -28,15 +28,16 @@ mounted in the working directory of relevant containers.
 
 We will use the GDELT version 2 GKG files. As mentioned, these files are
 formatted in tab-separated values. The schema is listed below. The columns that
-are most relevant are `date` and `AllNames`.
+are most relevant are `DATE` and `AllNames`.
 
-Make sure to import the required Spark SQL types.
+To use the schema for Spark's `DataFrameReader`, first make sure to import the
+required Spark SQL types:
 
 ```{.scala}
 import org.apache.spark.sql.types._
-...
+```
 
-The schema can be specified as a Spark `StructType`, as listed below.
+The schema can then be specified as a Spark `StructType`, as listed below.
 
 ```{.scala}
 val schema = StructType(

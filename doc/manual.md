@@ -1102,9 +1102,50 @@ mounted in the working directory of relevant containers.
 ## Assignment
 
 We will use the GDELT version 2 GKG files. As mentioned, these files are
-formatted in tab-separated values. The schema of the files can be read from
-`headers.csv` in `data/`. The columns that are most relevant are
-`date` and `AllNames`.
+formatted in tab-separated values. The schema is listed below. The columns that
+are most relevant are `DATE` and `AllNames`.
+
+To use the schema for Spark’s `DataFrameReader`, first make sure to import the
+required Spark SQL types:
+
+``` scala
+import org.apache.spark.sql.types._
+```
+
+The schema can then be specified as a Spark `StructType`, as listed below.
+
+``` scala
+val schema = StructType(
+      Array(
+        StructField("GKGRECORDID", StringType),
+        StructField("DATE", DateType),
+        StructField("SourceCollectionIdentifier", IntegerType),
+        StructField("SourceCommonName", StringType),
+        StructField("DocumentIdentifier", StringType),
+        StructField("Counts", StringType),
+        StructField("V2Counts", StringType),
+        StructField("Themes", StringType),
+        StructField("V2Themes", StringType),
+        StructField("Locations",StringType),
+        StructField("V2Locations",StringType),
+        StructField("Persons",StringType),
+        StructField("V2Persons",StringType),
+        StructField("Organizations",StringType),
+        StructField("V2Organizations",StringType),
+        StructField("V2Tone", StringType),
+        StructField("Dates",StringType),
+        StructField("GCAM", StringType),
+        StructField("SharingImage", StringType),
+        StructField("RelatedImages",StringType),
+        StructField("SocialImageEmbeds",StringType),
+        StructField("SocialVideoEmbeds",StringType),
+        StructField("Quotations", StringType),
+        StructField("AllNames", StringType),
+        StructField("Amounts",StringType),
+        StructField("TranslationInfo",StringType),
+        StructField("Extras", StringType)
+      )
+```
 
 In the `data/` folder you will also find a script called `get_data` and its
 Powershell equivalent `get_data.ps1`, for use on Windows. This script will
