@@ -5,29 +5,42 @@ In this first chapter, we will cover some of the concepts and technologies that
 are used during the course. We will introduce the following topics (in a
 different order):
 
--   **The GDELT project**, a large database of "human society", constructed of
-    mentions of "people, organizations, locations, themes, counts, images and
-    emotions" around the planet. As mentioned before, will use the GDELT
-    database to construct a histogram of the most important themes during a
-    certain timespan.
--   **Apache Spark**, a framework for processing large amounts of data on
-    multiple machines in a robust way. We will build our application for labs 1
-    and 2 using Spark.
--   **Amazon Web Services**, or AWS, which provide theoretically unlimited
-    compute infrastructure, allowing us to process a dataset as large as the
-    entire GDELT database in lab 2.
--   **Apache Kafka**, a framework for building so-called data pipelines, in
-    which
-    potentially many producers and consumers process real-time, streaming data.
-    In lab 3, we will take the application from labs 1 and 2 and modify it to
-    process data in real-time, using Kafka.
--   **Scala**, a programming language that runs on the Java Virtual Machine
-    (JVM). This is our (mandatory!) language of choice during the lab
-    assignments. We will use it to program for both Apache Spark and Apache
-    Kafka.
--   **Docker**, an application that allows the user to package and run software
-    (like Spark and Kafka and the programs we write for them) in an isolated
-    environment: a container.
+The GDELT project
+
+:   a large database of "human society", constructed of mentions of "people,
+    organizations, locations, themes, counts, images and emotions" around the
+    planet. As mentioned before, will use the GDELT database to construct a
+    histogram of the most important themes during a certain timespan.
+
+Apache Spark
+
+:   a framework for processing large amounts of data on multiple machines in a
+    robust way. We will build our application for labs 1 and 2 using Spark.
+
+Amazon Web Services
+
+:   or AWS, which provide theoretically unlimited compute infrastructure,
+    allowing us to process a dataset as large as the entire GDELT database in
+    lab 2.
+
+Apache Kafka
+
+:   a framework for building so-called data pipelines, in which potentially
+    many producers and consumers process real-time, streaming data. In lab 3,
+    we will take the application from labs 1 and 2 and modify it to process
+    data in real-time, using Kafka.
+
+Scala
+
+:   a programming language that runs on the Java Virtual Machine (JVM). This is
+    our (mandatory!) language of choice during the lab assignments. We will use
+    it to program for both Apache Spark and Apache Kafka.
+
+Docker
+
+:   an application that allows the user to package and run software (like Spark
+    and Kafka and the programs we write for them) in an isolated environment: a
+    container.
 
 The GDELT project
 -----------------
@@ -65,13 +78,29 @@ According to the [Docker Documentation]
 > use for easily deploying applications is. Containerization is increasingly
 > popular because containers are:
 >
-> -   Flexible: Even the most complex applications can be containerized.
-> -   Lightweight: Containers leverage and share the host kernel.
-> -   Interchangeable: You can deploy updates and upgrades on-the-fly.
-> -   Portable: You can build locally, deploy to the cloud, and run anywhere.
-> -   Scalable: You can increase and automatically distribute container
->     replicas.
-> -   Stackable: You can stack services vertically and on-the-fly.
+> Flexible
+>
+> : Even the most complex applications can be containerized.
+>
+> Lightweight
+>
+> :   Containers leverage and share the host kernel.
+>
+> Interchangeable
+>
+> :   You can deploy updates and upgrades on-the-fly.
+>
+> Portable
+>
+> :   You can build locally, deploy to the cloud, and run anywhere.
+>
+> Scalable
+>
+> :   You can increase and automatically distribute container replicas.
+>
+> Stackable
+>
+> :   You can stack services vertically and on-the-fly.
 
 For this course, we use Docker primarily to ensure every student is using the
 exact same platform for their applications, and to avoid certain
@@ -673,7 +702,8 @@ typed Dataset using the `as` method.
 scala> :paste
 // Entering paste mode (ctrl-D to finish)
 
-val ds = spark.read .schema(schema)
+val ds = spark.read
+              .schema(schema)
               .option("timestampFormat", "MM/dd/yy:hh:mm")
               .csv("./sensordata.csv")
               .as[SensorData]
@@ -917,7 +947,7 @@ application run is stored to be inspected later using the Spark history server.
 
 ```
 $ docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events
-    spark-submit target/scala-2.11/example_2.11-0.1.0-SNAPSHOT.jar
+    spark-submit target/scala-2.11/example_2.11-0.1.0.jar
 INFO:...
 SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
 SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
@@ -941,7 +971,7 @@ which can be solved by running the application in a forked process, which can be
 enabled by setting `fork in run := true` in `build.sbt`. You will also have to
 set to change the log levels programmatically, if desired.
 
-```
+```{.scala}
 import org.apache.log4j.{Level, Logger}
 ...
 
