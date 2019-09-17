@@ -56,7 +56,7 @@ There is a [guide to Spark performance] tuning on the Spark website.
 
 ## Deliverables
 
-The deliverable for this lab will be a blog post outlining your choices in
+The deliverable for this lab is a blog post outlining your choices in
 terms of configuration and your results in achieving the assignment. Be concise
 in your blog, you can skip introductions and go straight to juicy bits. These
 blog posts should be written in [Github flavored markdown], as we will

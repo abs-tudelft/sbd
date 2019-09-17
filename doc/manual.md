@@ -1157,13 +1157,11 @@ The aws-cli contains much more functionality, which can be found on the
 [AWS-CLI docs](https://aws.amazon.com/cli/).
 
 Once you have uploaded all the necessary files (again your application JAR, and
-all the files required by the application).
-
-We are now ready to provision a cluster. Go to the EMR service, and select
-*Create Cluster*. Next select *Go to advanced options*, select the latest
-release, and check the frameworks you want to use. In this case this means
-Spark, Hadoop and Ganglia. Spark and Hadoop you already know, we will introduce
-Ganglia later in this chapter.
+all the files required by the application), we are ready to provision a
+cluster. Go to the EMR service, and select *Create Cluster*. Next select *Go to
+advanced options*, select the latest release, and check the frameworks you want
+to use. In this case this means Spark, Hadoop and Ganglia. Spark and Hadoop you
+already know, we will introduce Ganglia later in this chapter.
 
 EMR works with steps, which can be thought of as a job, or the execution of a
 single application. You can choose to add steps in the creation of the cluster,
@@ -1182,18 +1180,18 @@ system logs and a number of other features (more information in the popups).
 After finishing this step, press *next*.
 
 You should now arrive in the *Security Options* screen. If you have not created
-a *EC2 keypair*, it is recommended that you do so now. This will allow you to
+an *EC2 keypair*, it is recommended that you do so now. This will allow you to
 access the Yarn, Spark, and Ganglia web interfaces in your browser. This makes
 debugging and monitoring the execution of your Spark Job much more manageable.
-To create a *EC2 keypair*, follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
+To create an *EC2 keypair*, follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
 
 After this has all been completed you are ready to spin up your first cluster
 by pressing *Create cluster*. Once the cluster has been created, AWS will start
 provisioning machines. This should take about 10 minutes. In the meantime you
-can add a step. Go the *Steps* foldout, and select *Spark application* for
+can add a step. Go to the *Steps* foldout, and select *Spark application* for
 *Step Type*. Clicking on *Configure* will open a dialogue in which you can
 select the application JAR location in your S3 bucket, as well as any number
-of argument to the application, spark-submit, as well as your action on
+of arguments to the application, spark-submit, as well as your action on
 failure.
 
 **Make sure you do not try to process the entire dataset in your
@@ -1497,7 +1495,7 @@ There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tun
 
 ## Deliverables
 
-The deliverable for this lab will be a blog post outlining your choices in
+The deliverable for this lab is a blog post outlining your choices in
 terms of configuration and your results in achieving the assignment. Be concise
 in your blog, you can skip introductions and go straight to juicy bits. These
 blog posts should be written in [Github flavored markdown](https://help.github.com/en/articles/basic-writing-and-formatting-syntax), as we will

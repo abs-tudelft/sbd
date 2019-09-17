@@ -1101,13 +1101,11 @@ The aws-cli contains much more functionality, which can be found on the
 [AWS-CLI docs].
 
 Once you have uploaded all the necessary files (again your application JAR, and
-all the files required by the application).
-
-We are now ready to provision a cluster. Go to the EMR service, and select
-*Create Cluster*. Next select *Go to advanced options*, select the latest
-release, and check the frameworks you want to use. In this case this means
-Spark, Hadoop and Ganglia. Spark and Hadoop you already know, we will introduce
-Ganglia later in this chapter.
+all the files required by the application), we are ready to provision a
+cluster. Go to the EMR service, and select *Create Cluster*. Next select *Go to
+advanced options*, select the latest release, and check the frameworks you want
+to use. In this case this means Spark, Hadoop and Ganglia. Spark and Hadoop you
+already know, we will introduce Ganglia later in this chapter.
 
 EMR works with steps, which can be thought of as a job, or the execution of a
 single application. You can choose to add steps in the creation of the cluster,
@@ -1138,18 +1136,18 @@ system logs and a number of other features (more information in the popups).
 After finishing this step, press *next*.
 
 You should now arrive in the *Security Options* screen. If you have not created
-a *EC2 keypair*, it is recommended that you do so now. This will allow you to
+an *EC2 keypair*, it is recommended that you do so now. This will allow you to
 access the Yarn, Spark, and Ganglia web interfaces in your browser. This makes
 debugging and monitoring the execution of your Spark Job much more manageable.
-To create a *EC2 keypair*, follow [these instructions][keypair instructions].
+To create an *EC2 keypair*, follow [these instructions][keypair instructions].
 
 After this has all been completed you are ready to spin up your first cluster
 by pressing *Create cluster*. Once the cluster has been created, AWS will start
 provisioning machines. This should take about 10 minutes. In the meantime you
-can add a step. Go the *Steps* foldout, and select *Spark application* for
+can add a step. Go to the *Steps* foldout, and select *Spark application* for
 *Step Type*. Clicking on *Configure* will open a dialogue in which you can
 select the application JAR location in your S3 bucket, as well as any number
-of argument to the application, spark-submit, as well as your action on
+of arguments to the application, spark-submit, as well as your action on
 failure.
 
 **Make sure you do not try to process the entire dataset in your
