@@ -10,13 +10,14 @@
           - [Resilient Distributed Datasets](#resilient-distributed-datasets)
           - [Dataframe and Dataset](#dataframe-and-dataset)
           - [Packaging your application using SBT](#packaging-your-application-using-sbt)
+      - [Amazon Web Services](#amazon-web-services)
   - [Lab 1](#lab-1)
       - [Before you start](#before-you-start-1)
       - [Assignment](#assignment)
       - [Deliverables](#deliverables)
       - [Questions](#questions)
   - [Lab 2](#lab-2)
-      - [Amazon Web Services](#amazon-web-services)
+      - [Before you start](#before-you-start-2)
       - [Assignment](#assignment-1)
       - [Deliverables](#deliverables-1)
   - [Lab 3](#lab-3)
@@ -1096,6 +1097,141 @@ Be sure to explore the history server thoroughly\! You can use it to gain an
 understanding of how Spark executes your application, as well as to debug and
 time your code, which is important for both lab 1 and 2.
 
+## Amazon Web Services
+
+AWS consists of a variety of different services, the ones relevant for this lab
+are listed below:
+
+  - [EC2](https://aws.amazon.com/ec2/)  
+    Elastic Compute Cloud allows you to provision a variety of different
+    machines that can be used to run a computation. An overview of the
+    different machines and their use cases can be found on the EC2 website.
+  - [EMR](https://aws.amazon.com/emr/)  
+    Elastic MapReduce is a layer on top of EC2, that allows you to quickly
+    deploy MapReduce-like applications, for instance Apache Spark.
+  - [S3](https://aws.amazon.com/s3/)  
+    Simple Storage Server is an object based storage system that is easy to
+    interact with from different AWS services.
+
+Note that the GDelt GKG is hosted on AWS S3 in the [US east region](https://aws.amazon.com/public-datasets/common-crawl/), so any
+EC2/EMR instances interacting with this data set should also be provisioned
+there. At the time of writing, this means that you should select either the
+Virginia or Ohio region for your instances.
+
+AWS EC2 offers spot instances, a marketplace for unused machines that you can
+bid on. These spot instances are often a order of magnitude cheaper than
+on-demand instances. The current price list can be found in the [EC2 website](https://aws.amazon.com/ec2/spot/pricing/).
+We recommend using spot instances for the entirety of this lab.
+
+We will be using the AWS infrastructure to run the application. Log in to the AWS
+console, and open the S3 interface. Create a bucket where we can store the
+application JAR, and all the other files needed by your application.
+
+There are (at least) two ways to transfer files to S3:
+
+1.  The web interface, and
+2.  The command line interface.
+
+The web interface is straightforward to use. To use the command line interface,
+first install the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html). Some example operations are listed below.
+
+To copy a file
+
+``` bash
+aws s3 cp path/to/file s3://destination-bucket/path/to/file
+```
+
+To copy a directory recursively
+
+``` bash
+aws s3 cp --recursive s3://origin-bucket/path/to/file
+```
+
+To move a file
+
+``` bash
+aws s3 mv path/to/file s3://destination-bucket/path/to/file
+```
+
+The aws-cli contains much more functionality, which can be found on the
+[AWS-CLI docs](https://aws.amazon.com/cli/).
+
+Once you have uploaded all the necessary files (again your application JAR, and
+all the files required by the application), we are ready to provision a
+cluster. Go to the EMR service, and select *Create Cluster*. Next select *Go to
+advanced options*, select the latest release, and check the frameworks you want
+to use. In this case this means Spark, Hadoop and Ganglia. Spark and Hadoop you
+already know, we will introduce Ganglia later in this chapter.
+
+EMR works with steps, which can be thought of as a job, or the execution of a
+single application. You can choose to add steps in the creation of the cluster,
+but this can also be done at a later time. Press *next*.
+
+In the *Hardware Configuration* screen, we can configure the arrangement and
+selection of the machines. We suggest starting out with `m4.large` machines on
+spot pricing. You should be fine running a small example workload with a single
+master node and two core nodes.\[3\]\[4\] Be sure to select *spot pricing* and
+place an appropriate bid. Remember that you can always check the current prices
+in the information popup or on the [Amazon website](https://aws.amazon.com/ec2/spot/pricing/). After
+selecting the machines, press *next*.
+
+In the *General Options* you can select a cluster name. You can tune where the
+system logs and a number of other features (more information in the popups).
+After finishing this step, press *next*.
+
+You should now arrive in the *Security Options* screen. If you have not created
+an *EC2 keypair*, it is recommended that you do so now. This will allow you to
+access the Yarn, Spark, and Ganglia web interfaces in your browser. This makes
+debugging and monitoring the execution of your Spark Job much more manageable.
+To create an *EC2 keypair*, follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
+
+After this has all been completed you are ready to spin up your first cluster
+by pressing *Create cluster*. Once the cluster has been created, AWS will start
+provisioning machines. This should take about 10 minutes. In the meantime you
+can add a step. Go to the *Steps* foldout, and select *Spark application* for
+*Step Type*. Clicking on *Configure* will open a dialogue in which you can
+select the application JAR location in your S3 bucket, as well as any number
+of arguments to the application, spark-submit, as well as your action on
+failure.
+
+**Make sure you do not try to process the entire dataset in your
+initial run, but, similar to lab 1, start with a few files, to confirm that the
+application works as intended**
+
+The setup will take some time to finish, so in the meantime you should
+configure a proxy for the web interfaces. More detailed information can be
+found on the [AWS website](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html). You can check the logs in your S3 bucket, or the
+web interfaces to track the progress of your application and whether any errors
+have occurred.
+
+By forwarding the web interfaces you will also have access to Apache Ganglia.
+Ganglia is a tool that allows you to monitor your cluster for incoming and
+outgoing network, CPU load, memory pressure, and other useful metrics. They can
+help to characterize the workload at hand, and help optimizing computation
+times. An example of its interface is shown in fig. 2.
+
+![Figure 2: Ganglia screenshot](./images/ganglia.png)
+
+It’s not uncommon to run into problems when you first deploy your application
+to AWS, here are some general clues:
+
+  - You can access S3 files directly using Spark, so via
+    `SparkContext.textFile` and `SparkSession.read.csv`, but not using the OS,
+    so using an ordinary `File` java class will not work. If you want to load a
+    file to the environment, you will have to figure out a workaround.
+
+  - You can monitor the (log) output of your master and worker nodes in Yarn,
+    which you can access in the web interfaces. It might help you to insert
+    some helpful logging messages in your Application.
+
+  - Scale your application by increasing the workload by an order of magnitude
+    at a time, some bugs only become apparent when you have a sufficient load
+    on your cluster and a sufficient cluster size. In terms of cost, it’s also
+    much cheaper if you do your debugging incrementally on smaller clusters.
+
+  - Ensure that your cluster is running in actual cluster mode (can be visually
+    confirmed by checking the load on the non-master nodes in Ganglia).
+
 # Lab 1
 
 In this lab, we will design and develop an application to process GDELT data.
@@ -1310,6 +1446,8 @@ will scale this application using Amazon Web Services to process the entire
 dataset (several terabytes). You are free to pick either your RDD, or
 Dataframe/Dataset implementation.
 
+## Before you start
+
 **We assume everybody has access to AWS credits via both the GitHub developer
 pack and the AWS classroom in their lab group\! If this is not the case, please
 ask for help, or send us an email.**
@@ -1317,145 +1455,9 @@ ask for help, or send us an email.**
 **You pay for cluster per commissioned minute. After you are done working with
 a cluster, please terminate the cluster, to avoid unnecessary costs.**
 
-Like last lab, we will first give you a short description of the different
-technologies you will be using before we give the actual assignment.
-
-## Amazon Web Services
-
-AWS consists of a variety of different services, the ones relevant for this lab
-are listed below:
-
-  - [EC2](https://aws.amazon.com/ec2/)  
-    Elastic Compute Cloud allows you to provision a variety of different
-    machines that can be used to run a computation. An overview of the
-    different machines and their use cases can be found on the EC2 website.
-  - [EMR](https://aws.amazon.com/emr/)  
-    Elastic MapReduce is a layer on top of EC2, that allows you to quickly
-    deploy MapReduce-like applications, for instance Apache Spark.
-  - [S3](https://aws.amazon.com/s3/)  
-    Simple Storage Server is an object based storage system that is easy to
-    interact with from different AWS services.
-
-Note that the GDelt GKG is hosted on AWS S3 in the [US east region](https://aws.amazon.com/public-datasets/common-crawl/), so any
-EC2/EMR instances interacting with this data set should also be provisioned
-there. At the time of writing, this means that you should select either the
-Virginia or Ohio region for your instances.
-
-AWS EC2 offers spot instances, a marketplace for unused machines that you can
-bid on. These spot instances are often a order of magnitude cheaper than
-on-demand instances. The current price list can be found in the [EC2 website](https://aws.amazon.com/ec2/spot/pricing/).
-We recommend using spot instances for the entirety of this lab.
-
-We will be using the AWS infrastructure to run the application. Log in to the AWS
-console, and open the S3 interface. Create a bucket where we can store the
-application JAR, and all the other files needed by your application.
-
-There are (at least) two ways to transfer files to S3:
-
-1.  The web interface, and
-2.  The command line interface.
-
-The web interface is straightforward to use. To use the command line interface,
-first install the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html). Some example operations are listed below.
-
-To copy a file
-
-``` bash
-aws s3 cp path/to/file s3://destination-bucket/path/to/file
-```
-
-To copy a directory recursively
-
-``` bash
-aws s3 cp --recursive s3://origin-bucket/path/to/file
-```
-
-To move a file
-
-``` bash
-aws s3 mv path/to/file s3://destination-bucket/path/to/file
-```
-
-The aws-cli contains much more functionality, which can be found on the
-[AWS-CLI docs](https://aws.amazon.com/cli/).
-
-Once you have uploaded all the necessary files (again your application JAR, and
-all the files required by the application).
-
-We are now ready to provision a cluster. Go to the EMR service, and select
-*Create Cluster*. Next select *Go to advanced options*, select the latest
-release, and check the frameworks you want to use. In this case this means
-Spark, Hadoop and Ganglia. Spark and Hadoop you already know, we will introduce
-Ganglia later in this chapter.
-
-EMR works with steps, which can be thought of as a job, or the execution of a
-single application. You can choose to add steps in the creation of the cluster,
-but this can also be done at a later time. Press *next*.
-
-In the *Hardware Configuration* screen, we can configure the arrangement and
-selection of the machines. We suggest starting out with `m4.large` machines on
-spot pricing. You should be fine running a small example workload with a single
-master node and two core nodes.\[3\]\[4\] Be sure to select *spot pricing* and
-place an appropriate bid. Remember that you can always check the current prices
-in the information popup or on the [Amazon website](https://aws.amazon.com/ec2/spot/pricing/). After
-selecting the machines, press *next*.
-
-In the *General Options* you can select a cluster name. You can tune where the
-system logs and a number of other features (more information in the popups).
-After finishing this step, press *next*.
-
-You should now arrive in the *Security Options* screen. If you have not created
-a *EC2 keypair*, it is recommended that you do so now. This will allow you to
-access the Yarn, Spark, and Ganglia web interfaces in your browser. This makes
-debugging and monitoring the execution of your Spark Job much more manageable.
-To create a *EC2 keypair*, follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
-
-After this has all been completed you are ready to spin up your first cluster
-by pressing *Create cluster*. Once the cluster has been created, AWS will start
-provisioning machines. This should take about 10 minutes. In the meantime you
-can add a step. Go the *Steps* foldout, and select *Spark application* for
-*Step Type*. Clicking on *Configure* will open a dialogue in which you can
-select the application JAR location in your S3 bucket, as well as any number
-of argument to the application, spark-submit, as well as your action on
-failure.
-
-**Make sure you do not try to process the entire dataset in your
-initial run, but, similar to lab 1, start with a few files, to confirm that the
-application works as intended**
-
-The setup will take some time to finish, so in the meantime you should
-configure a proxy for the web interfaces. More detailed information can be
-found on the [AWS website](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html). You can check the logs in your S3 bucket, or the
-web interfaces to track the progress of your application and whether any errors
-have occurred.
-
-By forwarding the web interfaces you will also have access to Apache Ganglia.
-Ganglia is a tool that allows you to monitor your cluster for incoming and
-outgoing network, CPU load, memory pressure, and other useful metrics. They can
-help to characterize the workload at hand, and help optimizing computation
-times. An example of its interface is shown in fig. 2.
-
-![Figure 2: Ganglia screenshot](./images/ganglia.png)
-
-It’s not uncommon to run into problems when you first deploy your application
-to AWS, here are some general clues:
-
-  - You can access S3 files directly using Spark, so via
-    `SparkContext.textFile` and `SparkSession.read.csv`, but not using the OS,
-    so using an ordinary `File` java class will not work. If you want to load a
-    file to the environment, you will have to figure out a workaround.
-
-  - You can monitor the (log) output of your master and worker nodes in Yarn,
-    which you can access in the web interfaces. It might help you to insert
-    some helpful logging messages in your Application.
-
-  - Scale your application by increasing the workload by an order of magnitude
-    at a time, some bugs only become apparent when you have a sufficient load
-    on your cluster and a sufficient cluster size. In terms of cost, it’s also
-    much cheaper if you do your debugging incrementally on smaller clusters.
-
-  - Ensure that your cluster is running in actual cluster mode (can be visually
-    confirmed by checking the load on the non-master nodes in Ganglia).
+Make sure you have read the introduction on Amazon Web services in the guide
+chapter and that you have a working solution to lab 1 before starting the
+assignment.
 
 ## Assignment
 
@@ -1493,16 +1495,17 @@ There is a [guide to Spark performance](https://spark.apache.org/docs/latest/tun
 
 ## Deliverables
 
-  - A report outlining your choices in terms of configuration and your results.
-  - A presentation (maximum 5 slides/minutes) in which you present your work
-    and results to the class. Try to put an emphasis on the
-    improvements you found, what kind of settings/configurations/changes had
-    the most impact.
+The deliverable for this lab is a blog post outlining your choices in
+terms of configuration and your results in achieving the assignment. Be concise
+in your blog, you can skip introductions and go straight to juicy bits. These
+blog posts should be written in [Github flavored markdown](https://help.github.com/en/articles/basic-writing-and-formatting-syntax), as we will
+publish all reports so you can learn from your classmates. We encourage you to
+have a look at them after we publish these\!
 
-In the report, there should be a justification for why you chose the cluster
+In the blog post, there should be a justification for why you chose the cluster
 configuration you did. If you have measurements for multiple cluster
-configurations please include them. Also detail all the improvements you found,
-and why they improved effectiveness.
+configurations, please include them. Also detail all the improvements you
+found, and why they improved effectiveness.
 
 # Lab 3
 
