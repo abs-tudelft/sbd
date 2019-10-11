@@ -15,6 +15,11 @@ project/plugins/project/
 .cache
 .lib/
 
-
 # End of https://www.gitignore.io/api/sbt
+
+# Download cache
 segment
+
+# Docker
+.sbt
+.ivy2

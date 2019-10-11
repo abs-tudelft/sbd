@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+  zookeeper-server:
+    build:
+      context: .
+      target: zookeeper-server
+
+  kafka-server:
+    build:
+      context: .
+      target: kafka-server
+    command: "--override zookeeper.connect=zookeeper-server"
+
+  kafka-producer:
+    image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
+    # build:
+    #   context: github.com/hseeberger/scala-sbt.git#:debian
+    #   args:
+    #     BASE_IMAGE_TAG: 8
+    #     SBT_VERSION: 1.3.2
+    #     SCALA_VERSION: 2.12.10
+    volumes:
+      - ./GDELTProducer:/root
+    command: sbt run
+
+  kafka-stream:
+    image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
+    volumes:
+      - ./GDELTStream:/root
+    command: sbt ~run
+
+  kafka-consumer:
+    image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
+    volumes:
+      - ./GDELTConsumer:/root
+    command: sbt run
+    ports:
+      - "1337:1337"
+
+  kafka-console-consumer:
+    build:
+      context: .
+      target: kafka-console-consumer
+    command: "--bootstrap-server kafka-server:9092 --topic gdelt-histogram --property print.key=true"
+
+  visualizer:
+    build:
+      context: .
+      target: visualizer
+    volumes:
+      - ./GDELTVisualizer:/src
+    ports:
+      - "1234:1234"
+      - "12345:12345"

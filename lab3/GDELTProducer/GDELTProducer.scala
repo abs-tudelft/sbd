@@ -5,15 +5,17 @@ import com.amazonaws.services.s3.transfer._;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import java.util.concurrent.{LinkedBlockingQueue, ScheduledThreadPoolExecutor, TimeUnit};
+import java.util.concurrent.{
+  LinkedBlockingQueue,
+  ScheduledThreadPoolExecutor,
+  TimeUnit
+};
 import java.io.File;
 import java.text.{DecimalFormat, SimpleDateFormat};
 import java.time.Duration;
 import java.util.{Calendar, TimeZone};
 
-
-
-object GDELTProducer{
+object GDELTProducer {
 
   val interval = 15
   val extension = ".gkg.csv"
@@ -26,7 +28,6 @@ object GDELTProducer{
   var lastFile: String = "20150218230000"
   fileNameFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
-
   def getFileList(window: Int): Array[String] = {
     var time = Calendar.getInstance
     time.set(Calendar.SECOND, 0)
@@ -34,6 +35,7 @@ object GDELTProducer{
 
     val minutes = time.get(Calendar.MINUTE) % interval
     time.add(Calendar.MINUTE, -(interval + minutes))
+    time.add(Calendar.MONTH, -12)
 
     println("Checking for downloads up to " + timeFormat.format(time.getTime()))
     val lastSegment = time.clone().asInstanceOf[Calendar]
@@ -52,8 +54,12 @@ object GDELTProducer{
     return files
   }
 
-
-  def getDownloads(tx: TransferManager, fileNames: Array[String], localDir: String, fileQueue: LinkedBlockingQueue[File]): (Array[File], Array[Download]) = {
+  def getDownloads(
+      tx: TransferManager,
+      fileNames: Array[String],
+      localDir: String,
+      fileQueue: LinkedBlockingQueue[File]
+  ): (Array[File], Array[Download]) = {
     var downloads: Array[Download] = Array()
     var files: Array[File] = Array()
 
@@ -62,16 +68,19 @@ object GDELTProducer{
       files = files :+ localFile
       if (!localFile.exists) {
         try {
-          downloads = downloads :+ tx.download(bucketName, prefix + fileName, localFile)
-        }
-        catch {
+          downloads = downloads :+ tx.download(
+            bucketName,
+            prefix + fileName,
+            localFile
+          )
+        } catch {
           case e: AmazonS3Exception => {
+            println(e)
             tx.shutdownNow
             throw new Exception("Download failed")
           }
         }
-      }
-      else {
+      } else {
         if (lastFile < localFile.getName) {
           fileQueue.offer(localFile)
           lastFile = localFile.getName
@@ -82,15 +91,18 @@ object GDELTProducer{
     return (files, downloads)
   }
 
-
-  def blockOnDownloads(files: Array[File], downloads: Array[Download], fileQueue: LinkedBlockingQueue[File]) {
+  def blockOnDownloads(
+      files: Array[File],
+      downloads: Array[Download],
+      fileQueue: LinkedBlockingQueue[File]
+  ) {
     if (downloads.size > 0) {
       val msg = "Downloading " + downloads.size.toString + " file(s)... "
       print(msg)
 
       val df = new DecimalFormat("##0.0")
       for (download <- downloads) {
-        while(!download.isDone) {
+        while (!download.isDone) {
           var progress = 0d
           for (download2 <- downloads) {
             progress += download2.getProgress().getPercentTransferred()
@@ -106,23 +118,26 @@ object GDELTProducer{
         }
       }
       print("\r" + msg + "Done. \n")
-    }
-    else {
+    } else {
       println("No downloads needed!")
     }
   }
 
-
-  def download(tx: TransferManager, window: Int, localDir: String, fileQueue: LinkedBlockingQueue[File]) {
+  def download(
+      tx: TransferManager,
+      window: Int,
+      localDir: String,
+      fileQueue: LinkedBlockingQueue[File]
+  ) {
     val fileNames = getFileList(window)
     val (files, downloads) = getDownloads(tx, fileNames, localDir, fileQueue)
     blockOnDownloads(files, downloads, fileQueue)
   }
 
-
   def main(args: Array[String]): Unit = {
     val credentialProviderChain = new DefaultAWSCredentialsProviderChain()
-    val s3 = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build
+    val s3 =
+      AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build
     val tx = TransferManagerBuilder
       .standard()
       .withS3Client(s3)
@@ -131,14 +146,14 @@ object GDELTProducer{
     val window = 60
     val localDir = "segment/"
 
-    val fileQueue : LinkedBlockingQueue[File] = new LinkedBlockingQueue()
+    val fileQueue: LinkedBlockingQueue[File] = new LinkedBlockingQueue()
     val kafka = new KafkaSupplier(fileQueue)
     val sup = new Thread(kafka)
     println("Starting Kafka producer.")
     sup.start
 
     val downloadSched = new java.util.concurrent.ScheduledThreadPoolExecutor(1)
-    val downloadTask = new Runnable{
+    val downloadTask = new Runnable {
       def run() = {
         download(tx, window, localDir, fileQueue)
       }
@@ -149,17 +164,27 @@ object GDELTProducer{
 
     val now = Calendar.getInstance
     val nextInterval = HelperFunctions.nextMinuteInterval(interval)
-    val delay = nextInterval.getTimeInMillis() - now.getTimeInMillis() + Duration.ofSeconds(5).toMillis()
+    val delay = nextInterval.getTimeInMillis() - now
+      .getTimeInMillis() + Duration.ofSeconds(5).toMillis()
 
-    println("\nFinished initial download. Scheduling the next download at " + timeFormat.format(nextInterval.getTime) + " and every following " + interval.toString + " minutes...")
-    println("Press enter at any time to cancel...\n")
-    downloadSched.scheduleAtFixedRate(downloadTask, delay, interval * 60 * 1000, java.util.concurrent.TimeUnit.MILLISECONDS)
+    println(
+      "\nFinished initial download. Scheduling the next download at " + timeFormat.format(
+        nextInterval.getTime
+      ) + " and every following " + interval.toString + " minutes..."
+    )
+    // println("Press enter at any time to cancel...\n")
+    downloadSched.scheduleAtFixedRate(
+      downloadTask,
+      delay,
+      interval * 60 * 1000,
+      java.util.concurrent.TimeUnit.MILLISECONDS
+    )
 
-    System.in.read()
-    downloadSched.shutdownNow
-    tx.shutdownNow
-    sup.interrupt()
+    // this is for docker: (no tty)
+    while (true) {}
+    // System.in.read()
+    // downloadSched.shutdownNow
+    // tx.shutdownNow
+    // sup.interrupt()
   }
 }
-
-
