@@ -158,9 +158,10 @@ HistogramTransformer
 :   You will have to implement the `HistogramTransformer` using the
     processor/transformer API of kafka streams, to convert the stream of
     allNames into a histogram of the last hour. We suggest you look at [state
-    store for Kafka streaming].
+    stores for Kafka streaming].
 
-  [state store for Kafka streaming]: https://kafka.apache.org/20/documentation/streams/developer-guide/processor-api.html
+  [state stores for Kafka streaming]:
+  https://kafka.apache.org/23/documentation/streams/developer-guide/processor-api.html
 
 You will have to write the result of this stream to a new topic called
 `gdelt-histogram`.
@@ -174,13 +175,18 @@ the output topic, so that the visualizer can update accordingly. When you
 decrement a name, because its occurrence is older than an hour, remember to
 publish an update as well!
 
+Note that you are only allowed to modify the `GDELTStream.scala` file. We
+should be able to compile and run your code without any other modifications.
+
 ## Deliverables
 
-- A complete zip of the entire project, including your implementation of
-    `GDELTStream.scala` (please remove all data files from the zip!)
-- A report containing
-    - Outline of the code (less than 1/2 a page)
+-   Your implementation of the GDELTStream application
+-   A report containing:
+    - An outline of the code (less than 1/2 a page)
     - Answers to the questions listed below
+
+Similar to lab 1, this implies you hand in __one__ Scala file and __one__ pdf
+file.
 
 ## Questions
 
