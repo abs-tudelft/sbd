@@ -2,7 +2,7 @@
   "name": "GDELTVisualizer",
   "version": "1.0.0",
   "scripts": {
-    "serve": "parcel serve src/index.html --hmr-port 12345"
+    "serve": "npm install && parcel serve src/index.html --hmr-port 12345"
   },
   "dependencies": {
     "d3": "^5.12.0"
