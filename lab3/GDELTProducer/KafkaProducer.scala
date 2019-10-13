@@ -22,9 +22,8 @@ import java.nio.charset.{Charset, CodingErrorAction};
 import java.util.concurrent.{LinkedBlockingQueue}
 import scala.collection.JavaConversions._
 
-class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
+class KafkaSupplier(server: String, queue: LinkedBlockingQueue[File]) extends Runnable {
   val groupId = "producer_check"
-  val server = "kafka-server:9092"
   val topic = "gdelt"
   val fileUploadInterval = 15
   val pollDelay = 1000

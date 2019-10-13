@@ -68,12 +68,13 @@ object GDELTProducer {
       if (!localFile.exists) {
         val url = new URL(baseUrl + fileName)
         val conn = url.openConnection()
+        val length = conn.getContentLengthLong()
         val out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(localFile)))
 
         val download = Download(
           (url #> out).run(),
           out,
-          conn.getContentLengthLong()
+          length
         )
 
         downloads = downloads :+ download
@@ -102,9 +103,9 @@ object GDELTProducer {
         while (download.process.isAlive) {
           var progress = 0d
           for (download2 <- downloads) {
-            progress += download2.outputStream.size() / download2.fileSize
+            progress += download2.outputStream.size() / download2.fileSize.toDouble
           }
-          print("\r" + msg + df.format(progress / downloads.size) + "%")
+          print("\r" + msg + df.format(progress / downloads.size * 100) + "%")
           Thread.sleep(100)
         }
       }
@@ -133,9 +134,10 @@ object GDELTProducer {
   def main(args: Array[String]): Unit = {
     val window = 60
     val localDir = "segment/"
+    val kafkaServer = args(0)
 
     val fileQueue: LinkedBlockingQueue[File] = new LinkedBlockingQueue()
-    val kafka = new KafkaSupplier(fileQueue)
+    val kafka = new KafkaSupplier(kafkaServer, fileQueue)
     val sup = new Thread(kafka)
     println("Starting Kafka producer.")
     sup.start
@@ -168,11 +170,15 @@ object GDELTProducer {
       java.util.concurrent.TimeUnit.MILLISECONDS
     )
 
-    // this is for docker: (no tty)
-    while (true) {}
-    // System.in.read()
-    // downloadSched.shutdownNow
-    // tx.shutdownNow
-    // sup.interrupt()
+    if (new File("/.dockerenv").exists()) {
+      // Running in Docker, no tty, no graceful termination.
+      while (true) {}
+    }
+    else {
+      // Graceful exit
+      System.in.read()
+      downloadSched.shutdownNow
+      sup.interrupt()
+    }
   }
 }

@@ -16,7 +16,7 @@ services:
     image: mozilla/sbt
     volumes:
       - ./GDELTProducer:/app
-    command: sbt run
+    command: sbt run "kafka-server:9092"
     working_dir: /app
 
   kafka-stream:
