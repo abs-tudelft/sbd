@@ -1,26 +1,27 @@
-import com.amazonaws.auth._;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.transfer._;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-
 import java.util.concurrent.{
   LinkedBlockingQueue,
   ScheduledThreadPoolExecutor,
   TimeUnit
 };
-import java.io.File;
+import java.io.{File, BufferedOutputStream, DataOutputStream, FileOutputStream};
+import java.net.URL
 import java.text.{DecimalFormat, SimpleDateFormat};
 import java.time.Duration;
 import java.util.{Calendar, TimeZone};
 
+import scala.sys.process._
+
+case class Download(
+  process: Process,
+  outputStream: DataOutputStream,
+  fileSize: Long,
+)
+
 object GDELTProducer {
 
   val interval = 15
-  val extension = ".gkg.csv"
-  val bucketName = "gdelt-open-data"
-  val prefix = "v2/gkg/"
+  val baseUrl = "http://data.gdeltproject.org/gdeltv2/"
+  val extension = ".gkg.csv.zip"
 
   val timeFormat = new SimpleDateFormat("HH:mm")
   val timeStampFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
@@ -35,7 +36,6 @@ object GDELTProducer {
 
     val minutes = time.get(Calendar.MINUTE) % interval
     time.add(Calendar.MINUTE, -(interval + minutes))
-    time.add(Calendar.MONTH, -12)
 
     println("Checking for downloads up to " + timeFormat.format(time.getTime()))
     val lastSegment = time.clone().asInstanceOf[Calendar]
@@ -55,7 +55,6 @@ object GDELTProducer {
   }
 
   def getDownloads(
-      tx: TransferManager,
       fileNames: Array[String],
       localDir: String,
       fileQueue: LinkedBlockingQueue[File]
@@ -67,19 +66,17 @@ object GDELTProducer {
       val localFile = new File(localDir + fileName)
       files = files :+ localFile
       if (!localFile.exists) {
-        try {
-          downloads = downloads :+ tx.download(
-            bucketName,
-            prefix + fileName,
-            localFile
-          )
-        } catch {
-          case e: AmazonS3Exception => {
-            println(e)
-            tx.shutdownNow
-            throw new Exception("Download failed")
-          }
-        }
+        val url = new URL(baseUrl + fileName)
+        val conn = url.openConnection()
+        val out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(localFile)))
+
+        val download = Download(
+          (url #> out).run(),
+          out,
+          conn.getContentLengthLong()
+        )
+
+        downloads = downloads :+ download
       } else {
         if (lastFile < localFile.getName) {
           fileQueue.offer(localFile)
@@ -102,10 +99,10 @@ object GDELTProducer {
 
       val df = new DecimalFormat("##0.0")
       for (download <- downloads) {
-        while (!download.isDone) {
+        while (download.process.isAlive) {
           var progress = 0d
           for (download2 <- downloads) {
-            progress += download2.getProgress().getPercentTransferred()
+            progress += download2.outputStream.size() / download2.fileSize
           }
           print("\r" + msg + df.format(progress / downloads.size) + "%")
           Thread.sleep(100)
@@ -124,25 +121,16 @@ object GDELTProducer {
   }
 
   def download(
-      tx: TransferManager,
       window: Int,
       localDir: String,
       fileQueue: LinkedBlockingQueue[File]
   ) {
     val fileNames = getFileList(window)
-    val (files, downloads) = getDownloads(tx, fileNames, localDir, fileQueue)
+    val (files, downloads) = getDownloads(fileNames, localDir, fileQueue)
     blockOnDownloads(files, downloads, fileQueue)
   }
 
   def main(args: Array[String]): Unit = {
-    val credentialProviderChain = new DefaultAWSCredentialsProviderChain()
-    val s3 =
-      AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build
-    val tx = TransferManagerBuilder
-      .standard()
-      .withS3Client(s3)
-      .build
-
     val window = 60
     val localDir = "segment/"
 
@@ -155,12 +143,12 @@ object GDELTProducer {
     val downloadSched = new java.util.concurrent.ScheduledThreadPoolExecutor(1)
     val downloadTask = new Runnable {
       def run() = {
-        download(tx, window, localDir, fileQueue)
+        download(window, localDir, fileQueue)
       }
     }
 
     println("Performing the initial downloads now.\n")
-    download(tx, window, localDir, fileQueue)
+    download(window, localDir, fileQueue)
 
     val now = Calendar.getInstance
     val nextInterval = HelperFunctions.nextMinuteInterval(interval)

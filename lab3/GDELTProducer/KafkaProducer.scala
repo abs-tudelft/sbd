@@ -16,6 +16,7 @@ import scala.math.max;
 import scala.util.{Try, Success, Failure}
 
 import java.util.{Calendar, Properties};
+import java.util.zip.ZipFile
 import java.io.File;
 import java.nio.charset.{Charset, CodingErrorAction};
 import java.util.concurrent.{LinkedBlockingQueue}
@@ -106,11 +107,14 @@ class KafkaSupplier(queue: LinkedBlockingQueue[File]) extends Runnable {
         codec.onMalformedInput(CodingErrorAction.IGNORE)
         linesToFeed ++= files
           .flatMap(
-            a =>
+            a => {
+              val zipFile = new ZipFile(a)
+              val entry = zipFile.entries().nextElement()
               HelperFunctions.buildTimeStamps(
-                Source.fromFile(a)(codec).getLines.toSeq,
+                Source.fromInputStream(zipFile.getInputStream(entry))(codec).getLines.toSeq,
                 fileUploadInterval
               )
+            }
           )
 
         val now = Calendar.getInstance
