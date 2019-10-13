@@ -13,21 +13,21 @@ services:
     command: "--override zookeeper.connect=zookeeper-server"
 
   kafka-producer:
-    image: mozilla/sbt
+    image: mozilla/sbt:8u212_1.2.8
     volumes:
       - ./GDELTProducer:/app
-    command: sbt run "kafka-server:9092"
+    command: sbt "run kafka-server:9092"
     working_dir: /app
 
   kafka-stream:
-    image: mozilla/sbt
+    image: mozilla/sbt:8u212_1.2.8
     volumes:
       - ./GDELTStream:/app
-    command: sbt ~run
+    command: sbt "~run"
     working_dir: /app
 
   kafka-consumer:
-    image: mozilla/sbt
+    image: mozilla/sbt:8u212_1.2.8
     volumes:
       - ./GDELTConsumer:/app
     command: sbt run

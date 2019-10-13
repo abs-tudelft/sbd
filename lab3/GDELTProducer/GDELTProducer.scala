@@ -62,6 +62,8 @@ object GDELTProducer {
     var downloads: Array[Download] = Array()
     var files: Array[File] = Array()
 
+    new File(localDir).mkdirs()
+
     for (fileName <- fileNames) {
       val localFile = new File(localDir + fileName)
       files = files :+ localFile
