@@ -38,8 +38,6 @@ object GDELTStream extends App {
     streams.close(10, TimeUnit.SECONDS)
   }
 
-  // this is for docker: (no tty)
-  while (true) {}
 }
 
 // This transformer should count the number of times a name occurs
