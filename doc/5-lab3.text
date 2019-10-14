@@ -63,7 +63,7 @@ For this assignment a `docker-compose.yml` file is provided to build and run
 the required services in Docker containers.
 [Docker Compose](https://docs.docker.com/compose/) is a tool for defining and
 running multi-container Docker applications. Please
-[install](https://docs.docker.com/compose/install/) the lastest version for
+[install](https://docs.docker.com/compose/install/) the latest version for
 this assignment. Also take a look at the
 [Compose file reference](https://docs.docker.com/compose/compose-file/).
 
