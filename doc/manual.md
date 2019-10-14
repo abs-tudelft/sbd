@@ -27,6 +27,7 @@
       - [Questions](#questions-1)
           - [General Kafka questions](#general-kafka-questions)
           - [Questions specific to the assignment](#questions-specific-to-the-assignment)
+  - [Footnotes](#footnotes)
 
 # Introduction
 
@@ -1550,9 +1551,7 @@ Kafka consists of 4 APIs, from the Kafka docs:
 
 Before you start with the lab, please read the [Introduction to Kafka on the Kafka
 website](https://kafka.apache.org/intro), to become familiar with the Apache
-Kafka abstraction and internals. You can find instructions on how to [install
-Kafka on your machine here](https://kafka.apache.org/quickstart). A good
-introduction to the [Kafka stream API can be found
+Kafka abstraction and internals. A good introduction to the [Kafka stream API can be found
 here](https://docs.confluent.io/current/streams/quickstart.html). We recommend
 you go through the code and examples.
 
@@ -1722,7 +1721,9 @@ words you can use, but you are welcome to use fewer if you can.
 6.  How could you use Kafka’s partitioning to compute the histogram in
     parallel? (max. 100 words)
 
-<!-- end list -->
+# Footnotes
+
+<!-- Nasty hack to get a header above footnotes in gfm. -->
 
 1.  Normally the image is pulled from Docker Hub, but the tag
     with the required version of Scala for Spark is no longer available.

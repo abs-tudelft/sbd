@@ -44,9 +44,7 @@ The Connector API
 
 Before you start with the lab, please read the [Introduction to Kafka on the Kafka
 website](https://kafka.apache.org/intro), to become familiar with the Apache
-Kafka abstraction and internals. You can find instructions on how to [install
-Kafka on your machine here](https://kafka.apache.org/quickstart). A good
-introduction to the [Kafka stream API can be found
+Kafka abstraction and internals. A good introduction to the [Kafka stream API can be found
 here](https://docs.confluent.io/current/streams/quickstart.html). We recommend
 you go through the code and examples.
 

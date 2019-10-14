@@ -1,5 +1,5 @@
-INPUT := $(wildcard *.text)
-
+INPUT = $(filter-out 6-footnotes.text, $(wildcard *.text))
+INPUT_MD := $(wildcard *.text)
 
 PANDOC=pandoc
 
@@ -22,9 +22,8 @@ manual.pdf : $(INPUT)
 manual.tex : $(INPUT)
 	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_OPTIONS_LATEX) -o $@ $(INPUT)
 
-manual.md : $(INPUT)
-	echo $(INPUT)
-	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_OPTIONS_MD) -o $@ $(INPUT)
+manual.md : $(INPUT_MD)
+	$(PANDOC) $(PANDOC_OPTIONS) $(PANDOC_OPTIONS_MD) -o $@ $(INPUT_MD)
 
 .PHONY: all clean
 
