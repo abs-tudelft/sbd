@@ -1,17 +1,10 @@
-ThisBuild / scalaVersion := "2.12.7"
+scalaVersion := "2.12.10"
 
-lazy val example = (project in file("."))
-  .settings(
-    name := "SBD 2018 - Assignment 3 - Stream",
-    fork in run := true,
-    outputStrategy := Some(StdoutOutput),
-    connectInput in run := true,
+name := "SBD 2018 - Assignment 3 - Stream"
 
-    libraryDependencies ++= Seq(
-        {
-        sys.props += "packaging.type" -> "jar"
-        "org.apache.kafka" %% "kafka-streams-scala" % "2.0.0"
-        },
-    )
-  )
+fork := true
+
+libraryDependencies ++= Seq(
+    "org.apache.kafka" %% "kafka-streams-scala" % "2.3.0"
+)
 

@@ -9,8 +9,12 @@ import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala._
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.state._
-import org.apache.kafka.streams.{KafkaStreams, KeyValue, StreamsConfig, Topology}
-
+import org.apache.kafka.streams.{
+  KafkaStreams,
+  KeyValue,
+  StreamsConfig,
+  Topology
+}
 
 object GDELTConsumer extends App {
   import Serdes._
@@ -18,20 +22,22 @@ object GDELTConsumer extends App {
   val props: Properties = {
     val p = new Properties()
     p.put(StreamsConfig.APPLICATION_ID_CONFIG, "gdelt-consumer")
-    p.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+    p.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-server:9092")
     p.put("auto.offset.reset", "latest")
     p
   }
 
   val builder: StreamsBuilder = new StreamsBuilder
-  val histogramStoreBuilder = Stores.keyValueStoreBuilder(
-    Stores.inMemoryKeyValueStore("ReducedHistogramStore"),
-    Serdes.String,
-    Serdes.Long
-  )
-  .withLoggingDisabled
+  val histogramStoreBuilder = Stores
+    .keyValueStoreBuilder(
+      Stores.inMemoryKeyValueStore("ReducedHistogramStore"),
+      Serdes.String,
+      Serdes.Long
+    )
+    .withLoggingDisabled
   builder.addStateStore(histogramStoreBuilder)
-  val counts: KStream[String, Long] = builder.stream[String, Long]("gdelt-histogram")
+  val counts: KStream[String, Long] =
+    builder.stream[String, Long]("gdelt-histogram")
   counts.process(() => new HistogramProcessor, "ReducedHistogramStore")
 
   val streams: KafkaStreams = new KafkaStreams(builder.build(), props)
@@ -49,8 +55,6 @@ object GDELTConsumer extends App {
     serverThread.interrupt()
   }
 
-  System.in.read()
-  System.exit(0)
 }
 
 class HistogramProcessor extends Processor[String, Long] {
@@ -59,7 +63,9 @@ class HistogramProcessor extends Processor[String, Long] {
 
   def init(context: ProcessorContext) {
     this.context = context
-    this.reduced = context.getStateStore("ReducedHistogramStore").asInstanceOf[KeyValueStore[String, Long]]
+    this.reduced = context
+      .getStateStore("ReducedHistogramStore")
+      .asInstanceOf[KeyValueStore[String, Long]]
   }
 
   def process(name: String, count: Long) {
@@ -74,13 +80,11 @@ class HistogramProcessor extends Processor[String, Long] {
             this.deleteReducedHist(minimum.key)
             this.putReducedHist(name, count)
           }
-        }
-        else {
+        } else {
           // Add new record because buffer is not full yet
           this.putReducedHist(name, count)
         }
-      }
-      else {
+      } else {
         // Update existing record
         this.putReducedHist(name, count)
       }
@@ -113,8 +117,5 @@ class HistogramProcessor extends Processor[String, Long] {
     minimum
   }
 
-  def close() {
-
-  }
+  def close() {}
 }
-

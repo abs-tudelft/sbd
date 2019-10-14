@@ -1,3 +1,8 @@
+import * as d3 from "d3";
+import { sendUpdate } from "./tester";
+
+let intervalId = undefined;
+
 const margin = ({top: 20, right: 0, bottom: 180, left: 100})
 const height = 700
 const width = 1280
@@ -70,14 +75,6 @@ function onClose() {
   websocketButton.innerHTML = "Start websocket"
   testButton.disabled = false
   enabled = false
-}
-
-
-function randInt(min, max) {
-  // Sample a random integer from [min, max)
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 const chart = () => {
