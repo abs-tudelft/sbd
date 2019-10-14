@@ -55,10 +55,6 @@ object GDELTConsumer extends App {
     serverThread.interrupt()
   }
 
-  // this is for docker: (no tty)
-  while (true) {}
-  // System.in.read()
-  // System.exit(0)
 }
 
 class HistogramProcessor extends Processor[String, Long] {

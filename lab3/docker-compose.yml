@@ -22,7 +22,7 @@ services:
     image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
     volumes:
       - ./GDELTStream:/root
-    command: sbt "run ~"
+    command: sbt ~run
 
   kafka-consumer:
     image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10

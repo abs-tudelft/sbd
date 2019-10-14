@@ -172,13 +172,7 @@ object GDELTProducer {
       java.util.concurrent.TimeUnit.MILLISECONDS
     )
 
-    if (new File("/.dockerenv").exists()) {
-      // Running in Docker, no tty, no graceful termination.
-      while (true) {}
-    }
-    else {
-      // Graceful exit
-      System.in.read()
+    sys.ShutdownHookThread {
       downloadSched.shutdownNow
       sup.interrupt()
     }
