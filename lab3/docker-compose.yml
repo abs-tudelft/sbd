@@ -15,19 +15,19 @@ services:
   kafka-producer:
     image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
     volumes:
-      - ./GDELTProducer:/app
+      - ./GDELTProducer:/root
     command: sbt "run kafka-server:9092"
 
   kafka-stream:
     image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
     volumes:
-      - ./GDELTStream:/app
+      - ./GDELTStream:/root
     command: sbt "run ~"
 
   kafka-consumer:
     image: hseeberger/scala-sbt:8u222_1.3.2_2.12.10
     volumes:
-      - ./GDELTConsumer:/app
+      - ./GDELTConsumer:/root
     command: sbt run
     ports:
       - "1337:1337"
