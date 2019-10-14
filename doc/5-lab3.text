@@ -100,12 +100,10 @@ running containers:
 - `docker-compose up -d`: Create and start containers in the background
 - `docker-compose down`: Stop and remove containers, networks, images, and
   volumes
-
 - `docker-compose start`: Start services
 - `docker-compose restart`: Restart services
 - `docker-compose stop`: Stop services
 - `docker-compose rm`: Remove stopped containers
-
 - `docker-compose logs --follow <SERVICE>`: View and follow log output from
   containers
 
@@ -217,7 +215,7 @@ words you can use, but you are welcome to use fewer if you can.
 2.  Could you use a Java/Scala data structure instead of a Kafka State Store to
     manage your state in a processor/transformer? Why, or why not?
     (max. 50 words)
-3.  Given that the histogram is stored in a Kafka `StateStore`, how would you
+3.  Given that the histogram is stored in a Kafka StateStore, how would you
     extract the top 100 topics? Is this efficient? (max. 75 words)
 4.  The visualizer draws the histogram in your web browser. A Kafka consumer
     has to communicate the current 'state' of the histogram to this visualizer.

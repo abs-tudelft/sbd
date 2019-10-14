@@ -1561,54 +1561,60 @@ completely written in Java, the streams API has been wrapped in a Scala API for
 convenience. You can find the Scala KStreams documentation
 [here](https://developer.lightbend.com/docs/api/kafka-streams-scala/0.2.1/com/lightbend/kafka/scala/streams/KStreamS.html),
 for API docs on the different parts of Kafka, like `StateStores`, please refer
-to [this link](https://kafka.apache.org/20/javadoc/overview-summary.html).
+to [this link](https://kafka.apache.org/23/javadoc/overview-summary.html).
 
 ## Setting up
 
-In the lab’s repository you will find a template for your solution. There are a
-bunch of scripts (`.sh` for MacOS/Linux, `.bat` for Windows). For these scripts
-to work you first will have to define a `KAFKA_HOME` environment variable to
-the root of the Kafka installation directory. The Kafka installation directory
-should contain the following directories:
+For this assignment a `docker-compose.yml` file is provided to build and run
+the required services in Docker containers.
+[Docker Compose](https://docs.docker.com/compose/) is a tool for defining and
+running multi-container Docker applications. Please
+[install](https://docs.docker.com/compose/install/) the latest version for
+this assignment. Also take a look at the
+[Compose file reference](https://docs.docker.com/compose/compose-file/).
 
-    $ tree .
-    ├── bin
-    │   └── windows
-    ├── config
-    ├── libs
-    └── site-docs
+For this assignment the following containers are defined in the
+`docker-compose.yml` file:
 
-Once that has been set up, copy the lab files from the GitHub repository. Try
-to run the `kafka_start.sh` or `kafka_start.bat` depending on your OS. If you
-receive an error about being unable to find a `java` binary, make sure you have
-Java installed and it is in your path.
+  - `zookeeper-server`: A Zookeeper server instance.
+  - `kafka-server`: A single Kafka server instance.
+  - `kafka-producer`: A Kafka producer running the GDELTProducer application.
+  - `kafka-stream`: A Kafka stream processor running the GDELTStream application.
+  - `kafka-consumer`: A Kafka consumer running the GDELTConsumer application.
+  - `kafka-console-consumer`: A Kafka consumer subscribed to the
+    `gdel-histogram` topic, writing records to the console.
+  - `visualizer`: Simple webserver serving the GDELTVisualizer web application.
+    The application can be accessed when the service is running by navigating to
+    [localhost:1234](http://localhost:1234).
 
-The `kafka_start` script does a number of things:
+To start the containers, navigate to the `lab3` directory and run
+`docker-compose up`. This will build and start all the containers defined in
+the compose file. To start over, stop and remove everything with
+`docker-compose down`.
 
-1.  Start a Zookeeper server, which acts as a naming, configuration and task
-    coordination server, on port 2181
-2.  Start a single Kafka broker on port 9092
+The GDELTStream application, which you will develop for this assignment,
+is built and run in the `kafka-stream` service container. To start an
+interactive `sbt` shell use `docker-compose exec kafka-stream sbt`. Make sure
+the other services are up before starting your streams application. You can
+stop your application before running it again after changing the source using
+`CTRL+C`.
 
-Navigate to the GDELTProducer directory, and run `sbt run` to
-start\[5\] the GDELT stream.
+You can use the following `docker-compose` commands to interact with your
+running containers:
 
-We can now inspect the output of the `gdelt` topic by running the following
-command on MacOS/Linux:
+  - `docker-compose up`: Create and start containers
+  - `docker-compose up -d`: Create and start containers in the background
+  - `docker-compose down`: Stop and remove containers, networks, images, and
+    volumes
+  - `docker-compose start`: Start services
+  - `docker-compose restart`: Restart services
+  - `docker-compose stop`: Stop services
+  - `docker-compose rm`: Remove stopped containers
+  - `docker-compose logs --follow <SERVICE>`: View and follow log output from
+    containers
 
-    $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
-        --topic gdelt --property print.key=true --property key.separator=-
-
-Or on Windows PowerShell:
-
-    $env:KAFKA_HOME\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 `
-            --topic gdelt --property print.key=true --property key.separator=-
-
-Or on Windows cmd:
-
-    %KAFKA_HOME%\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 ^
-            --topic gdelt --property print.key=true --property key.separator=-
-
-If you see output appearing, you are now ready to start on the assignment.
+For a full list of available commands please refer to the
+[CLI Reference](https://docs.docker.com/compose/reference/overview/).
 
 ## Assignment
 
@@ -1639,9 +1645,8 @@ below.
   - Consumer  
     The consumer finally acts as a *sink*, and will process the incoming
     histogram updates from the transformer into a smaller histogram of only the 100
-    most occurring names for display \[6\]. It will finally stream this
-    histogram to
-    our visualizer over a WebSocket connection.
+    most occurring names for display \[5\]. It will finally stream this
+    histogram to our visualizer over a WebSocket connection.
 
 You are now tasked with writing an implementation of the histogram transformer.
 In the file `GDELTStream/GDELTStream.scala` you will have to implement the
@@ -1655,7 +1660,7 @@ following
     You will have to implement the `HistogramTransformer` using the
     processor/transformer API of kafka streams, to convert the stream of
     allNames into a histogram of the last hour. We suggest you look at [state
-    store for Kafka streaming](https://kafka.apache.org/20/documentation/streams/developer-guide/processor-api.html).
+    stores for Kafka streaming](https://kafka.apache.org/23/documentation/streams/developer-guide/processor-api.html).
 
 You will have to write the result of this stream to a new topic called
 `gdelt-histogram`.
@@ -1668,19 +1673,18 @@ the output topic, so that the visualizer can update accordingly. When you
 decrement a name, because its occurrence is older than an hour, remember to
 publish an update as well\!
 
-To run the visualizer, first start the websocket server by navigating to the
-GDELTConsumer directory and running `sbt run`. Next, navigate to the
-visualization directory in the root of the GitHub repository, under assignment
-3, open index.html. Once that is opened, press open web socket to start
-the visualization.
+Note that you are only allowed to modify the `GDELTStream.scala` file. We
+should be able to compile and run your code without any other modifications.
 
 ## Deliverables
 
-  - A complete zip of the entire project, including your implementation of
-    `GDELTStream.scala` (please remove all data files from the zip\!)
-  - A report containing
-      - Outline of the code (less than 1/2 a page)
+  - Your implementation of the GDELTStream application
+  - A report containing:
+      - An outline of the code (less than 1/2 a page)
       - Answers to the questions listed below
+
+Similar to lab 1, this implies you hand in **one** Scala file and **one** pdf
+file.
 
 ## Questions
 
@@ -1706,7 +1710,7 @@ words you can use, but you are welcome to use fewer if you can.
 2.  Could you use a Java/Scala data structure instead of a Kafka State Store to
     manage your state in a processor/transformer? Why, or why not?
     (max. 50 words)
-3.  Given that the histogram is stored in a Kafka `StateStore`, how would you
+3.  Given that the histogram is stored in a Kafka StateStore, how would you
     extract the top 100 topics? Is this efficient? (max. 75 words)
 4.  The visualizer draws the histogram in your web browser. A Kafka consumer
     has to communicate the current ‘state’ of the histogram to this visualizer.
@@ -1739,10 +1743,6 @@ words you can use, but you are welcome to use fewer if you can.
     spot instances, the procedure to request additional can be found in the
     [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
 
-5.  As this [issue](https://github.com/sbt/sbt/issues/3618)
-    suggests, you might need to run `sbt run` twice when starting the producer for
-    the first time.
-
-6.  It might turn out that this is too much for your browser to
+5.  It might turn out that this is too much for your browser to
     handle. If this is the case, you may change it manually in the
     `HistogramProcessor` contained in `GDELTConsumer.scala`.
