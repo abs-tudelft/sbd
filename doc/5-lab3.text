@@ -87,7 +87,11 @@ the compose file. To start over, stop and remove everything with
 `docker-compose down`.
 
 The GDELTStream application, which you will develop for this assignment,
-automatically rebuilds and restarts when the source changes.
+is built and run in the `kafka-stream` service container. To start an
+interactive `sbt` shell use `docker-compose exec kafka-stream sbt`. Make sure
+the other services are up before starting your streams application. You can
+stop your application before running it again after changing the source using
+`CTRL+C`.
 
 You can use the following `docker-compose` commands to interact with your
 running containers:
@@ -98,6 +102,7 @@ running containers:
   volumes
 
 - `docker-compose start`: Start services
+- `docker-compose restart`: Restart services
 - `docker-compose stop`: Stop services
 - `docker-compose rm`: Remove stopped containers
 
