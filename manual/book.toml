@@ -1,0 +1,6 @@
+[book]
+title = "Supercomputing for Big Data - Lab Manual"
+authors = ["R.P. Hes", "T.C. Leliveld", "Matthijs Brobbel"]
+language = "en"
+multilingual = false
+src = "src"
