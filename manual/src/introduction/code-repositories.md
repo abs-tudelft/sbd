@@ -16,14 +16,14 @@ The snapshot of the code in your assignment repository on the `master` branch,
 at the moment the deadline expires, will be your submission. Make sure to make
 your last commit before the deadline!
 
-We recommend students to work on branches, and make pull requests to their `master`
-branch once the code they are trying to implement is complete. These pull
-requests can be reviewed by their teammates or by the TAs to provide early
+We recommend students to work on branches, and make pull requests to their
+`master` branch once the code they are trying to implement is complete. These
+pull requests can be reviewed by their teammates or by the TAs to provide early
 feedback. This is also an explicit mechanism you will find in GitHub Classroom.
 
 Here is an example of feedback that we can provide based on your pull request:
 
-![Example of a review requested through GitHub Classroom](img/review.png)
+![Example of a review requested through GitHub Classroom](../assets/images/review.png)
 
 [git]: https://git-scm.com
 [github]: https://github.com

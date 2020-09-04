@@ -66,7 +66,7 @@ copying your repository publicly. The examination rules of the Delft University
 of Technology explain that even though perhaps you wrote the code yourself,
 making it publicly available makes you a potential accomplice to plagiarism and
 you may receive the same punishment as whoever copied it from you. We repeat:
-*DO NOT make your code publicly available**.
+*DO NOT make your code publicly available*.
 
 [early feedback]: https://en.wikipedia.org/wiki/Formative_assessment
 [rubric]: https://en.wikipedia.org/wiki/Rubric_(academic)

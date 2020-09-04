@@ -1,9 +1,9 @@
 # Introduction
 
 What requirement would you place on a city or town to live in? As far as the
-TA's are concerned, that have prepared this lab, it is paramount there are
-**plenty of beer breweries** nearby, such that we may quench our thirst after a 
-hard day's work at the Supercomputing for Big Data lab!
+teaching assistants (TAs) are concerned, that have prepared this lab, it is
+paramount there are *plenty of beer breweries* nearby, such that we may quench
+our thirst after a hard day's work at the Supercomputing for Big Data lab!
 
 It turns out that we can achieve all the learning objectives of the course by
 attempting to answer this question and some variants on it. To this end, we 
