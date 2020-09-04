@@ -1,7 +1,6 @@
 # Summary
 
 - [Introduction](./introduction/index.md)
-  - [Before you start](./introduction/before-you-start.md)
   - [Goal of this lab](./introduction/goal-of-this-lab.md)
   - [Communication with TAs](introduction/communication-with-tas.md)
   - [Code repositories](introduction/code-repositories.md)
@@ -24,15 +23,18 @@
   - [Assignment](./lab1/assignment.md)
   - [Deliverables](./lab1/deliverables.md)
   - [Questions](./lab1/questions.md)
+  - [Rubric](./lab1/rubric.md)
 - [Lab 2](./lab2/index.md)
   - [Before you start](./lab2/before-you-start.md)
   - [Assignment](./lab2/assignment.md)
   - [Deliverables](./lab2/deliverables.md)
+  - [Rubric](./lab2/rubric.md)
 - [Lab 3](./lab3/index.md)
   - [Before you start](./lab3/before-you-start.md)
   - [Assignment](./lab3/assignment.md)
   - [Deliverables](./lab3/deliverables.md)
   - [Questions](./lab3/questions.md)
+  - [Rubric](./lab3/rubric.md)
 
 ---
 
