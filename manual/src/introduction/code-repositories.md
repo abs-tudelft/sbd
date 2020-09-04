@@ -8,7 +8,7 @@ hosted on [GitHub], inside the [GitHub Classroom] used for [this course].
 
 If you do not know how to use git, you ***must*** familiarize yourself with it
 first. This is an essential skill for your future career. We consider this a
-prerequisite to the course. There are many tutorial online, and sometimes
+prerequisite to the course. There are many tutorials online, and sometimes
 [cheatsheets] come in handy when you start to use git. There are also [GUIs]
 that may be useful to those that don't like working on the command-line.
 
@@ -16,7 +16,7 @@ The snapshot of the code in your assignment repository on the `master` branch,
 at the moment the deadline expires, will be your submission. Make sure to make
 your last commit before the deadline!
 
-We recommend students work on branches, and make pull requests to their `master`
+We recommend students to work on branches, and make pull requests to their `master`
 branch once the code they are trying to implement is complete. These pull
 requests can be reviewed by their teammates or by the TAs to provide early
 feedback. This is also an explicit mechanism you will find in GitHub Classroom.
