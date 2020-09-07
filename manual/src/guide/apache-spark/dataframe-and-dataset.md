@@ -5,9 +5,9 @@ store of some structured (tabular) format (be it csv, JSON, parquet, or
 something else) that we would like to analyse, typically in some SQL-like
 fashion. Manually applying operations to rows like this is both labour
 intensive, and inefficient, as we have knowledge of the 'schema' of data. This
-is where DataFrames originate from. Spark has an optimized SQL query engine
-that can optimize the compute path as well as provide a more efficient
-representation of the rows when given a schema. From the
+is where DataFrames originate from. Spark has an optimized SQL query engine that
+can optimize the compute path as well as provide a more efficient representation
+of the rows when given a schema. From the
 [Spark SQL, DataFrames and Datasets
 Guide](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html#overview):
 
@@ -154,6 +154,7 @@ The string is not checked by the Scala compiler, but only during run-time by
 the Spark SQL library. Any errors will only show up during run-time.
 These errors may include both typos in 
 * the SQL keywords, and
+* the field names, and
 * the timestamp.
 
 This is not recommended unless you absolutely love SQL and like debugging these
@@ -177,7 +178,7 @@ scala> dfFilter.collect.foreach(println)
 
 We have now replaced the SQL query of the form:
 ```sql
-SELECT field WHERE predicate
+SELECT fieldname WHERE predicate
 ```
 
 ... with the `filter()` method of a Spark DataFrame. This is already a bit
@@ -191,9 +192,9 @@ just like with RDDs, but there are also some SQL-like database-oriented methods
 such as `join()`. As such, the Scala API for DataFrames combines the best of
 both worlds.
 
-Still, this approach is still error-prone, since it is allowed to write the
-filter predicate as an SQL predicate, retaining the problem of potential errors
-in the timestamp.
+Still, this approach is error-prone, since it is allowed to write the filter
+predicate as an SQL predicate, retaining the problem of potential errors in the
+timestamp field name and the timestamp itself.
 
 #### DataSet
 
@@ -208,7 +209,7 @@ still allowing Spark to optimize the query and storage of the data by making use
 of schemas.
 
 We do have to write a bit more Scala to be able to use the strongly-typed
-DataSet.
+DataSet:
 
 ```scala
 scala> import java.sql.Timestamp
@@ -233,8 +234,8 @@ case class SensorData (
 defined class SensorData
 ```
 
-Now we can convert a Dataframe (which actually is just an untyped DataSet) to a
-typed DataSet using the `as` method.
+Now we can convert a DataFrame (which is actually just a `DataSet[Row]`, where
+`Row` allows fields to be untyped) to a typed DataSet using the `as` method.
 
 ```scala
 scala> :paste
@@ -267,18 +268,28 @@ SensorData(THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89)
 ...
 ```
 
-Note that the SQL-like predicate used in the DataFrame implementation is now
-replaced with the constructor of the Timestamp class. This is more type safe,
-since any typos will be detected by the Scala compiler.
+This has two advantages:
+* The field names can now be checked by the Scala compiler as well, by inspecting
+our case class. It will detect if we made a mistake when writing `a.timestamp`.
+* The SQL-like predicate used in the DataFrame implementation is now
+replaced with the constructor of the Timestamp class. This is more type-safe,
+since any type mismatches will be detected by the Scala compiler. 
+
+Of course, you could still supply an incorrect month number (e.g. 13). However,
+the Timestamp object is already created during construction of the
+lazy-evaluated DAG, not when that stage of the DAG actually starts computation.
+The constructor will therefore raise any errors early on, and not at the end
+stage of e.g. some computation that has been taking hours already.
 
 We now have an setup where the Scala compiler will check all methods used to
 build up the directed acyclic graph (DAG) of our computation exist at every
-intermediate resulting DataFrame. We can't make mistakes in the SQL
-constructs/keywords anymore, as well as mistakes in the data types thrown into
-the filter. This provides us with more guarantees that are queries are valid (at
-least on a type level).
+intermediate resulting DataFrame. We can't make mistakes in the SQL keywords
+anymore, as well as mistakes in the field names, or data types thrown into the
+filter. This provides us with more guarantees that our queries are valid (at
+least at the type level).
 
-DataBricks has published [an excellent
+There are a lot of additional advantages to DataSets that have not yet been
+exposed through these examples. DataBricks has published [an excellent
 blog](https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html)
 about why DataSets were introduced, next to RDDs. While DataSets don't replace
 RDDs, they are nowadays most often used, because they have some more nice
