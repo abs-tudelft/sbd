@@ -18,7 +18,7 @@ cd sbd-example
 For command-line commands, we're going to assume we're using Linux with Bash. If
 you're on Windows or Mac, you have to figure out how to do stuff yourself, or
 perhaps use a virtual machine or container.
- 
+
 This chapter will continue to introduce the following topics:
 
 ## Docker
@@ -35,7 +35,7 @@ robust way. We will build our application for labs 1 and 2 using Spark.
 ## Amazon Web Services
 
 AWS, which provide theoretically unlimited compute infrastructure, allowing us
-to process a dataset as large as the entire GDELT database in lab 2.
+to process a large dataset in lab 2.
 
 ## Apache Kafka
 

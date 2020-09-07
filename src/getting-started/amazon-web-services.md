@@ -19,10 +19,9 @@ deploy MapReduce-like applications, for instance Apache Spark.
 [Simple Storage Server](https://aws.amazon.com/s3/) is an object based storage system that is easy to
 interact with from different AWS services.
 
-Note that the GDelt GKG is hosted on AWS S3 in the [US east region](https://aws.amazon.com/public-datasets/common-crawl/)
-, so any EC2/EMR instances interacting with this data set should also be provisioned
-there. At the time of writing, this means that you should select either the
-Virginia or Ohio region for your instances.
+Note that the OpenStreetMap data is hosted on AWS S3 in the `us-east-1` region, so any EC2/EMR instances interacting with this data set should also be provisioned
+there. At the time of writing, this means that you should select the
+N. Virginia region for your instances.
 
 AWS EC2 offers spot instances, a marketplace for unused machines that you can
 bid on. These spot instances are often a order of magnitude cheaper than
