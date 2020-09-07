@@ -22,7 +22,7 @@ folder to resemble the package structure.
 The project's name, dependencies, and versioning is defined in the `build.sbt`
 file. An example `build.sbt` file is
 
-```
+```scala
 name := "Example"
 version := "0.1.0"
 scalaVersion := "2.12.12"
@@ -61,20 +61,20 @@ downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.10/
 ...
 https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar
   100.0% [##########] 544.5 KiB (4.8 MiB / s)
-[info] Fetched artifacts of 
+[info] Fetched artifacts of
 [info] loading settings for project root from build.sbt ...
 [info] set current project to Example (in build file:/root/)
 [info] sbt server started at local:///root/.sbt/1.0/server/27dc1aa3fdf4049b492d/sock
-sbt:Example> 
+sbt:Example>
 ```
 
 We can now type `compile`.
 
 ```
 sbt:Example> compile
-[info] Updating 
+[info] Updating
 [info] Resolved  dependencies
-[info] Updating 
+[info] Updating
 https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12.pom
   100.0% [##########] 2.6 KiB (69.1 KiB / s)
 
@@ -91,7 +91,7 @@ We can try to run the application by typing `run`.
 
 ```
 sbt:Example> run
-[info] running example.Example 
+[info] running example.Example
 Hello world!
 [success] Total time: 0 s, completed Sep 7, 2020 10:40:24 AM
 ```
@@ -116,7 +116,7 @@ run automatically on source changes.
 ```
 sbt:Example> ~run
 [info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
-[info] running example.Example 
+[info] running example.Example
 Hello world!
 (a,2)
 [success] Total time: 0 s, completed Sep 7, 2020 10:40:56 AM
@@ -143,7 +143,7 @@ Interactive environment
 To build Spark applications with SBT we need to include dependencies (Spark
 most notably) to build the project. Modify your `build.sbt` file like so
 
-```
+```scala
 name := "Example"
 version := "0.1.0"
 scalaVersion := "2.12.12"
@@ -161,7 +161,7 @@ We could now use Spark in the script (after running `compile`).
 Let's implement a Spark application.
 Modify `example.scala` as follows, but don't run the code yet!
 
-```{.scala}
+```scala
 package example
 
 import org.apache.spark.sql.types._
@@ -264,10 +264,11 @@ to warn](https://stackoverflow.com/questions/27781187/how-to-stop-info-messages-
 to reduce the output.
 
 For development purposes you can also try running the application from SBT
-using the `run` command. You might run into some trouble with threads here,
-which can be solved by running the application in a forked process, which can be
-enabled by setting `fork in run := true` in `build.sbt`. You will also have to
-set to change the log levels programmatically, if desired.
+using the `run` command. Make sure to set the Spark master to `local` in your
+code. You might run into some trouble with threads here, which can be solved
+by running the application in a forked process, which can be enabled by
+setting `fork in run := true` in `build.sbt`. You will also have to set to
+change the log levels programmatically, if desired.
 
 ```scala
 import org.apache.log4j.{Level, Logger}
@@ -293,6 +294,7 @@ $ docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080 spar
 ```
 
 The output will look as follows:
+
 ```
 starting org.apache.spark.deploy.history.HistoryServer, logging to /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-5b5de5805769.out
 
