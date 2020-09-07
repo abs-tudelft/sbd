@@ -39,65 +39,75 @@ figure above as the arrows between elements.
 > List of wide and narrow dependencies for (pair) RDD operations
 
 Now that you have an idea of what the abstraction is about, let's demonstrate
-some example code with the Spark shell. _If you want to paste pieces of code
-into the spark shell from this guide, it might be useful to copy from the
-github version, and use the `:paste` command in the spark shell to paste the
-code. Hit `ctrl+D` to stop pasting._
+some example code with the Spark shell. 
 
-```shell
-$ docker run -it --rm -v "`pwd`":/io spark-shell
-19/09/08 14:00:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+_If you want to paste pieces of code into the spark shell from this guide, it
+might be useful to copy from the github version, and use the `:paste` command in
+the spark shell to paste the code. Hit `ctrl+D` to stop pasting._
+
+We can start the shell using [Docker](../docker.md):
+
+```bash
+docker run -it --rm -v "`pwd`":/io spark-shell
+```
+
+We should now ge the following output:
+
+```scala
+1337-42-01 07:44:21,765 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-Spark context Web UI available at http://af29447c6dcd:4040
-Spark context available as 'sc' (master = local[*], app id = local-1567951261349).
+Spark context Web UI available at http://333c7146e54b:4040
+Spark context available as 'sc' (master = local[*], app id = local-1599464666576).
 Spark session available as 'spark'.
 Welcome to
       ____              __
      / __/__  ___ _____/ /__
     _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 2.4.4
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.6
       /_/
-
-Using Scala version 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_222)
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
 Type in expressions to have them evaluated.
 Type :help for more information.
-
-scala> spark
-res2: org.apache.spark.sql.SparkSession =
-                                    org.apache.spark.sql.SparkSession@48a32c4f
 ```
 
-When opening a Spark Shell, by default you get a SparkSession and SparkContext
-object. This object contains the configuration of your session, i.e. whether
-you are running in local or cluster mode, the name of your application, the
-logging level etc.
+When opening a Spark Shell, by default, you get two objects.
+* A `SparkSession` named `spark`.
+* A `SparkContext` named `sc`. 
 
-Going back to our shell, let's first create some sample data that we can
-demonstrate the RDD API around. Here we create an infinite list of repeating
-characters from 'a' tot 'z'.
+These objects contains the configuration of your session, i.e. whether you are
+running in local or cluster mode, the name of your application, the logging
+level etc.
+
+We can get some (sometimes slightly arcane) information about Scala objects that
+exist in the scope of the shell, e.g.:
+```scala
+scala> spark
+res0: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@747e0a31
+```
+
+Now, let's first create some sample data that we can demonstrate the RDD API
+around. Here we create an infinite list of repeating characters from 'a' tot
+'z'.
 
 ```scala
 scala> val charsOnce = ('a' to 'z').toStream
 charsOnce: scala.collection.immutable.Stream[Char] = Stream(a, ?)
+
 scala> val chars: Stream[Char] = charsOnce #::: chars
 chars: Stream[Char] = Stream(a, ?)
 ```
 
 Now we build a collection with the first 200000 integers, zipped with the
-character stream. We display the first 30 results.
+character stream. We display the first five results.
 
 ```scala
 scala> val rdd = sc.parallelize(chars.zip(1 to 200000), numSlices=20)
-rdd: org.apache.spark.rdd.RDD[(Char, Int)] =
-                    ParallelCollectionRDD[0] at parallelize at <console>:26
+rdd: org.apache.spark.rdd.RDD[(Char, Int)] = ParallelCollectionRDD[0] at parallelize at <console>:26
 
-scala> rdd.take(30)
-res2: Array[(Char, Int)] = Array((a,1), (b,2), (c,3), (d,4), (e,5), (f,6),
-(g,7), (h,8), (i,9), (j,10), (k,11), (l,12), (m,13), (n,14), (o,15), (p,16),
-(q,17), (r,18), (s,19), (t,20), (u,21), (v,22), (w,23), (x,24), (y,25), (z,26),
-(a,27), (b,28), (c,29), (d,30))
+scala> rdd.take(5)
+res2: Array[(Char, Int)] = Array((a,1), (b,2), (c,3), (d,4), (e,5))
 ```
 
 Let's dissect what just happened. We created a Scala object that is a list of
@@ -110,8 +120,7 @@ Let's apply some (lazily evaluated) transformations to this RDD.
 
 ```scala
 scala> val mappedRDD = rdd.map({case (chr, num) => (chr, num+1)})
-mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
-                            MapPartitionsRDD[5] at map at <console>:25
+mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = MapPartitionsRDD[1] at map at <console>:25
 ```
 
 We apply a `map` to the RDD, applying a function to all the elements in the
@@ -121,14 +130,12 @@ foreign, so if this is confusing, spend some time looking at tutorials and
 messing around in the Scala interpreter.
 
 You might have noticed that the transformation completed awfully fast. This is
-Spark's [lazy evaluation](https://en.wikipedia.org/wiki/Lazy_evaluation) in action.
-No computation will be performed until an action is applied.
+Spark's [lazy evaluation](https://en.wikipedia.org/wiki/Lazy_evaluation) in
+action. No computation will be performed until an action is applied.
 
 ```scala
 scala> val reducedRDD = rdd.reduceByKey(_ + _)
-reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] =
-                            ShuffledRDD[6] at reduceByKey at <console>:25
-
+reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = ShuffledRDD[2] at reduceByKey at <console>:25
 ```
 
 Now we apply a `reduceByKey` operation, grouping all of the identical keys together and
@@ -153,13 +160,17 @@ res3: Array[(Char, Int)] = Array((d,769300000), (x,769253844), (e,769307693),
 Typically, we don't build the data first, but we actually load it from a
 database or file system. Say we have some data in (multiple) files in a
 specific format. As an example consider `sensordata.csv` (in the `example`
-folder). We can load it as follows
+folder). We can load it as follows:
 
 ```scala
 // sc.textFile can take multiple files as argument!
 scala> val raw_data = sc.textFile("sensordata.csv")
-raw_data: org.apache.spark.rdd.RDD[String] =
-                sensordata.csv MapPartitionsRDD[1] at textFile at <console>:24
+raw_data: org.apache.spark.rdd.RDD[String] = sensordata.csv MapPartitionsRDD[1] at textFile at <console>:24
+```
+
+And observe some of its contents:
+
+```scala
 scala> raw_data.take(10).foreach(println)
 COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
 COHUTTA,3/10/14:1:02,9.67,1.731,882,0.52,87,1.79
@@ -177,10 +188,13 @@ We can process this data to filter only measurements on `3/10/14:1:01`.
 
 ```scala
 scala> val filterRDD = raw_data.map(_.split(","))
-                    .filter(x => x(1) == "3/10/14:1:01")
-filterRDD: org.apache.spark.rdd.RDD[Array[String]] =
-                MapPartitionsRDD[11] at filter at <console>:25
+                               .filter(x => x(1) == "3/10/14:1:01")
+filterRDD: org.apache.spark.rdd.RDD[Array[String]] = MapPartitionsRDD[11] at filter at <console>:25
+```
 
+And look at the output:
+
+```scala
 scala> filterRDD.foreach(a => println(a.mkString(" ")))
 COHUTTA 3/10/14:1:01 10.27 1.73 881 1.56 85 1.94
 LAGNAPPE 3/10/14:1:01 9.59 1.602 777 0.09 88 1.78
@@ -189,12 +203,12 @@ CHER 3/10/14:1:01 10.17 1.653 777 1.89 96 1.57
 THERMALITO 3/10/14:1:01 10.24 1.75 777 1.25 80 0.89
 ANDOUILLE 3/10/14:1:01 10.26 1.048 777 1.88 94 1.66
 BUTTE 3/10/14:1:01 10.12 1.379 777 1.58 83 0.67
-MOJO 3/10/14:1:01 10.47 1.828 967 0.36 77 1.75
 CARGO 3/10/14:1:01 9.93 1.903 778 0.55 76 1.44
+MOJO 3/10/14:1:01 10.47 1.828 967 0.36 77 1.75
 BBKING 3/10/14:1:01 10.03 0.839 967 1.17 80 1.28
 ```
 
 You might have noticed that this is a bit tedious to work with, as we have to
-convert everything to Scala objects, and aggregations rely on having a pair
-RDD, which is fine when we have a single key, but for more complex
-aggregations, this becomes a bit tedious to juggle with.
+convert everything to Scala objects, and aggregations rely on having a pair RDD,
+which is fine when we have a single key. For more complex aggregations, this
+becomes a bit tedious to juggle with.
