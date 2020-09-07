@@ -1,13 +1,12 @@
 # Lab 1
 
-In this lab, we will design and develop an application to process GDELT data.
-For a given amount of segments, the application should output the 10 most
-frequently mentioned topics contained in the `AllNames` column. The application
-will later be used in lab 2 to scale the analysis to the entire dataset.
+In this lab, we will design and develop an application to process [OpenStreetMap](https://www.openstreetmap.org)
+data. For a small subset of the planet (the Zuid-Holland provice of the
+Netherlands), the application should output a list of cities and [brewery](https://wiki.openstreetmap.org/wiki/Brewery)
+counts, ordered by the number of breweries.
 
-In lab 1, you will start by writing a Spark application that processes the
-GDELT dataset. You will run this application on a small subset of data on
-your local computer. You will use this to
+You will run this application on a small subset of data on your local computer.
+You will use this to:
 
 1.  get familiar with the Spark APIs,
 2.  analyze the application's scaling behavior, and
@@ -18,11 +17,6 @@ performance, cost, or a combination of the two.
 
 You may have noticed that the first lab does not contain any supercomputing,
 let alone big data. For lab 2, you will deploy your code on AWS, in an actual
-big data cluster, in an effort to scale up your application to process the
-complete dataset, which measures several terabytes. It is up to you to find the
-configuration that will get you the most efficiency, as per your definition in
-lab 1.
-
-For the final lab, we will modify the code from lab 1 to work in a streaming
-data context. You will attempt to rewrite the application to process events in
-real-time, in a way that is still scalable over many machines.
+big data cluster, in an effort to scale up your application to process a larger
+dataset. It is up to you to find the configuration that will get you the most
+efficiency, as per your definition.

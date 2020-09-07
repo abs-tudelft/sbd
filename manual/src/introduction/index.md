@@ -2,12 +2,12 @@
 
 What requirement would you place on a city or town to live in? As far as the
 teaching assistants (TAs) are concerned, that have prepared this lab, it is
-paramount there are *plenty of beer breweries* nearby, such that we may quench
+paramount there are _plenty of beer breweries_ nearby, such that we may quench
 our thirst after a hard day's work at the Supercomputing for Big Data lab!
 
 It turns out that we can achieve all the learning objectives of the course by
-attempting to answer this question and some variants on it. To this end, we 
-limit ourselves to a context where we can only use the [OpenStreetmap] dataset,
+attempting to answer this question and some variants on it. To this end, we
+limit ourselves to a context where we can only use the [OpenStreetMap] dataset,
 together with various industry-standard frameworks and tools, such as the [Scala
 programming language] to write our programs, [Apache Spark] to process batches
 of data, [Apache Kafka] to process streaming data, and the [Amazon Web Services]
@@ -26,8 +26,8 @@ on Brightspace and Discord.
 
 [amazon web services]: https://aws.amazon.com
 [github]: https://github.com/abs-tudelft/sbd
-[OpenStreetmap]: https://www.openstreetmap.org
+[openstreetmap]: https://www.openstreetmap.org
 [apache spark]: https://spark.apache.org
 [apache kafka]: https://kafka.apache.org
-[mdBook]: https://github.com/rust-lang/mdBook
+[mdbook]: https://github.com/rust-lang/mdBook
 [scala programming language]: https://www.scala-lang.org/
