@@ -1,6 +1,6 @@
 [book]
 title = "Supercomputing for Big Data - Lab Manual"
-authors = ["R.P. Hes", "T.C. Leliveld", "Matthijs Brobbel"]
+authors = ["R.P. Hes", "T.C. Leliveld", "Matthijs Brobbel", "Johan Peltenburg"]
 language = "en"
 multilingual = false
 src = "src"
