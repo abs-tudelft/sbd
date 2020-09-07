@@ -2,11 +2,11 @@
 
 For this lab, you will write a lot of code. All (incremental additions to) the
 code for the lab assignments are kept in a private [git] repository that is
-hosted on [GitHub], inside the [GitHub Classroom] used for [this course].
+hosted on [GitHub], inside the [GitHub Classroom] used for this course.
 (Please don't register yet until you've read the full introduction.) This is the
-*only way** to turn in code, any other channels, such as e-mail, are rejected.
+\*only way\*\* to turn in code, any other channels, such as e-mail, are rejected.
 
-If you do not know how to use git, you ***must*** familiarize yourself with it
+If you do not know how to use git, you **_must_** familiarize yourself with it
 first. This is an essential skill for your future career. We consider this a
 prerequisite to the course. There are many tutorials online, and sometimes
 [cheatsheets] come in handy when you start to use git. There are also [GUIs]
@@ -29,5 +29,4 @@ Here is an example of feedback that we can provide based on your pull request:
 [github]: https://github.com
 [github classroom]: https://classroom.github.com
 [cheatsheets]: https://rogerdudler.github.io/git-guide
-[GUIs]: https://www.gitkraken.com
-[this course]: https://classroom.github.com/g/j4FjBg_-
+[guis]: https://www.gitkraken.com
