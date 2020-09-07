@@ -57,13 +57,14 @@ docker run hello-world
 
 ### Setting up Spark in Docker
 
-In order to run Spark in a container, a `Dockerfile` is provided in the lab 1
-repository, which can be used to build images for `spark-submit` to run your Spark
-application, `spark-shell` to run a Spark interactive shell, and the Spark history
-server to view event logs from application runs. You need to build these images before
-you get started. The Dockerfiles we provide assume that you run Docker from the
-folder at which they are located. Don't move them around! They will stop
-working.
+In order to run Spark in a container, a `Dockerfile` is provided in the root of
+all repositories we will use in this lab, including the repository for the
+Getting Started guide. The `Dockerfile` can be used to build images for
+`spark-submit` to run your Spark application, `spark-shell` to run a Spark
+interactive shell, and the Spark history server to view event logs from
+application runs. You need to build these images before you get started. The
+Dockerfiles we provide assume that you run Docker from the folder at which they
+are located. Don't move them around! They will stop working.
 
 To build a docker image from the Dockerfile, we use `docker build`:
 

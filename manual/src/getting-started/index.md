@@ -1,7 +1,13 @@
-# Guide
+# Getting Started
 
 In this chapter, we will cover some of the concepts and technologies that are
 used during the course. We will introduce the following topics:
+
+## Docker
+
+An application that allows the user to package and run software (like Spark and
+Kafka and the programs we write for them) in an isolated environment: a
+container.
 
 ## Apache Spark
 
@@ -25,12 +31,6 @@ real-time, using Kafka.
 A programming language that runs on the Java Virtual Machine (JVM). This is our
 (mandatory!) language of choice during the lab assignments. We will use it to
 program for both Apache Spark and Apache Kafka.
-
-## Docker
-
-An application that allows the user to package and run software (like Spark and
-Kafka and the programs we write for them) in an isolated environment: a
-container.
 
 ## OpenStreetMap
 
