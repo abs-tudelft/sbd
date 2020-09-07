@@ -19,9 +19,8 @@ jobs:
         echo "::add-path::${HOME}/mdbook/"
     - name: Build
       run: mdbook build
-      working-directory: manual
     - uses: peaceiris/actions-gh-pages@v3
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: manual/book
+        publish_dir: book
