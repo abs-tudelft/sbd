@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>OpenStreetMap - Supercomputing for Big Data - Lab Manual</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../introduction/goal-of-this-lab.html"><strong aria-hidden="true">1.1.</strong> Goal of this lab</a></li><li class="chapter-item expanded "><a href="../introduction/communication-with-tas.html"><strong aria-hidden="true">1.2.</strong> Communication with TAs</a></li><li class="chapter-item expanded "><a href="../introduction/code-repositories.html"><strong aria-hidden="true">1.3.</strong> Code repositories</a></li><li class="chapter-item expanded "><a href="../introduction/groups.html"><strong aria-hidden="true">1.4.</strong> Groups</a></li><li class="chapter-item expanded "><a href="../introduction/aws.html"><strong aria-hidden="true">1.5.</strong> AWS</a></li><li class="chapter-item expanded "><a href="../introduction/grading.html"><strong aria-hidden="true">1.6.</strong> Grading</a></li></ol></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/docker.html"><strong aria-hidden="true">2.1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/index.html"><strong aria-hidden="true">2.2.</strong> Apache Spark</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/apache-spark/resilient-distributed-datasets.html"><strong aria-hidden="true">2.2.1.</strong> Resilient Distributed Datasets</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/dataframe-and-dataset.html"><strong aria-hidden="true">2.2.2.</strong> Dataframe and Dataset</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/packaging-your-application-using-sbt.html"><strong aria-hidden="true">2.2.3.</strong> Packaging your application using SBT</a></li></ol></li><li class="chapter-item expanded "><a href="../getting-started/amazon-web-services.html"><strong aria-hidden="true">2.3.</strong> Amazon Web Services</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-kafka.html"><strong aria-hidden="true">2.4.</strong> Apache Kafka</a></li><li class="chapter-item expanded "><a href="../getting-started/scala.html"><strong aria-hidden="true">2.5.</strong> Scala</a></li><li class="chapter-item expanded "><a href="../getting-started/openstreetmap.html" class="active"><strong aria-hidden="true">2.6.</strong> OpenStreetMap</a></li></ol></li><li class="chapter-item expanded "><a href="../lab1/index.html"><strong aria-hidden="true">3.</strong> Lab 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab1/before-you-start.html"><strong aria-hidden="true">3.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../lab1/assignment.html"><strong aria-hidden="true">3.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../lab1/deliverables.html"><strong aria-hidden="true">3.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../lab1/rubric.html"><strong aria-hidden="true">3.4.</strong> Rubric</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../faq.html">FAQ</a></li><li class="chapter-item expanded affix "><a href="../links.html">Useful links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Supercomputing for Big Data - Lab Manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2><a class="header" href="#openstreetmap" id="openstreetmap">OpenStreetMap</a></h2>
+<p><a href="(https://www.openstreetmap.org)">OpenStreetMap</a> is a project where you can download free geographic data from
+the whole world. Such data will be used as the only data source for our queries
+in this lab. The project has an excellent <a href="https://wiki.openstreetmap.org/wiki/Main_Page">Wiki</a> where a lot of information
+about the structure of the dataset may be found.</p>
+<p>OpenStreetMap data knows three map elements:</p>
+<ul>
+<li><a href="https://wiki.openstreetmap.org/wiki/Node">Nodes</a> : a single point on the map, e.g. to mark the location of a <a href="https://www.openstreetmap.org/node/4829046021">brewery</a>.</li>
+<li><a href="https://wiki.openstreetmap.org/wiki/Way">Ways</a> : an ordered lists of nodes, e.g. to represent (a part of) a <a href="https://www.openstreetmap.org/way/7624546">street</a>.</li>
+<li><a href="https://wiki.openstreetmap.org/wiki/Relation">Relations</a> : a group of other elements, e.g. to represent the <a href="https://www.openstreetmap.org/relation/47798">boundary</a> and
+center of a city.</li>
+</ul>
+<p>All map elements may have associated <a href="https://wiki.openstreetmap.org/wiki/Tags">tags</a> that expose more information about
+what they represent. For example, we may look at <a href="https://www.openstreetmap.org/node/3376839743">some node</a>, and find that it
+represents the Delft central station, with the following tags:</p>
+<table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
+<tr><td>name</td><td>Delft</td></tr>
+<tr><td>public_transport</td><td>station</td></tr>
+<tr><td>railway</td><td>station</td></tr>
+<tr><td>railway:ref</td><td>Dt</td></tr>
+<tr><td>train</td><td>yes</td></tr>
+<tr><td>wheelchair</td><td>yes</td></tr>
+<tr><td>wikidata</td><td>Q800653</td></tr>
+<tr><td>wikipedia</td><td>nl:Station Delft</td></tr>
+</tbody></table>
+<p>Many tags have an explanation on the Wiki, for example the <a href="https://wiki.openstreetmap.org/wiki/Key:wheelchair">wheelchair</a> tag,
+where its value describes an indication of the level of accessibility for people
+in wheelchairs to, in this case, the station.</p>
+<p>Feel free to browse around the wiki to discover other tags. We can spoil that
+<a href="https://wiki.openstreetmap.org/wiki/Brewery">this</a> page contains some useful tags that you may want to use for your lab
+assignments.</p>
+<h3><a class="header" href="#preparing-the-dataset-for-lab-1" id="preparing-the-dataset-for-lab-1">Preparing the dataset for Lab 1</a></h3>
+<p>We will now explain how to prepare our dataset for lab 1. Because the query that
+we are interested in is too large to process during our initial short
+development iterations of implementing and debugging, its useful to start off
+with a small subset of the data (in lab 1), until your implementation is stable
+enough to be moved to a large cluster (in lab 2), to process the whole thing!</p>
+<p>Furthermore, to be able to leverage SparkSQL, we must convert the OpenStreetMap
+data to a tabular format. We will use the ORC format for this. Follow the steps
+below to end up with an ORC file for lab 1.</p>
+<p>Luckily, some people have already chopped up the whole world into manageable
+pieces. In our case, we will start off with just the province of Zuid-Holland,
+where Delft is located. Also, some people have written <a href="https://github.com/mojodna/osm2orc">a conversion tool</a> for
+us already, that helps us convert the <code>.osm.pbf</code> file into an <code>.orc</code> file.</p>
+<ul>
+<li>
+<p>Download the <a href="https://download.geofabrik.de/europe/netherlands.html">province of Zuid-Holland</a>. You need to get the <code>.osm.pbf</code> file.</p>
+</li>
+<li>
+<p>Download and extract v.0.5.5 of <a href="https://github.com/mojodna/osm2orc/releases/download/v0.5.5/osm2orc-0.5.5.tar.gz">osm2orc</a> (click the link to download
+immediately).</p>
+</li>
+<li>
+<p>Run osm2orc to obtain the ORC file of Zuid-Holland. osm2orc can be found in
+the <code>bin/</code> folder of the tool. Example usage in Linux:</p>
+</li>
+</ul>
+<pre><code class="language-console">./osm2orc /path/to/zuid-holland-latest.osm.pbf /destination/for/zuid-holland.orc
+</code></pre>
+<p>You can also use the Dockerfile provided in the lab 1 repository to build an image
+that includes this tool:</p>
+<ul>
+<li>First build the <code>osm2orc</code> image (from the root of the lab 1 repository):</li>
+</ul>
+<pre><code class="language-bash">docker build --target osm2orc -t osm2orc .
+</code></pre>
+<ul>
+<li>Run the conversion tool in a container. Make sure the source <code>.osm.pbf</code> file is
+downloaded in your current working directory.</li>
+</ul>
+<pre><code class="language-bash">docker run -it --rm -v &quot;`pwd`&quot;:/io osm2orc /io/zuid-holland-latest.osm.pbf /io/zuid-holland.orc
+</code></pre>
+<p>You will now have the <code>zuid-holland.orc</code> file somewhere on your machine. We will
+use this file as our input. Make sure you understand <a href="http://spark.apache.org/docs/2.4.6/sql-data-sources-load-save-functions.html">how to load the file into
+Spark</a>.</p>
+<h3><a class="header" href="#openstreetmap-schema" id="openstreetmap-schema">OpenStreetMap schema</a></h3>
+<p>Once you have loaded the data set, it's possible to print out the schema of the
+data, for example, on the Spark shell. Note that this assumes you have loaded
+the data set as a Spark DataFrame called <code>df</code>.</p>
+<pre><code>scala&gt; df.printSchema()
+root
+ |-- id: long (nullable = true)
+ |-- type: string (nullable = true)
+ |-- tags: map (nullable = true)
+ |    |-- key: string
+ |    |-- value: string (valueContainsNull = true)
+ |-- lat: decimal(9,7) (nullable = true)
+ |-- lon: decimal(10,7) (nullable = true)
+ |-- nds: array (nullable = true)
+ |    |-- element: struct (containsNull = true)
+ |    |    |-- ref: long (nullable = true)
+ |-- members: array (nullable = true)
+ |    |-- element: struct (containsNull = true)
+ |    |    |-- type: string (nullable = true)
+ |    |    |-- ref: long (nullable = true)
+ |    |    |-- role: string (nullable = true)
+ |-- changeset: long (nullable = true)
+ |-- timestamp: timestamp (nullable = true)
+ |-- uid: long (nullable = true)
+ |-- user: string (nullable = true)
+ |-- version: long (nullable = true)
+ |-- visible: boolean (nullable = true)
+</code></pre>
+<p>And we may look at a tiny part of the data, say the first three rows:</p>
+<pre><code>scala&gt; df.show(3)
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+|     id|type|tags|       lat|      lon|nds|members|changeset|          timestamp|uid|user|version|visible|
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+|2383199|node|  []|52.0972000|4.2997000| []|     []|        0|2011-10-31 12:45:53|  0|    |      3|   true|
+|2383215|node|  []|52.0990543|4.3002070| []|     []|        0|2020-01-08 20:50:29|  0|    |      6|   true|
+|2716646|node|  []|52.0942524|4.3354580| []|     []|        0|2011-12-26 23:12:28|  0|    |      3|   true|
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+</code></pre>
+<p>Here we can observe that the first three rows are elements of the <code>&quot;node&quot;</code> type.
+Note that there are two other types of elements, as explained previously. We
+also have the <code>&quot;way&quot;</code> and <code>&quot;relation&quot;</code>. There are all flattened into this single
+table by the conversion tool.</p>
+<p>How big is this dataframe?</p>
+<pre><code>scala&gt; df.count()
+res1: Long = 18426861
+</code></pre>
+<p>It has over 18 million rows already, and this is just the province of
+Zuid-Holland!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../getting-started/scala.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../lab1/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../getting-started/scala.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../lab1/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Packaging your application using SBT - Supercomputing for Big Data - Lab Manual</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../introduction/goal-of-this-lab.html"><strong aria-hidden="true">1.1.</strong> Goal of this lab</a></li><li class="chapter-item expanded "><a href="../../introduction/communication-with-tas.html"><strong aria-hidden="true">1.2.</strong> Communication with TAs</a></li><li class="chapter-item expanded "><a href="../../introduction/code-repositories.html"><strong aria-hidden="true">1.3.</strong> Code repositories</a></li><li class="chapter-item expanded "><a href="../../introduction/groups.html"><strong aria-hidden="true">1.4.</strong> Groups</a></li><li class="chapter-item expanded "><a href="../../introduction/aws.html"><strong aria-hidden="true">1.5.</strong> AWS</a></li><li class="chapter-item expanded "><a href="../../introduction/grading.html"><strong aria-hidden="true">1.6.</strong> Grading</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/docker.html"><strong aria-hidden="true">2.1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/index.html"><strong aria-hidden="true">2.2.</strong> Apache Spark</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/resilient-distributed-datasets.html"><strong aria-hidden="true">2.2.1.</strong> Resilient Distributed Datasets</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/dataframe-and-dataset.html"><strong aria-hidden="true">2.2.2.</strong> Dataframe and Dataset</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/packaging-your-application-using-sbt.html" class="active"><strong aria-hidden="true">2.2.3.</strong> Packaging your application using SBT</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/amazon-web-services.html"><strong aria-hidden="true">2.3.</strong> Amazon Web Services</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-kafka.html"><strong aria-hidden="true">2.4.</strong> Apache Kafka</a></li><li class="chapter-item expanded "><a href="../../getting-started/scala.html"><strong aria-hidden="true">2.5.</strong> Scala</a></li><li class="chapter-item expanded "><a href="../../getting-started/openstreetmap.html"><strong aria-hidden="true">2.6.</strong> OpenStreetMap</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab1/index.html"><strong aria-hidden="true">3.</strong> Lab 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab1/before-you-start.html"><strong aria-hidden="true">3.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab1/assignment.html"><strong aria-hidden="true">3.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab1/deliverables.html"><strong aria-hidden="true">3.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab1/rubric.html"><strong aria-hidden="true">3.4.</strong> Rubric</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../../faq.html">FAQ</a></li><li class="chapter-item expanded affix "><a href="../../links.html">Useful links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Supercomputing for Big Data - Lab Manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3><a class="header" href="#packaging-your-application-using-sbt" id="packaging-your-application-using-sbt">Packaging your application using SBT</a></h3>
+<p>We showed how to run Spark in interactive mode. Now we will explain how to build
+applications that can be submitted using the <code>spark-submit</code> command.</p>
+<p>First, we will explain how to structure a Scala project, using the <a href="https://www.scala-sbt.org">SBT build
+tool</a>. The typical project structure is</p>
+<pre><code>├── build.sbt
+├── project
+│   └── build.properties
+└── src
+    └── main
+        └── scala
+            └── example.scala
+</code></pre>
+<p>This is typical for JVM languages. More directories are added under the <code>scala</code>
+folder to resemble the package structure.</p>
+<p>The project's name, dependencies, and versioning is defined in the <code>build.sbt</code>
+file. An example <code>build.sbt</code> file is</p>
+<pre><code class="language-scala">name := &quot;Example&quot;
+version := &quot;0.1.0&quot;
+scalaVersion := &quot;2.12.12&quot;
+</code></pre>
+<p>This specifies the Scala version of the project (2.12.12) and the name of the
+project.</p>
+<p>If you run <code>sbt</code> in this folder it will generate the project directory and
+<code>build.properties</code>. <code>build.properties</code> contains the SBT version that is
+used to build the project with, for backwards compatibility.</p>
+<p>Open <code>example.scala</code> and add the following</p>
+<pre><code class="language-scala">package example
+
+
+object Example {
+  def main(args: Array[String]) {
+    println(&quot;Hello world!&quot;)
+  }
+}
+</code></pre>
+<p>Start the <code>sbt</code> container in the root folder (the one where <code>build.sbt</code> is
+located). This puts you in interactive mode of SBT. We can compile the sources
+by writing the <code>compile</code> command.</p>
+<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;:/root sbt sbt
+[info] [launcher] getting org.scala-sbt sbt 1.3.13  (this may take some time)...
+downloading https://repo1.maven.org/maven2/org/scala-sbt/sbt/1.3.13/sbt-1.3.13.jar ...
+downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.10/scala-library-2.12.10.jar ...
+
+...
+https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar
+  100.0% [##########] 544.5 KiB (4.8 MiB / s)
+[info] Fetched artifacts of
+[info] loading settings for project root from build.sbt ...
+[info] set current project to Example (in build file:/root/)
+[info] sbt server started at local:///root/.sbt/1.0/server/27dc1aa3fdf4049b492d/sock
+sbt:Example&gt;
+</code></pre>
+<p>We can now type <code>compile</code>.</p>
+<pre><code>sbt:Example&gt; compile
+[info] Updating
+[info] Resolved  dependencies
+[info] Updating
+https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12.pom
+  100.0% [##########] 2.6 KiB (69.1 KiB / s)
+
+...
+
+[info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
+[info] Non-compiled module 'compiler-bridge_2.12' for Scala 2.12.12. Compiling...
+[info]   Compilation completed in 8.038s.
+[success] Total time: 10 s, completed Sep 7, 2020 10:39:38 AM
+
+</code></pre>
+<p>We can try to run the application by typing <code>run</code>.</p>
+<pre><code>sbt:Example&gt; run
+[info] running example.Example
+Hello world!
+[success] Total time: 0 s, completed Sep 7, 2020 10:40:24 AM
+</code></pre>
+<p>Now let's add a function to <code>example.scala</code>.</p>
+<pre><code class="language-scala">object Example {
+  def addOne(tuple: (Char, Int)) : (Char, Int) = tuple match {
+    case (chr, int) =&gt; (chr, int+1)
+  }
+  def main(args: Array[String]) {
+    println(&quot;Hello world!&quot;)
+    println(addOne('a', 1))
+  }
+}
+</code></pre>
+<p>In your SBT session we can prepend any command with a tilde (<code>~</code>) to make them
+run automatically on source changes.</p>
+<pre><code>sbt:Example&gt; ~run
+[info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
+[info] running example.Example
+Hello world!
+(a,2)
+[success] Total time: 0 s, completed Sep 7, 2020 10:40:56 AM
+[info] 1. Monitoring source files for root/run...
+[info]    Press &lt;enter&gt; to interrupt or '?' for more options.
+
+</code></pre>
+<p>We can also open an interactive session using SBT.</p>
+<pre><code>sbt:Example&gt; console
+[info] Starting scala interpreter...
+Welcome to Scala 2.12.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_265).
+Type in expressions for evaluation. Or try :help.
+
+scala&gt; example.Example.addOne('a', 1)
+res1: (Char, Int) = (a,2)
+
+scala&gt; println(&quot;Interactive environment&quot;)
+Interactive environment
+</code></pre>
+<p>To build Spark applications with SBT we need to include dependencies (Spark
+most notably) to build the project. Modify your <code>build.sbt</code> file like so</p>
+<pre><code class="language-scala">name := &quot;Example&quot;
+version := &quot;0.1.0&quot;
+scalaVersion := &quot;2.12.12&quot;
+
+val sparkVersion = &quot;2.4.6&quot;
+
+libraryDependencies ++= Seq(
+  &quot;org.apache.spark&quot; %% &quot;spark-core&quot; % sparkVersion,
+  &quot;org.apache.spark&quot; %% &quot;spark-sql&quot; % sparkVersion
+)
+</code></pre>
+<p>We could now use Spark in the script (after running <code>compile</code>).</p>
+<p>Let's implement a Spark application.
+Modify <code>example.scala</code> as follows, but don't run the code yet!</p>
+<pre><code class="language-scala">package example
+
+import org.apache.spark.sql.types._
+import org.apache.spark.sql._
+import java.sql.Timestamp
+
+
+object ExampleSpark {
+  case class SensorData (
+    sensorName: String,
+    timestamp: Timestamp,
+    numA: Double,
+    numB: Double,
+    numC: Long,
+    numD: Double,
+    numE: Long,
+    numF: Double
+  )
+  def main(args: Array[String]) {
+    val schema =
+      StructType(
+        Array(
+          StructField(&quot;sensorname&quot;, StringType, nullable=false),
+          StructField(&quot;timestamp&quot;, TimestampType, nullable=false),
+          StructField(&quot;numA&quot;, DoubleType, nullable=false),
+          StructField(&quot;numB&quot;, DoubleType, nullable=false),
+          StructField(&quot;numC&quot;, LongType, nullable=false),
+          StructField(&quot;numD&quot;, DoubleType, nullable=false),
+          StructField(&quot;numE&quot;, LongType, nullable=false),
+          StructField(&quot;numF&quot;, DoubleType, nullable=false)
+        )
+      )
+
+    val spark = SparkSession
+      .builder
+      .appName(&quot;Example&quot;)
+      .getOrCreate()
+    val sc = spark.sparkContext // If you need SparkContext object
+
+    import spark.implicits._
+
+    val ds = spark.read
+                  .schema(schema)
+                  .option(&quot;timestampFormat&quot;, &quot;MM/dd/yy:hh:mm&quot;)
+                  .csv(&quot;./sensordata.csv&quot;)
+                  .as[SensorData]
+
+    val dsFilter = ds.filter(a =&gt; a.timestamp ==
+        new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+
+    dsFilter.collect.foreach(println)
+
+    spark.stop
+  }
+}
+</code></pre>
+<p>We will not run this code, but submit it to a local Spark &quot;cluster&quot; (on your
+machine). To do so, we require a JAR. You can build a JAR using the <code>package</code>
+command in SBT. This JAR will be located in the
+<code>target/scala-version/project_name_version.jar</code>.</p>
+<p>You can run the JAR via a <code>spark-submit</code> container (which will run on local
+mode). By mounting the <code>spark-events</code> directory the event log of the
+application run is stored to be inspected later using the Spark history server.</p>
+<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;:/io -v &quot;`pwd`&quot;/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
+</code></pre>
+<p>The output should look as follows:</p>
+<pre><code>2020-09-07 11:07:28,890 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2020-09-07 11:07:29,068 INFO spark.SparkContext: Running Spark version 2.4.6
+2020-09-07 11:07:29,087 INFO spark.SparkContext: Submitted application: Example
+
+...
+
+SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
+SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
+SensorData(THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89)
+SensorData(BUTTE,2014-03-10 01:01:00.0,10.12,1.379,777,1.58,83,0.67)
+SensorData(CARGO,2014-03-10 01:01:00.0,9.93,1.903,778,0.55,76,1.44)
+SensorData(LAGNAPPE,2014-03-10 01:01:00.0,9.59,1.602,777,0.09,88,1.78)
+SensorData(CHER,2014-03-10 01:01:00.0,10.17,1.653,777,1.89,96,1.57)
+SensorData(ANDOUILLE,2014-03-10 01:01:00.0,10.26,1.048,777,1.88,94,1.66)
+SensorData(MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75)
+SensorData(BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28)
+
+...
+
+2020-09-07 11:07:33,694 INFO util.ShutdownHookManager: Shutdown hook called
+2020-09-07 11:07:33,694 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-757daa7c-c317-428e-934f-aaa9e74bf808
+2020-09-07 11:07:33,696 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-a38554ba-18fc-46aa-aa1e-0972e24a4cb0
+</code></pre>
+<p>By default, Spark's logging is quite verbose. You can change the <a href="https://stackoverflow.com/questions/27781187/how-to-stop-info-messages-displaying-on-spark-console">log levels
+to warn</a>
+to reduce the output.</p>
+<p>For development purposes you can also try running the application from SBT
+using the <code>run</code> command. Make sure to set the Spark master to <code>local</code> in your
+code. You might run into some trouble with threads here, which can be solved
+by running the application in a forked process, which can be enabled by
+setting <code>fork in run := true</code> in <code>build.sbt</code>. You will also have to set to
+change the log levels programmatically, if desired.</p>
+<pre><code class="language-scala">import org.apache.log4j.{Level, Logger}
+...
+
+
+def main(args: Array[String]) {
+    ...
+    Logger.getLogger(&quot;org.apache.spark&quot;).setLevel(Level.WARN)
+    ...
+}
+</code></pre>
+<p>You can also use this logger to log your application which might be helpful for
+debugging on the AWS cluster later on.</p>
+<p>You can inspect the event log from the application run using the Spark history
+server. Start a <code>spark-history-server</code> container from the project root folder
+and mount the <code>spark-events</code> folder in the container.</p>
+<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;/spark-events/:/spark-events -p 18080:18080 spark-history-server
+</code></pre>
+<p>The output will look as follows:</p>
+<pre><code>starting org.apache.spark.deploy.history.HistoryServer, logging to /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-5b5de5805769.out
+
+...
+
+2020-09-07 11:10:23,020 INFO history.FsHistoryProvider: Parsing file:/spark-events/local-1599477015931 for listing data... 2020-09-07
+11:10:23,034 INFO history.FsHistoryProvider: Finished parsing file:/spark-events/local-1599477015931
+</code></pre>
+<p>Navigate to <a href="localhost:18080">http://localhost:18080</a> to view detailed
+information about your jobs.
+After analysis you can shutdown the Spark history server using ctrl+C.</p>
+<pre><code>^C
+2020-09-07 11:13:21,619 ERROR history.HistoryServer: RECEIVED SIGNAL INT
+2020-09-07 11:13:21,630 INFO server.AbstractConnector: Stopped Spark@70219bf{HTTP/1.1,[http/1.1]}{0.0.0.0:18080}
+2020-09-07 11:13:21,633 INFO util.ShutdownHookManager: Shutdown hook called
+</code></pre>
+<p>Be sure to explore the history server thoroughly! You can use it to gain an
+understanding of how Spark executes your application, as well as to debug and
+time your code, which is important for both lab 1 and 2.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../getting-started/apache-spark/dataframe-and-dataset.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../getting-started/amazon-web-services.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../getting-started/apache-spark/dataframe-and-dataset.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../getting-started/amazon-web-services.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
