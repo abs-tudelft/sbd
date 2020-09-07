@@ -1,7 +1,7 @@
 ### Packaging your application using SBT
 
-We showed how to run Spark in interactive mode. Now we will explain how to
-build applications that can be submitted using the `spark-submit` command.
+We showed how to run Spark in interactive mode. Now we will explain how to build
+applications that can be submitted using the `spark-submit` command.
 
 First, we will explain how to structure a Scala project, using the [SBT build
 tool](https://www.scala-sbt.org). The typical project structure is
@@ -9,7 +9,7 @@ tool](https://www.scala-sbt.org). The typical project structure is
 ```
 ├── build.sbt
 ├── project
-│   └── build.properties
+│   └── build.properties
 └── src
     └── main
         └── scala
@@ -24,7 +24,7 @@ file. An example `build.sbt` file is
 
 ```
 name := "Example"
-
+version := "0.1.0"
 scalaVersion := "2.12.12"
 ```
 
@@ -48,30 +48,52 @@ object Example {
 }
 ```
 
-Start a `scala-sbt` container in the root folder (the one where `build.sbt` is located). This puts
-you in interactive mode of SBT. We can compile the sources by writing the
-`compile` command.
+Start the `sbt` container in the root folder (the one where `build.sbt` is
+located). This puts you in interactive mode of SBT. We can compile the sources
+by writing the `compile` command.
 
 ```
-$ docker run -it --rm -v "`pwd`":/root scala-sbt sbt
-Getting org.scala-sbt sbt 1.2.8  (this may take some time)...
+$ docker run -it --rm -v "`pwd`":/root sbt sbt
+[info] [launcher] getting org.scala-sbt sbt 1.3.13  (this may take some time)...
+downloading https://repo1.maven.org/maven2/org/scala-sbt/sbt/1.3.13/sbt-1.3.13.jar ...
+downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.10/scala-library-2.12.10.jar ...
+
 ...
-[info] Loading settings for project root from build.sbt ...
-[info] Set current project to Example (in build file:/root/)
+https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar
+  100.0% [##########] 544.5 KiB (4.8 MiB / s)
+[info] Fetched artifacts of 
+[info] loading settings for project root from build.sbt ...
+[info] set current project to Example (in build file:/root/)
 [info] sbt server started at local:///root/.sbt/1.0/server/27dc1aa3fdf4049b492d/sock
+sbt:Example> 
+```
+
+We can now type `compile`.
+
+```
 sbt:Example> compile
+[info] Updating 
+[info] Resolved  dependencies
+[info] Updating 
+https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12.pom
+  100.0% [##########] 2.6 KiB (69.1 KiB / s)
+
 ...
-[info] Done compiling.
-[success] Total time: 0 s, completed Sep 8, 2019 2:17:14 PM
+
+[info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
+[info] Non-compiled module 'compiler-bridge_2.12' for Scala 2.12.12. Compiling...
+[info]   Compilation completed in 8.038s.
+[success] Total time: 10 s, completed Sep 7, 2020 10:39:38 AM
+
 ```
 
 We can try to run the application by typing `run`.
 
 ```
 sbt:Example> run
-[info] Running example.Example
+[info] running example.Example 
 Hello world!
-[success] Total time: 1 s, completed Sep 8, 2019 2:18:18 PM
+[success] Total time: 0 s, completed Sep 7, 2020 10:40:24 AM
 ```
 
 Now let's add a function to `example.scala`.
@@ -93,15 +115,14 @@ run automatically on source changes.
 
 ```
 sbt:Example> ~run
-[info] Compiling 1 Scala source to ...
-[info] Done compiling.
-[info] Packaging ...
-[info] Done packaging.
-[info] Running example.Example
+[info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
+[info] running example.Example 
 Hello world!
 (a,2)
-[success] Total time: 1 s, completed Sep 8, 2019 2:19:03 PM
-1. Waiting for source changes in project hello... (press enter to interrupt)
+[success] Total time: 0 s, completed Sep 7, 2020 10:40:56 AM
+[info] 1. Monitoring source files for root/run...
+[info]    Press <enter> to interrupt or '?' for more options.
+
 ```
 
 We can also open an interactive session using SBT.
@@ -109,7 +130,7 @@ We can also open an interactive session using SBT.
 ```
 sbt:Example> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_222).
+Welcome to Scala 2.12.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_265).
 Type in expressions for evaluation. Or try :help.
 
 scala> example.Example.addOne('a', 1)
@@ -124,7 +145,7 @@ most notably) to build the project. Modify your `build.sbt` file like so
 
 ```
 name := "Example"
-
+version := "0.1.0"
 scalaVersion := "2.12.12"
 
 val sparkVersion = "2.4.6"
@@ -135,7 +156,10 @@ libraryDependencies ++= Seq(
 )
 ```
 
-We can now use Spark in the script. Modify `example.scala`.
+We could now use Spark in the script (after running `compile`).
+
+Let's implement a Spark application.
+Modify `example.scala` as follows, but don't run the code yet!
 
 ```{.scala}
 package example
@@ -195,17 +219,28 @@ object ExampleSpark {
 }
 ```
 
-You can build a JAR using the `package` command in SBT. This JAR will be
-located in the `target/scala-version/project_name_version.jar`.
+We will not run this code, but submit it to a local Spark "cluster" (on your
+machine). To do so, we require a JAR. You can build a JAR using the `package`
+command in SBT. This JAR will be located in the
+`target/scala-version/project_name_version.jar`.
 
 You can run the JAR via a `spark-submit` container (which will run on local
 mode). By mounting the `spark-events` directory the event log of the
 application run is stored to be inspected later using the Spark history server.
 
 ```
-$ docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events
-    spark-submit target/scala-2.11/example_2.11-0.1.0.jar
-INFO:...
+$ docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
+```
+
+The output should look as follows:
+
+```
+2020-09-07 11:07:28,890 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2020-09-07 11:07:29,068 INFO spark.SparkContext: Running Spark version 2.4.6
+2020-09-07 11:07:29,087 INFO spark.SparkContext: Submitted application: Example
+
+...
+
 SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
 SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
 SensorData(THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89)
@@ -216,10 +251,15 @@ SensorData(CHER,2014-03-10 01:01:00.0,10.17,1.653,777,1.89,96,1.57)
 SensorData(ANDOUILLE,2014-03-10 01:01:00.0,10.26,1.048,777,1.88,94,1.66)
 SensorData(MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75)
 SensorData(BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28)
-INFO:...
+
+...
+
+2020-09-07 11:07:33,694 INFO util.ShutdownHookManager: Shutdown hook called
+2020-09-07 11:07:33,694 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-757daa7c-c317-428e-934f-aaa9e74bf808
+2020-09-07 11:07:33,696 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-a38554ba-18fc-46aa-aa1e-0972e24a4cb0
 ```
 
-By default, Spark's logging is quite assertive. You can change the [log levels
+By default, Spark's logging is quite verbose. You can change the [log levels
 to warn](https://stackoverflow.com/questions/27781187/how-to-stop-info-messages-displaying-on-spark-console)
 to reduce the output.
 
@@ -249,38 +289,17 @@ server. Start a `spark-history-server` container from the project root folder
 and mount the `spark-events` folder in the container.
 
 ```
-$ docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080
-    spark-history-server
-starting org.apache.spark.deploy.history.HistoryServer, logging to
-/spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-d5dfa4949b86.out
-Spark Command: /usr/local/openjdk-8/bin/java -cp /spark/conf/:/spark/jars/*
-  -Xmx1g org.apache.spark.deploy.history.HistoryServer
-========================================
-Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
-19/09/08 14:25:33 INFO HistoryServer: Started daemon with process name:
-  14@d5dfa4949b86
-19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for TERM
-19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for HUP
-19/09/08 14:25:33 INFO SignalUtils: Registered signal handler for INT
-19/09/08 14:25:34 WARN NativeCodeLoader: Unable to load native-hadoop library
-  for your platform... using builtin-java classes where applicable
-19/09/08 14:25:34 INFO SecurityManager: Changing view acls to: root
-19/09/08 14:25:34 INFO SecurityManager: Changing modify acls to: root
-19/09/08 14:25:34 INFO SecurityManager: Changing view acls groups to:
-19/09/08 14:25:34 INFO SecurityManager: Changing modify acls groups to:
-19/09/08 14:25:34 INFO SecurityManager: SecurityManager: authentication
-  disabled; ui acls disabled; users  with view permissions: Set(root); groups
-     with view permissions: Set(); users  with modify permissions: Set(root);
-      groups with modify permissions: Set()
-19/09/08 14:25:34 INFO FsHistoryProvider: History server ui acls disabled;
-  users with admin permissions: ; groups with admin permissions
-19/09/08 14:25:35 INFO FsHistoryProvider:
-  Parsing file:/spark-events/local-1567952519905 for listing data...
-19/09/08 14:25:35 INFO Utils: Successfully started service on port 18080.
-19/09/08 14:25:35 INFO HistoryServer: Bound HistoryServer to 0.0.0.0,
-  and started at http://d5dfa4949b86:18080
-19/09/08 14:25:36 INFO FsHistoryProvider: Finished parsing
-  file:/spark-events/local-1567952519905
+$ docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080 spark-history-server
+```
+
+The output will look as follows:
+```
+starting org.apache.spark.deploy.history.HistoryServer, logging to /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-5b5de5805769.out
+
+...
+
+2020-09-07 11:10:23,020 INFO history.FsHistoryProvider: Parsing file:/spark-events/local-1599477015931 for listing data... 2020-09-07
+11:10:23,034 INFO history.FsHistoryProvider: Finished parsing file:/spark-events/local-1599477015931
 ```
 
 Navigate to [http://localhost:18080](localhost:18080) to view detailed
@@ -288,9 +307,10 @@ information about your jobs.
 After analysis you can shutdown the Spark history server using ctrl+C.
 
 ```
-$ ^C
-19/09/08 14:27:18 ERROR HistoryServer: RECEIVED SIGNAL INT
-19/09/08 14:27:18 INFO ShutdownHookManager: Shutdown hook called
+^C
+2020-09-07 11:13:21,619 ERROR history.HistoryServer: RECEIVED SIGNAL INT
+2020-09-07 11:13:21,630 INFO server.AbstractConnector: Stopped Spark@70219bf{HTTP/1.1,[http/1.1]}{0.0.0.0:18080}
+2020-09-07 11:13:21,633 INFO util.ShutdownHookManager: Shutdown hook called
 ```
 
 Be sure to explore the history server thoroughly! You can use it to gain an

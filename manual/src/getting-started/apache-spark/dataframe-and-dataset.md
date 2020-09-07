@@ -5,10 +5,11 @@ store of some structured (tabular) format (be it csv, JSON, parquet, or
 something else) that we would like to analyse, typically in some SQL-like
 fashion. Manually applying operations to rows like this is both labour
 intensive, and inefficient, as we have knowledge of the 'schema' of data. This
-is where DataFrames originate from. Spark has an optimized SQL query engine
-that can optimize the compute path as well as provide a more efficient
-representation of the rows when given a schema. From the
-[Spark SQL, DataFrames and Datasets Guide](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html#overview):
+is where DataFrames originate from. Spark has an optimized SQL query engine that
+can optimize the compute path as well as provide a more efficient representation
+of the rows when given a schema. From the
+[Spark SQL, DataFrames and Datasets
+Guide](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html#overview):
 
 > Spark SQL is a Spark module for structured data processing. Unlike the basic
 > Spark RDD API, the interfaces provided by Spark SQL provide Spark with more
@@ -113,24 +114,25 @@ root
  |-- numE: long (nullable = true)
  |-- numF: double (nullable = true
 
-scala> df.take(10).foreach(println)
+scala> df.take(5).foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
 [COHUTTA,2014-03-10 01:03:00.0,10.47,1.732,882,1.7,92,0.66]
 [COHUTTA,2014-03-10 01:05:00.0,9.56,1.734,883,1.35,99,0.68]
 [COHUTTA,2014-03-10 01:06:00.0,9.74,1.736,884,1.27,92,0.73]
-[COHUTTA,2014-03-10 01:08:00.0,10.44,1.737,885,1.34,93,1.54]
-[COHUTTA,2014-03-10 01:09:00.0,9.83,1.738,885,0.06,76,1.44]
-[COHUTTA,2014-03-10 01:11:00.0,10.49,1.739,886,1.51,81,1.83]
-[COHUTTA,2014-03-10 01:12:00.0,9.79,1.739,886,1.74,82,1.91]
-[COHUTTA,2014-03-10 01:13:00.0,10.02,1.739,886,1.24,86,1.79]
 ```
 
-We can perform the same filtering operation as before in a couple of ways. We
-can use really error prone SQL queries (not recommended unless you absolutely
-love SQL and like debugging these command strings, this took me about 20
-minutes to get right).
+We will now continue to perform the same filtering operation as previously
+performed on the RDD.
+There are three ways in which we could do this:
 
+1. By supplying an SQL query string to Spark SQL, operating on the *untyped*
+   `DataFrame`.
+2. By using the Scala API for the *untyped* `DataFrame`.
+3. By using the Scala API for the *strongly-typed* `DataSet`. 
+
+#### SQL query string
+We can use really error prone SQL queries, like so:
 ```scala
 scala> df.createOrReplaceTempView("sensor")
 
@@ -144,16 +146,23 @@ scala> dfFilter.collect.foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78]
 [THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89]
-[BUTTE,2014-03-10 01:01:00.0,10.12,1.379,777,1.58,83,0.67]
-[CARGO,2014-03-10 01:01:00.0,9.93,1.903,778,0.55,76,1.44]
-[LAGNAPPE,2014-03-10 01:01:00.0,9.59,1.602,777,0.09,88,1.78]
-[CHER,2014-03-10 01:01:00.0,10.17,1.653,777,1.89,96,1.57]
-[ANDOUILLE,2014-03-10 01:01:00.0,10.26,1.048,777,1.88,94,1.66]
-[MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75]
-[BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28]
+...
 ```
 
-A slightly more sane and type-safe way would be to do the following.
+As you can see, we're simply providing an SQL string to the `spark.sql` method.
+The string is not checked by the Scala compiler, but only during run-time by
+the Spark SQL library. Any errors will only show up during run-time.
+These errors may include both typos in 
+* the SQL keywords, and
+* the field names, and
+* the timestamp.
+
+This is not recommended unless you absolutely love SQL and like debugging these
+command strings. (This took me about 20 minutes to get right!)
+
+#### DataFrame
+
+A slightly more sane and type-safe way would be to do the following:
 
 ```scala
 scala> val dfFilter = df.filter("timestamp = TIMESTAMP(\"2014-03-10 01:01:00\")")
@@ -164,30 +173,43 @@ scala> dfFilter.collect.foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78]
 [THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89]
-[BUTTE,2014-03-10 01:01:00.0,10.12,1.379,777,1.58,83,0.67]
-[CARGO,2014-03-10 01:01:00.0,9.93,1.903,778,0.55,76,1.44]
-[LAGNAPPE,2014-03-10 01:01:00.0,9.59,1.602,777,0.09,88,1.78]
-[CHER,2014-03-10 01:01:00.0,10.17,1.653,777,1.89,96,1.57]
-[ANDOUILLE,2014-03-10 01:01:00.0,10.26,1.048,777,1.88,94,1.66]
-[MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75]
-[BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28]
+...
 ```
 
-But this is still quite error-prone as writing these strings contains no
-typechecking. This is not a big deal when writing these queries in an
-interactive environment on a small dataset, but can be quite time consuming
-when there's a typo at the end of a long running job that means two hours of
-your (and the cluster's) time is wasted.
+We have now replaced the SQL query of the form:
+```sql
+SELECT fieldname WHERE predicate
+```
 
-This is why the Spark community developed the Dataset abstraction. It is a sort
-of middle ground between Dataframes and RDDs, where you get some of the type
-safety of RDDs by operating on a [case class](https://docs.scala-lang.org/tour/case-classes.html)
-(also known as product type).
-This allows us to use the compile-time typechecking on the product types,
-whilst still allowing Spark to optimize the query and storage of the data by
-making use of schemas.
+... with the `filter()` method of a Spark DataFrame. This is already a bit
+better, since the *Scala compiler* and *not the Spark SQL run-time library* can
+now check the the existence of the `filter()` method for the DataFrame class.
+If we made a typo, we would get a compiler error, before running the code!
 
-Let's dive in some code, first we need to define a product type for a row.
+Also, the methods supported by DataFrames look much like those of 
+[Scala's parallel collections](https://docs.scala-lang.org/overviews/parallel-collections/overview.html),
+just like with RDDs, but there are also some SQL-like database-oriented methods
+such as `join()`. As such, the Scala API for DataFrames combines the best of
+both worlds.
+
+Still, this approach is error-prone, since it is allowed to write the filter
+predicate as an SQL predicate, retaining the problem of potential errors in the
+timestamp field name and the timestamp itself.
+
+#### DataSet
+
+Luckily, there is also the DataSet abstraction. 
+It is a sort of middle ground between DataFrames and RDDs, where you get some of
+the type safety of RDDs by operating on a Scala [case
+class](https://docs.scala-lang.org/tour/case-classes.html) (also known as
+product type).
+
+This allows even more compile-time type checking on the product types, while
+still allowing Spark to optimize the query and storage of the data by making use
+of schemas.
+
+We do have to write a bit more Scala to be able to use the strongly-typed
+DataSet:
 
 ```scala
 scala> import java.sql.Timestamp
@@ -212,8 +234,8 @@ case class SensorData (
 defined class SensorData
 ```
 
-Now we can convert a Dataframe (which actually is just an untyped Dataset) to a
-typed Dataset using the `as` method.
+Now we can convert a DataFrame (which is actually just a `DataSet[Row]`, where
+`Row` allows fields to be untyped) to a typed DataSet using the `as` method.
 
 ```scala
 scala> :paste
@@ -231,7 +253,7 @@ ds: org.apache.spark.sql.Dataset[SensorData] =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 ```
 
-Now we can apply compile time type-checked operations.
+Now we can apply compile-time type-checked operations:
 
 ```scala
 scala> val dsFilter = ds.filter(a => a.timestamp ==
@@ -243,18 +265,39 @@ scala> dsFilter.collect.foreach(println)
 SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
 SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
 SensorData(THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89)
-SensorData(BUTTE,2014-03-10 01:01:00.0,10.12,1.379,777,1.58,83,0.67)
-SensorData(CARGO,2014-03-10 01:01:00.0,9.93,1.903,778,0.55,76,1.44)
-SensorData(LAGNAPPE,2014-03-10 01:01:00.0,9.59,1.602,777,0.09,88,1.78)
-SensorData(CHER,2014-03-10 01:01:00.0,10.17,1.653,777,1.89,96,1.57)
-SensorData(ANDOUILLE,2014-03-10 01:01:00.0,10.26,1.048,777,1.88,94,1.66)
-SensorData(MOJO,2014-03-10 01:01:00.0,10.47,1.828,967,0.36,77,1.75)
-SensorData(BBKING,2014-03-10 01:01:00.0,10.03,0.839,967,1.17,80,1.28)
+...
 ```
 
-This provides us with more guarantees that are queries are valid (atleast on a
-type level).
+This has two advantages:
+* The field names can now be checked by the Scala compiler as well, by inspecting
+our case class. It will detect if we made a mistake when writing `a.timestamp`.
+* The SQL-like predicate used in the DataFrame implementation is now
+replaced with the constructor of the Timestamp class. This is more type-safe,
+since any type mismatches will be detected by the Scala compiler. 
+
+Of course, you could still supply an incorrect month number (e.g. 13). However,
+the Timestamp object is already created during construction of the
+lazy-evaluated DAG, not when that stage of the DAG actually starts computation.
+The constructor will therefore raise any errors early on, and not at the end
+stage of e.g. some computation that has been taking hours already.
+
+We now have an setup where the Scala compiler will check all methods used to
+build up the directed acyclic graph (DAG) of our computation exist at every
+intermediate resulting DataFrame. We can't make mistakes in the SQL keywords
+anymore, as well as mistakes in the field names, or data types thrown into the
+filter. This provides us with more guarantees that our queries are valid (at
+least at the type level).
+
+There are a lot of additional advantages to DataSets that have not yet been
+exposed through these examples. DataBricks has published [an excellent
+blog](https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html)
+about why DataSets were introduced, next to RDDs. While DataSets don't replace
+RDDs, they are nowadays most often used, because they have some more nice
+properties as explained before. Read the blog to get to know the details!
 
 This was a brief overview of the 2 (or 3) different Spark APIs. You can always
-find more information on the programming guides for [RDDs](https://spark.apache.org/docs/2.4.6/rdd-programming-guide.html)
-and [Dataframes/Datasets](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html) and in the [Spark documentation](https://spark.apache.org/docs/2.4.6/api/scala/index.html#package).
+find more information on the programming guides for
+[RDDs](https://spark.apache.org/docs/2.4.6/rdd-programming-guide.html) and
+[Dataframes/Datasets](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html)
+and in the [Spark
+documentation](https://spark.apache.org/docs/2.4.6/api/scala/index.html#package).
