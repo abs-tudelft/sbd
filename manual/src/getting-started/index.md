@@ -1,7 +1,25 @@
 # Getting Started
 
 In this chapter, we will cover some of the concepts and technologies that are
-used during the course. We will introduce the following topics:
+used during the course.
+
+## Example repository
+
+The examples in this chapter are accompanied by some code. You can download this
+code from its [online repository]. Unless stated otherwise, we usually run
+commands in the root folder of this repository. To get this code and go into the
+root folder, you could run:
+
+```bash
+git clone https://github.com/abs-tudelft/sbd-example.git
+cd sbd-example
+```
+
+For command-line commands, we're going to assume we're using Linux with Bash. If
+you're on Windows or Mac, you have to figure out how to do stuff yourself, or
+perhaps use a virtual machine or container.
+ 
+This chapter will continue to introduce the following topics:
 
 ## Docker
 
@@ -36,3 +54,5 @@ program for both Apache Spark and Apache Kafka.
 
 A open source project capturing geographic data from all over the world. The
 assignments of this lab are based on (parts of) this data set.
+
+[online repository]: https://github.com/abs-tudelft/sbd-example
