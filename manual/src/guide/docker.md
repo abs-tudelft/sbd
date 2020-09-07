@@ -10,31 +10,34 @@ According to the [Docker Documentation](https://docs.docker.com/get-started)
 >
 > Flexible
 >
-> : Even the most complex applications can be containerized.
+> - Even the most complex applications can be containerized.
 >
 > Lightweight
 >
-> : Containers leverage and share the host kernel.
+> - Containers leverage and share the host kernel.
 >
 > Interchangeable
 >
-> : You can deploy updates and upgrades on-the-fly.
+> - You can deploy updates and upgrades on-the-fly.
 >
 > Portable
 >
-> : You can build locally, deploy to the cloud, and run anywhere.
+> - You can build locally, deploy to the cloud, and run anywhere.
 >
 > Scalable
 >
-> : You can increase and automatically distribute container replicas.
+> - You can increase and automatically distribute container replicas.
 >
 > Stackable
 >
-> : You can stack services vertically and on-the-fly.
+> - You can stack services vertically and on-the-fly.
 
 For this course, we use Docker primarily to ensure every student is using the
 exact same platform for their applications, and to avoid certain
 platform-specific issues and peculiarities.
+
+> You are **not** required to use Docker for this lab when you feel comfortable
+> setting up the required tools on your own system.
 
 A basic understanding of some [Docker](https://docs.docker.com/) concepts helps
 in getting started with this course. [Part 1: Orientation and
@@ -54,10 +57,10 @@ docker run hello-world
 
 ### Setting up Spark in Docker
 
-In order to run Spark in a container, a `Dockerfile` is provided which can be
-used to build images for `spark-submit` to run your Spark application,
-`spark-shell` to run a Spark interactive shell, and the Spark history server to
-view event logs from application runs. You need to build these images before
+In order to run Spark in a container, a `Dockerfile` is provided in the lab 1
+repository, which can be used to build images for `spark-submit` to run your Spark
+application, `spark-shell` to run a Spark interactive shell, and the Spark history
+server to view event logs from application runs. You need to build these images before
 you get started. The Dockerfiles we provide assume that you run Docker from the
 folder at which they are located. Don't move them around! They will stop
 working.
@@ -80,8 +83,8 @@ We use `docker build` to build the images we need to use Spark and SBT.
   docker build \
   --build-arg BASE_IMAGE_TAG="8" \
   --build-arg SBT_VERSION="1.3.13" \
-  --build-arg SCALA_VERSION="2.11.12" \
-  -t scala-sbt \
+  --build-arg SCALA_VERSION="2.12.12" \
+  -t sbt \
   github.com/hseeberger/scala-sbt.git#:debian
   ```
 
@@ -110,7 +113,7 @@ provided template project.
 - Run SBT to package or test your application (`sbt <command>`)
 
   ```bash
-  docker run -it --rm -v "`pwd`":/root scala-sbt sbt
+  docker run -it --rm -v "`pwd`":/root sbt sbt
   ```
 
 - Start a Spark shell (`spark-shell`)
