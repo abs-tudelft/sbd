@@ -1,9 +1,7 @@
 ## Useful links
 
-We hope you will enjoy this course and achieve all learning objectives!
 Below are some links that are useful:
 
-- [GitHub Classroom for Supercomputing for Big Data](https://classroom.github.com/classrooms/70689463-sbd)
 - [Git cheatsheet](https://rogerdudler.github.io/git-guide)
 
 ## Often-used API docs:
