@@ -8,10 +8,4 @@ Course material for Supercomputing for Big Data.
 > ET4310  
 > Supercomputing for Big Data
 
-## Lab manual
-
 The lab manual is available at: https://abs-tudelft.github.io/sbd/.
-
-## Lab assignments
-
-Lab assignments are available on [Brightspace](https://brightspace.tudelft.nl).
