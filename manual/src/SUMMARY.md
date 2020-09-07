@@ -7,8 +7,8 @@
   - [Groups](introduction/groups.md)
   - [Amazon AWS](introduction/amazon-aws.md)
   - [Grading](introduction/grading.md)
-  - [Useful links](introduction/links.md)
-- [Guide](./guide/index.md)
+- [Getting Started](./guide/index.md)
+  - [Docker](./guide/docker.md)
   - [Apache Spark](./guide/apache-spark/index.md)
     - [Resilient Distributed Datasets](./guide/apache-spark/resilient-distributed-datasets.md)
     - [Dataframe and Dataset](./guide/apache-spark/dataframe-and-dataset.md)
@@ -16,7 +16,6 @@
   - [Amazon Web Services](./guide/amazon-web-services.md)
   - [Apache Kafka](./guide/apache-kafka.md)
   - [Scala](./guide/scala.md)
-  - [Docker](./guide/docker.md)
   - [OpenStreetMap](./guide/openstreetmap.md)
 - [Lab 1](./lab1/index.md)
   - [Before you start](./lab1/before-you-start.md)
@@ -38,4 +37,5 @@
 
 ---
 
-[FAQ](./faq.md)
+- [FAQ](./faq.md)
+- [Useful links](links.md)

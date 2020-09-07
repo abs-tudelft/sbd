@@ -2,7 +2,7 @@
 
 Apache Spark provides a programming model for a resilient distributed
 shared memory model. To elaborate on this, Spark allows you to program against
-a _unified view_ of memory (i.e. RDD or DataFrame), while the processing
+a _unified view_ of memory (i.e. RDD or DataFrame), while the processing
 happens _distributed_ over _multiple nodes/machines/computers/servers_ being
 able to compensate for _failures of these nodes_.
 

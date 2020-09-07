@@ -44,7 +44,7 @@ into the spark shell from this guide, it might be useful to copy from the
 github version, and use the `:paste` command in the spark shell to paste the
 code. Hit `ctrl+D` to stop pasting._
 
-```scala
+```shell
 $ docker run -it --rm -v "`pwd`":/io spark-shell
 19/09/08 14:00:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties

@@ -1,4 +1,4 @@
-## OpenStreetmap
+## OpenStreetMap
 
 [OpenStreetMap] is a project where you can download free geographic data from
 the whole world. Such data will be used as the only data source for our queries
@@ -67,7 +67,64 @@ us already, that helps us convert the `.osm.pbf` file into an `.orc` file.
 You will now have the `zuid-holland.orc` file somewhere on your machine. We will
 use this file as our input. Make sure you understand [how to load the file into
 Spark].
- 
+
+### OpenStreetMap schema
+Once you have loaded the data set, it's possible to print out the schema of the
+data, for example, on the Spark shell. Note that this assumes you have loaded
+the data set as a Spark DataFrame called `df`.
+
+```
+scala> df.printSchema()
+root
+ |-- id: long (nullable = true)
+ |-- type: string (nullable = true)
+ |-- tags: map (nullable = true)
+ |    |-- key: string
+ |    |-- value: string (valueContainsNull = true)
+ |-- lat: decimal(9,7) (nullable = true)
+ |-- lon: decimal(10,7) (nullable = true)
+ |-- nds: array (nullable = true)
+ |    |-- element: struct (containsNull = true)
+ |    |    |-- ref: long (nullable = true)
+ |-- members: array (nullable = true)
+ |    |-- element: struct (containsNull = true)
+ |    |    |-- type: string (nullable = true)
+ |    |    |-- ref: long (nullable = true)
+ |    |    |-- role: string (nullable = true)
+ |-- changeset: long (nullable = true)
+ |-- timestamp: timestamp (nullable = true)
+ |-- uid: long (nullable = true)
+ |-- user: string (nullable = true)
+ |-- version: long (nullable = true)
+ |-- visible: boolean (nullable = true)
+```
+
+And we may look at a tiny part of the data, say the first three rows:
+```
+scala> df.show(3)
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+|     id|type|tags|       lat|      lon|nds|members|changeset|          timestamp|uid|user|version|visible|
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+|2383199|node|  []|52.0972000|4.2997000| []|     []|        0|2011-10-31 12:45:53|  0|    |      3|   true|
+|2383215|node|  []|52.0990543|4.3002070| []|     []|        0|2020-01-08 20:50:29|  0|    |      6|   true|
+|2716646|node|  []|52.0942524|4.3354580| []|     []|        0|2011-12-26 23:12:28|  0|    |      3|   true|
++-------+----+----+----------+---------+---+-------+---------+-------------------+---+----+-------+-------+
+```
+
+Here we can observe that the first three rows are elements of the `"node"` type.
+Note that there are two other types of elements, as explained previously. We
+also have the `"way"` and `"relation"`. There are all flattened into this single
+table by the conversion tool.
+
+How big is this dataframe?
+
+```
+scala> df.count()
+res1: Long = 18426861
+```
+
+It has over 18 million rows already, and this is just the province of 
+Zuid-Holland!
 
 [OpenStreetMap]: (https://www.openstreetmap.org)
 [Wiki]: https://wiki.openstreetmap.org/wiki/Main_Page

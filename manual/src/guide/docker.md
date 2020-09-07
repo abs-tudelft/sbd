@@ -36,12 +36,17 @@ For this course, we use Docker primarily to ensure every student is using the
 exact same platform for their applications, and to avoid certain
 platform-specific issues and peculiarities.
 
-A basic understanding of some [Docker](https://docs.docker.com/) concepts helps in getting started with
-this course. [Part 1: Orientation and setup](https://docs.docker.com/get-started/) of the [Get Started Guide](https://docs.docker.com/get-started/) covers the basic [Docker](https://docs.docker.com/) concepts used in this course.
+A basic understanding of some [Docker](https://docs.docker.com/) concepts helps
+in getting started with this course. [Part 1: Orientation and
+setup](https://docs.docker.com/get-started/) of the [Get Started
+Guide](https://docs.docker.com/get-started/) covers the basic
+[Docker](https://docs.docker.com/) concepts used in this course.
 
 Before trying the lab assignments and tutorials in the next sections, make sure
-you [Install Docker (stable)](https://docs.docker.com/install/#supported-platforms) and test your installation by running the simple
-[Hello World image](https://hub.docker.com/_/hello-world).
+you [Install Docker
+(stable)](https://docs.docker.com/install/#supported-platforms) and test your
+installation by running the simple [Hello World
+image](https://hub.docker.com/_/hello-world).
 
 ```bash
 docker run hello-world

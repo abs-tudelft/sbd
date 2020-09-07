@@ -9,7 +9,7 @@ tool](https://www.scala-sbt.org). The typical project structure is
 ```
 ├── build.sbt
 ├── project
-│   └── build.properties
+│   └── build.properties
 └── src
     └── main
         └── scala
