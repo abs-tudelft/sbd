@@ -282,6 +282,8 @@ libraryDependencies ++= Seq(
   &quot;org.apache.spark&quot; %% &quot;spark-sql&quot; % sparkVersion
 )
 </code></pre>
+<p>If you still have the SBT shell opened, you must use <code>reload</code> to make sure your
+<code>build.sbt</code> is updated.</p>
 <p>We could now use Spark in the script (after running <code>compile</code>).</p>
 <p>Let's implement a Spark application.
 Modify <code>example.scala</code> as follows, but don't run the code yet!</p>
