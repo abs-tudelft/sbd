@@ -107,23 +107,28 @@ We use `docker build` to build the images we need to use Spark and SBT.
   docker build --target spark-history-server -t spark-history-server .
   ```
 
-You can then run the following commands from the Spark application root
+You could then run the following commands from the Spark application root
 (the folder containing the `build.sbt` file). Please make sure to use the
 provided template project.
 
-- Run SBT to package or test your application (`sbt <command>`)
+The commands below are provided as a reference, and they will be used throughout
+the rest of this guide. You do not have to run them now, because some of them
+require additional parameters (e.g. `spark-submit`) that we will provide later
+in the manual.
+
+- To run SBT to package or test your application (`sbt <command>`)
 
   ```bash
   docker run -it --rm -v "`pwd`":/root sbt sbt
   ```
 
-- Start a Spark shell (`spark-shell`)
+- To start a Spark shell (`spark-shell`)
 
   ```bash
   docker run -it --rm -v "`pwd`":/io spark-shell
   ```
 
-- Run your Spark application (`spark-submit`) (fill in the class name of your
+- To run your Spark application (`spark-submit`) (fill in the class name of your
   application and the name of your project!)
 
   ```bash
@@ -132,7 +137,7 @@ provided template project.
   target/scala-2.12/<YOUR_PROJECT_NAME>_2.12-1.0.jar
   ```
 
-- Spawn the history server to view event logs, accessible at
+- To spawn the history server to view event logs, accessible at
   [localhost:18080](http://localhost:18080)
 
   ```bash
@@ -140,7 +145,7 @@ provided template project.
   -p 18080:18080 spark-history-server
   ```
 
-The rest of the manual will not generally mention these Docker commands again,
-so know that if we mention e.g. `spark-shell`, you should run the corresponding
-`docker run` command listed above. You can create scripts or aliases for your
-favorite shell to avoid having to type a lot.
+The further we get in the manual, we will generally not mention the full Docker
+commands this explicitly again, so know that if we mention e.g. `spark-shell`,
+you should run the corresponding `docker run` command listed above. You can
+create scripts or aliases for your favorite shell to avoid having to type a lot.
