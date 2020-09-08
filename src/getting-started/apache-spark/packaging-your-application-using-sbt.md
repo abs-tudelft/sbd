@@ -156,6 +156,9 @@ libraryDependencies ++= Seq(
 )
 ```
 
+If you still have the SBT shell opened, you must use `reload` to make sure your
+`build.sbt` is updated.
+
 We could now use Spark in the script (after running `compile`).
 
 Let's implement a Spark application.
