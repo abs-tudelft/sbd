@@ -27,6 +27,12 @@ An application that allows the user to package and run software (like Spark and
 Kafka and the programs we write for them) in an isolated environment: a
 container.
 
+## Scala
+
+A programming language that runs on the Java Virtual Machine (JVM). This is our
+(mandatory!) language of choice during the lab assignments. We will use it to
+program for both Apache Spark and Apache Kafka.
+
 ## Apache Spark
 
 A framework for processing large amounts of data on multiple machines in a
@@ -43,12 +49,6 @@ A framework for building so-called data pipelines, in which potentially many
 producers and consumers process real-time, streaming data. In lab 3, we will
 take the application from labs 1 and 2 and modify it to process data in
 real-time, using Kafka.
-
-## Scala
-
-A programming language that runs on the Java Virtual Machine (JVM). This is our
-(mandatory!) language of choice during the lab assignments. We will use it to
-program for both Apache Spark and Apache Kafka.
 
 ## OpenStreetMap
 

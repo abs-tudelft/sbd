@@ -6,7 +6,7 @@ parts of the guide, but is generally based on:
 1. Your code
 2. Your report
 
-Additionally, there is a a potential oral exam based on the grade of a quiz at 
+Additionally, there is a potential oral exam based on the grade of a quiz at 
 the end of the course (more about this at the end of this section).
 
 All your code must be incrementally updated on GitHub Classroom. The reports are
@@ -39,7 +39,7 @@ GitHub Classroom, it is incredibly unlikely that you will fail this course. At
 the same time, do remember that programming experience is a prerequisite for
 this course. We unfortunately do not have time to teach you how to program.
 
-Regarding point 3, there is a possibility that some group members do not
+Regarding the oral exam, there is a possibility that some group members do not
 contribute to achieving the lab goals, in turn causing them to not achieve the
 learning objectives (sometimes called freeloaders). Because the TU Delft strives
 to deliver Masters of Science of the highest quality, we must ensure that all
