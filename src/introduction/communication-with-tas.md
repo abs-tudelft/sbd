@@ -20,4 +20,8 @@ question in the `#general` chat, so all students can observe our reply.
 Just to be clear: this does not include advice on your specific approach.
 Also, do not copy and paste large portions of code in the chat.
 
+To prevent multiple TAs solving problems for your at the same time, contact only
+one TA with your request or problem. Please do not broadcast the message to all
+TAs. Only send your request to one TA.
+
 [discord]: https://discord.com/
