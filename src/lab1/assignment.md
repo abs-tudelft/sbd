@@ -22,6 +22,8 @@ We will use the [Zuid-Holland](https://download.geofabrik.de/europe/netherlands/
 subset provided by [Geofabrik](geofabrik.de/). The `.osm.pbf` files can be
 converted to `.orc` files using the tool mentioned in the introduction.
 
+Please note that using other datasets for this assignment is **not** allowed.
+
 Try to keep the following in mind when building your application:
 
 - Functionality: providing a correct answer to this query is not trivial, attempt
