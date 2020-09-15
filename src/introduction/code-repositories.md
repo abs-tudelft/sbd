@@ -19,11 +19,28 @@ your last commit before the deadline!
 We recommend students to work on branches, and make pull requests to their
 `master` branch once the code they are trying to implement is complete. These
 pull requests can be reviewed by their teammates or by the TAs to provide early
-feedback. This is also an explicit mechanism you will find in GitHub Classroom.
+feedback. 
 
-Here is an example of feedback that we can provide based on your pull request:
+The feedback mechanism is also explicitly available in your GitHut Classroom
+repository as a pull request that is made when your repository is first
+initialized. To trigger the TA's to start reviewing your master branch, you can
+also use this pull request (PRs). It will be named `Feedback #1` and can be
+found by clicking `Pull requests`, then the `Feedback #1` PR. You can then ask
+for a review from the TAs; either user `mbrobbel` or `johanpel`. Also see the
+figure below:
+
+![Where to find the pull requests and ask for review](../assets/images/review_request.png)
+ 
+Here is an example of feedback that we can provide based on the `Feedback #1` PR.
+Note that you can also request reviews on any other PR if you want.
 
 ![Example of a review requested through GitHub Classroom](../assets/images/review.png)
+
+Because we have limited capacity, we do ask you to request a review only when
+you've made either very significant contributions, or preferably when you think
+you have completed the assignment. TA priority will be based on groups ordered
+by number of review requests performed (e.g. groups who have had only one
+request will go before groups who have had several reviews).
 
 [git]: https://git-scm.com
 [github]: https://github.com
