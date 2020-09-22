@@ -30,8 +30,7 @@ a. Each lab will have an associated [Rubric], which is like a table with
 
 b. You can request reviews from the TAs in GitHub Classroom on e.g. your pull
    requests with incremental changes to your code. This includes requesting 
-   reviews on your `README.md` (i.e. your report). An example is shown at the 
-   bottom of this page.
+   reviews on your `README.md` (i.e. your report).
 
 Therefore, by spending the required amount of time to learn, using the Rubric to
 reflect on your own work, and by making use of the review functionality of
