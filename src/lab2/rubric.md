@@ -101,7 +101,8 @@ An example where an application implementation is not appropriate:
 * Related Learning Objectives: L1, L4
 
 The student selects and executes an appropriate strategy at the cluster level to
-overcome bottlenecks in their implementation.
+overcome bottlenecks in their implementation, and takes into consideration the
+trade-off between cost and performance.
 
 An example where this is done appropriately is: if the application throughput is
 bound by network I/O, the student can choose to run the application on instances
@@ -111,7 +112,6 @@ An example where this is not done appropriately is: the performance of the
 application is bound by memory size, but to mitigate this the student moves to
 instance types with GPUs to obtain more compute, but not more memory, or the
 other way around.
-
 
 | Grade          | Indicators                                                  |
 |----------------|-------------------------------------------------------------|
