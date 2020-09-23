@@ -114,10 +114,6 @@ select the application JAR location in your S3 bucket, as well as any number
 of arguments to the application, spark-submit, as well as your action on
 failure.
 
-**Make sure you do not try to process the entire dataset in your
-initial run, but, similar to lab 1, start with a few files, to confirm that the
-application works as intended**
-
 The setup will take some time to finish, so in the meantime you should
 configure a proxy for the web interfaces. More detailed information can be
 found on the [AWS website]. You can check the logs in your S3 bucket, or the
