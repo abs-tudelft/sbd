@@ -1,6 +1,6 @@
 ## Before you start
 
-To make sure this assignment is challenging and instructive for all students we require all Spark applications to have a level 3 robustness implementation.
+To make sure this assignment is challenging and instructive for all students, we require all Spark applications to have a level 3 robustness implementation.
 
 > A guide with hints and pointers to upgrade your application to level 3 robustness will be published here after the deadline of lab 1 has passed.
 
