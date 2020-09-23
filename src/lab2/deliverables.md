@@ -1,15 +1,12 @@
 ## Deliverables
 
-The deliverable for this lab is a blog post outlining your choices in
-terms of configuration and your results in achieving the assignment. Be concise
-in your blog, you can skip introductions and go straight to juicy bits. These
-blog posts should be written in [Github flavored markdown], as we will
-publish all reports so you can learn from your classmates. We encourage you to
-have a look at them after we publish these!
+The deliverable for this lab are a report documenting:
 
-In the blog post, there should be a justification for why you chose the cluster
-configuration you did. If you have measurements for multiple cluster
-configurations, please include them. Also detail all the improvements you
-found, and why they improved effectiveness.
+- The iterative decision-making process
+- Improvements made to the application and their effects
 
-[github flavored markdown]: https://help.github.com/en/articles/basic-writing-and-formatting-syntax
+Add the source of your (optimized) application in the repository. You can copy
+the sources from your lab 1 repository as a starting point.
+
+Write the report in the `README.md` markdown file in the root of your
+repository. Use the template as a starting point for your report.
