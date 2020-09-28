@@ -161,11 +161,8 @@
                     <main>
                         <h2><a class="header" href="#before-you-start" id="before-you-start">Before you start</a></h2>
 <p>To make sure this assignment is challenging and instructive for all students, we
-require all Spark applications to have a level 3 robustness implementation.</p>
-<blockquote>
-<p>A guide with hints and pointers to upgrade your application to level 3
-robustness will be published here after the deadline of lab 1 has passed.</p>
-</blockquote>
+require all Spark applications to have a level 3 robustness implementation. Please
+use the guide below to upgrade your application if needed.</p>
 <p><strong>We assume everybody has access to AWS credits via both the GitHub developer
 pack and the AWS classroom in their lab group! If this is not the case, please
 ask for help, or send us an email.</strong></p>
@@ -173,6 +170,74 @@ ask for help, or send us an email.</strong></p>
 cluster, please terminate the cluster, to avoid unnecessary costs.</strong></p>
 <p>Make sure you have read the introduction on Amazon Web services in the guide
 chapter before starting the assignment.</p>
+<h3><a class="header" href="#level-3-robustness-guide" id="level-3-robustness-guide">Level 3 robustness guide</a></h3>
+<p>The description here describes how you can upgrade your application to a level 3 robustness implementation (as listed in the rubric of lab 1).</p>
+<p>Please be aware that:</p>
+<ul>
+<li>If the method in your application from lab 1 is the same as the one described below, but implemented differently, you are <strong>not required</strong> to modify it.</li>
+<li>If the method in your application from lab 1 is more robust than the one described below, you are <strong>allowed to modify your application to be less robust</strong> if you have scalability or performance issues.</li>
+</ul>
+<p>This guide uses relations to construct polygons for city boundaries and then performs <a href="https://en.wikipedia.org/wiki/Point_in_polygon">point-in-polygon</a> tests to check if a brewery is within a certain city.</p>
+<ol>
+<li>Read input data set and split into:</li>
+</ol>
+<ul>
+<li><a href="https://wiki.openstreetmap.org/wiki/Node"><code>nodes</code></a></li>
+<li><a href="https://wiki.openstreetmap.org/wiki/Way"><code>ways</code></a></li>
+<li><a href="https://wiki.openstreetmap.org/wiki/Relation"><code>relations</code></a></li>
+</ul>
+<p>Make sure you understand the difference between these types and how to dereference IDs in both ways and relations:</p>
+<ul>
+<li>Ways reference nodes in the <code>nds</code> field. Typically you <a href="https://spark.apache.org/docs/2.4.6/api/scala/index.html#org.apache.spark.sql.functions$@posexplode(e:org.apache.spark.sql.Column):org.apache.spark.sql.Column"><code>posexplode</code></a> the field with references and then <code>join</code> with the <code>nodes</code> on ID. Use <code>posexplode</code> instead of <code>explode</code> because nodes in a way are ordered, and this method allows you to recover that information.</li>
+</ul>
+<p>Below is an incomplete example that shows how you could dereference nodes for ways using the Dataframe API. This may look a bit different if you are using the Dataset API.</p>
+<pre><code class="language-scala">val nodes = df
+      .filter('type === &quot;node&quot;)
+      .select(
+        'id.as(&quot;node_id&quot;),
+        ...
+      )
+
+val ways = df
+      .filter('type === &quot;way&quot;)
+      .select(
+        'id.as(&quot;way_id&quot;),
+        ...,
+        posexplode($&quot;nds&quot;)
+      )
+      .select(
+        'way_id,
+        ...,
+        struct('pos, 'col.as(&quot;id&quot;)).as(&quot;node&quot;)
+      )
+      .join(nodes, $&quot;node.id&quot; === 'node_id)
+      .groupBy('way_id)
+      .agg(
+        array_sort(
+          collect_list(
+            struct($&quot;node.pos&quot;.as(&quot;pos&quot;), ...)
+          )
+        ).as(&quot;way&quot;)
+      )
+</code></pre>
+<ul>
+<li>Relations reference nodes and ways in the <code>members.ref</code> field. You can <code>posexplode</code> the members field and join with <code>ways</code> and <code>nodes</code>. You need to <code>posexplode</code> and <code>join</code> the <code>ways</code> again to dereference the nodes that belong to that way. Make sure you understand the data in the <code>members.role</code> and <code>members.type</code> fields.</li>
+</ul>
+<p>To collect the exploded and joined information in single rows you can <code>groupBy</code> and <code>agg</code> with <code>collect_list</code>. For ways you <code>groupBy</code> the ID of the way and collect the list of nodes (maintain the order). For relations you first <code>groupBy</code> relation ID and way ID to collect the list of nodes belonging to the ways. Then you can <code>groupBy</code> relation ID to collect the ways in the relation.</p>
+<ol start="2">
+<li>Find breweries</li>
+</ol>
+<p>Use tag information from the <a href="https://wiki.openstreetmap.org/wiki/Brewery">Brewery wiki</a> to find coordinates of breweries. Nodes have coordinate information, however ways and relations require dereferencing IDs to get the nodes that make up the way or relation. For breweries you can select any node (coordinate) or average of the coordinates of the nodes that make up the way or relation. This is based on the assumption that breweries (ways and relations) don't cross city boundaries. A more robust implementation would be to recover the geometry and perform contains checks later, but this is not a requirement.</p>
+<ol start="3">
+<li>Find cities</li>
+</ol>
+<p>Use <a href="https://wiki.openstreetmap.org/wiki/Relation:boundary">boundary relations</a> to construct polygons for city boundaries. The use of third-party libraries for geometry types is encouraged. We recommend <a href="https://github.com/locationtech/jts">JTS</a>. You can use <a href="https://www.geomesa.org/">GeoMesa</a> <a href="https://www.geomesa.org/documentation/stable/user/spark/spark_jts.html">Spark JTS</a> for serialization support of geometry types. Hint take a look at the <a href="https://locationtech.github.io/jts/javadoc/org/locationtech/jts/operation/polygonize/Polygonizer.html"><code>Polygonizer</code></a> class.
+You can also use other libraries e.g. <a href="https://github.com/apache/incubator-sedona">Apache Sedona</a>.</p>
+<ol start="4">
+<li>Check if a brewery is within the boundary of a city</li>
+</ol>
+<p>Perform the point-in-polygon check for breweries and cities. Use of the implementation provided your third-party library is strongly recommended.</p>
+<p>If you get stuck please contact one of the TAs.</p>
 
                     </main>
 
