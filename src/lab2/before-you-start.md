@@ -69,7 +69,7 @@ Use tag information from the [Brewery wiki](https://wiki.openstreetmap.org/wiki/
 
 3. Find cities
 
-Use [boundary relations](https://wiki.openstreetmap.org/wiki/Relation:boundary) to construct polygons for city boundaries. The use of third-party libraries for geometry types is encouraged. We recommend [JTS](https://github.com/locationtech/jts). Hint take a look at the [`Polygonizer`](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/operation/polygonize/Polygonizer.html) class.
+Use [boundary relations](https://wiki.openstreetmap.org/wiki/Relation:boundary) to construct polygons for city boundaries. The use of third-party libraries for geometry types is encouraged. We recommend [JTS](https://github.com/locationtech/jts). You can use [GeoMesa](https://www.geomesa.org/) [Spark JTS](https://www.geomesa.org/documentation/stable/user/spark/spark_jts.html) for serialization support of geometry types. Hint take a look at the [`Polygonizer`](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/operation/polygonize/Polygonizer.html) class.
 
 4. Check if a brewery is within the boundary of a city
 
