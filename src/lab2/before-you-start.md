@@ -16,7 +16,14 @@ chapter before starting the assignment.
 
 ### Level 3 robustness guide
 
-The description here describes how you can upgrade your application to a level 3 robustness implementation (as listed in the rubric of lab 1). This guide uses relations to construct polygons for city boundaries and then performs [point-in-polygon](https://en.wikipedia.org/wiki/Point_in_polygon) tests to check if a brewery is within a certain city.
+The description here describes how you can upgrade your application to a level 3 robustness implementation (as listed in the rubric of lab 1).
+
+Please be aware that:
+
+- If the method in your application from lab 1 is the same as the one described below, but implemented differently, you are **not required** to modify it.
+- If the method in your application from lab 1 is more robust than the one described below, you are **allowed to modify your application to be less robust** if you have scalability or performance issues.
+
+This guide uses relations to construct polygons for city boundaries and then performs [point-in-polygon](https://en.wikipedia.org/wiki/Point_in_polygon) tests to check if a brewery is within a certain city.
 
 1. Read input data set and split into:
 
@@ -27,6 +34,8 @@ The description here describes how you can upgrade your application to a level 3
 Make sure you understand the difference between these types and how to dereference IDs in both ways and relations:
 
 - Ways reference nodes in the `nds` field. Typically you [`posexplode`](<https://spark.apache.org/docs/2.4.6/api/scala/index.html#org.apache.spark.sql.functions$@posexplode(e:org.apache.spark.sql.Column):org.apache.spark.sql.Column>) the field with references and then `join` with the `nodes` on ID. Use `posexplode` instead of `explode` because nodes in a way are ordered, and this method allows you to recover that information.
+
+Below is an incomplete example that shows how you could dereference nodes for ways using the Dataframe API. This may look a bit different if you are using the Dataset API.
 
 ```scala
 val nodes = df
@@ -70,6 +79,7 @@ Use tag information from the [Brewery wiki](https://wiki.openstreetmap.org/wiki/
 3. Find cities
 
 Use [boundary relations](https://wiki.openstreetmap.org/wiki/Relation:boundary) to construct polygons for city boundaries. The use of third-party libraries for geometry types is encouraged. We recommend [JTS](https://github.com/locationtech/jts). You can use [GeoMesa](https://www.geomesa.org/) [Spark JTS](https://www.geomesa.org/documentation/stable/user/spark/spark_jts.html) for serialization support of geometry types. Hint take a look at the [`Polygonizer`](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/operation/polygonize/Polygonizer.html) class.
+You can also use other libraries e.g. [Apache Sedona](https://github.com/apache/incubator-sedona).
 
 4. Check if a brewery is within the boundary of a city
 
