@@ -202,7 +202,7 @@ application.</p>
 <li>
 <p>When using Amazon's services, please <strong>use the N.Virgina region (<code>us-east-1</code>).
 This is where the S3 buckets with the data sets are hosted.</strong> Create your
-buckets and clusters in this region. This is the only region that should be 
+buckets and clusters in this region. This is the only region that should be
 used during this course.</p>
 </li>
 <li>
@@ -227,9 +227,12 @@ arguments of spark-submit.</p>
 (<code>s3://&lt;your-bucket&gt;/output.orc</code>)</p>
 </li>
 <li>
-<p>Scalability comes at a cost, you can't ignore a proper trade-off between 
-runtime and cost. For example,decreasing the run time by 10% while increasing 
+<p>Scalability comes at a cost, you can't ignore a proper trade-off between
+runtime and cost. For example,decreasing the run time by 10% while increasing
 the monetary cost by 500% is typically not acceptable.</p>
+</li>
+<li>
+<p>Consider using a <a href="https://en.wikipedia.org/wiki/Spatial_database#Spatial_index">Spatial index</a> to optimize the spatial query. Use scalable third-party libraries that are suitable to be used in Spark.</p>
 </li>
 </ul>
 <h3><a class="header" href="#data-sets" id="data-sets">Data sets</a></h3>
