@@ -48,7 +48,7 @@ Please note:
 
 - When using Amazon's services, please **use the N.Virgina region (`us-east-1`).
   This is where the S3 buckets with the data sets are hosted.** Create your
-  buckets and clusters in this region. This is the only region that should be 
+  buckets and clusters in this region. This is the only region that should be
   used during this course.
 
 - Always start with a small number of small instance types e.g. 1 master node
@@ -57,6 +57,7 @@ Please note:
   types) to prevent wasting credits.
 
 - Check the following links for information about configuring Spark on EMR:
+
   - https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html
   - https://aws.amazon.com/blogs/big-data/best-practices-for-successfully-managing-memory-for-apache-spark-applications-on-amazon-emr/
 
@@ -66,9 +67,11 @@ Please note:
 - Write the resulting ORC file to your S3 bucket.
   (`s3://<your-bucket>/output.orc`)
 
-- Scalability comes at a cost, you can't ignore a proper trade-off between 
-  runtime and cost. For example,decreasing the run time by 10% while increasing 
+- Scalability comes at a cost, you can't ignore a proper trade-off between
+  runtime and cost. For example,decreasing the run time by 10% while increasing
   the monetary cost by 500% is typically not acceptable.
+
+- Consider using a [Spatial index](https://en.wikipedia.org/wiki/Spatial_database#Spatial_index) to optimize the spatial query. Use scalable third-party libraries that are suitable to be used in Spark.
 
 ### Data sets
 
