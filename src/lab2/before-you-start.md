@@ -50,7 +50,7 @@ val ways = df
       .select(
         'id.as("way_id"),
         ...,
-        posexplode($"nds")
+        posexplode($"nds.ref")
       )
       .select(
         'way_id,
