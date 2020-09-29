@@ -1820,7 +1820,7 @@ val ways = df
       .select(
         'id.as(&quot;way_id&quot;),
         ...,
-        posexplode($&quot;nds&quot;)
+        posexplode($&quot;nds.ref&quot;)
       )
       .select(
         'way_id,
