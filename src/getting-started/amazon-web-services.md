@@ -116,7 +116,7 @@ failure.
 
 The setup will take some time to finish, so in the meantime you should
 configure a proxy for the web interfaces. More detailed information can be
-found on the [AWS website]. You can check the logs in your S3 bucket, or the
+found on the [AWS website](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html). You can check the logs in your S3 bucket, or the
 web interfaces to track the progress of your application and whether any errors
 have occurred.
 
