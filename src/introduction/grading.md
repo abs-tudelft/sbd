@@ -49,8 +49,8 @@ the lab. If you do not pass (there will be a specific threshold), you are
 invited to an oral examination where we will discuss the implementation of the
 code. Based on this, we will determine a grade multiplier between zero and one.
 Thus, make sure you understand every detail of the code your group may produce.
-The quiz will be performed on Brightspace during a lecture slot. More
-information will be made available there in due time.
+The quiz will be performed on Brightspace during a lecture slot. An example of
+quiz questions is found [here](../quiz_example.md).
 
 ### Regarding plagiarism
 

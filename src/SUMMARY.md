@@ -30,5 +30,6 @@
 
 ---
 
-[FAQ](./faq.md)
-[Useful links](links.md)
+- [FAQ](./faq.md)
+- [Quiz example](./quiz_example.md)
+- [Useful links](links.md)
