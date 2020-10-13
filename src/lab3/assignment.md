@@ -1,68 +1,104 @@
 ## Assignment
 
-As mentioned before, for this assignment, we will no longer batch process the
-GDELT Global Knowledge Graph, but rather stream it into a pipeline that
-computes a histogram of the last hour. This pipeline is depicted in the figure below.
-We will give a small description of the individual parts below.
+Once you have created your lab 3 repository on GitHub Classroom, your job is to
+implement the Transformer component in the following file:
+`transformer/src/main/scala/Transformer.scala`.
 
-![GDELT streaming pipeline](../assets/images/kafka_pipeline.png)
+The Transformer application this year will also be a beer-themed assignment. The
+producer produces a stream of events that represent "check-ins" of a specific
+drink in a specific city (inspired by [Untappd](https://untappd.com/)).
 
-### Producer
+Each check-in is supplied as a [JSON](https://www.json.org/json-en.html) object
+on the stream. Check-ins contain the following fields:
 
-The producer, contained in the `GDELTProducer` Scala project, starts by
-downloading all segments of the previous hour (minus a 15 minute offset), and
-immediately start streaming records (rows) to a Kafka topic called `gdelt`.
-Simultaneously, it will schedule a new download step at the next quarter of the
-hour. The frequency by which the records are streamed is determined as the current
-amount of queued records over the time left until new data is downloaded from
-S3.
+| Field       | JSON Type   | Description |
+|-------------|-------------|-------------|
+| `timestamp` | number      | The Unix timestamp of the check-in. |
+| `city_id`   | number      | The ID of the city where the check-in was made. |
+| `city_name` | string      | The name of the city where the check-in was made. |
+| `style`     | string      | The drink style. |
 
-### Transformer
+Suppose we are beer connoisseurs and we are interested to learn where a lot of
+check-in activity is coming from. Usually this means there is a beer festival
+that we want to visit, and perhaps it is in our city or a city close-by. We do
+want to make sure that there is plenty of beer with styles to our preference. So
+we can filter out or include some of the more [adventurous
+styles](https://en.wikipedia.org/wiki/Gueuze)*.
 
-The transformer receives GDELT records on the `gdelt` topic and should use
-them to construct a histogram of the names from the "allNames" column of the
-dataset, but only for the last hour. This is very similar to the application
-you wrote in Lab 1, but it happens in real-time and you should take care to
-also decrement/remove names that are older than an hour (relative to your input
-data). Finally, the transformer's output should appear on a Kafka topic called
-`gdelt-histogram`.
+Your task is to filter check-ins by beer style, and count the number of
+check-ins per city within a time window, and produce streaming updates for the
+real-time world map of the web interface.
 
-### Consumer
+### Supplying beer styles
+Beer styles to include are supplied in a file called 'beer.styles'.
+Beer styles are separated by newline. For example:
+```
+Amber ale
+Stout
+Pilsener/Pilsner/Pils 
+```
+Beer styles in this file match exactly with the names of the producer
+implementation found in: `producer/src/main.rs`.
 
-The consumer finally acts as a _sink_, and will process the incoming
-histogram updates from the transformer into a smaller histogram of only the 100
-most occurring names for display (It might turn out that this is too much for your browser to
-handle. If this is the case, you may change it manually in the
-`HistogramProcessor` contained in `GDELTConsumer.scala`.). It will finally stream this
-histogram to our visualizer over a WebSocket connection.
+### Producing updates
 
-You are now tasked with writing an implementation of the histogram transformer.
-In the file `GDELTStream/GDELTStream.scala` you will have to implement the
-following
+The updates are to be sent over a Kafka stream with a key-value-pair `<Long,
+Long>`, where the key is the ID of the city where the check-in was made, and the
+value is the number of check-ins within our window.
 
-### GDELT row processing
+For example, if we receive the following JSONs on the `events` stream:
 
-In the main function you will first have to write a function that filters
-the GDELT lines to a stream of allNames column. You can achieve this using
-the high-level API of Kafka Streams, on the `KStream` object.
+```json
+{"timestamp":1, "city_id":1, "city_name":"Delft", "style":"Brown ale"}
+{"timestamp":2, "city_id":1, "city_name":"Delft", "style":"Bitter"}
+{"timestamp":3, "city_id":1, "city_name":"Delft", "style":"Weizenbock"}
+{"timestamp":4, "city_id":2, "city_name":"Rotterdam", "style":"Schwarzbier"}
+```
 
-### HistogramTransformer
+And if we would set our recent window to a 3 milliseconds range, we
+need to produce the following records on the 'updates' stream:
 
-You will have to implement the `HistogramTransformer` using the
-processor/transformer API of kafka streams, to convert the stream of
-allNames into a histogram of the last hour. We suggest you look at [state
-stores for Kafka streaming](https://kafka.apache.org/23/documentation/streams/developer-guide/processor-api.html).
+```C++
+K, V:
+1, 1  // t=1 ms, update Delft with the new recent check-in 
+1, 2  // t=2 ms, update Delft with the new recent check-in
+1, 3  // t=3 ms, update Delft with the new recent check-in
+1, 2  // t=4 ms, update Delft, the oldest check-in went out of the window
+2, 1  // t=4 ms, update Rotterdam to have 1 check-in recently
+1, 1  // t=5 ms, update Delft to remove old check-ins
+1, 0  // t=6 ms, update Delft to remove old check-ins
+2, 0  // t=7 ms, update Rotterdam to remove old check-ins
+```
 
-You will have to write the result of this stream to a new topic called
-`gdelt-histogram`.
-This stream should consist of records (key-value pairs) of the form `(name, count)` and type `(String, Long)`, where the value of name was extracted from
-the "allNames" column.
+### General hints and recommended approach
 
-This means that whenever the transformer reads a name from the "allNames"
-column, it should publish an updated, i.e. incremented, (name, count) pair on
-the output topic, so that the visualizer can update accordingly. When you
-decrement a name, because its occurrence is older than an hour, remember to
-publish an update as well!
+* Streaming frameworks like Kafka usually work with very strong notions of
+  **stateless** and **stateful** operations.
+  * An example of a **stateless** operation is to filter records of a stream based
+    on their content.
+  * An example of a **stateful** operation is to update some existing data 
+    structure based on streamed records.
+* Keeping track of check-ins that have been included in your current window of
+  interest is **stateful**, and can be done in an abstraction called a **state
+  store**.
+  * You can operate on state stores whenever a new record arrives using so called
+    **stateful transformations** of records.
+  * It is recommended to use the 
+    [Processor API](https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html)
+    for this.  
+  * While it is technically possible to use Kafka's Windowing abstractions, it 
+    is **not recommended**, because it does not exactly match our use-case.
+* What is a little bit similar to building up DAGs in Spark is what in Kafka is
+  called building up the stream Topology. 
+  *  This is also lazily evaluated and only starts doing its thing when you call
+    `.start()` on a `KafkaStreams`. 
+  * You can obtain a Topology description for debugging after using e.g. 
+    `val topology = builder.build()` and then `println(topology.describe())`.
+  * If you copy-paste the description
+    [in this tool](https://zz85.github.io/kafka-streams-viz/),
+    you can visualize it.
 
-Note that you are only allowed to modify the `GDELTStream.scala` file. We
-should be able to compile and run your code without any other modifications.
+### Notes
+\* For this particular style, "wild" yeasts are used. Folklore says pigeons
+sitting over the water reservoirs at breweries used to provide such yeasts
+through their droppings!

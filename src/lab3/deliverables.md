@@ -1,9 +1,18 @@
 ## Deliverables
 
-- Your implementation of the GDELTStream application
-- A report containing:
-  - An outline of the code (less than 1/2 a page)
-  - Answers to the questions listed below
+The deliverables for this lab are:
 
-Similar to lab 1, this implies you hand in **one** Scala file and **one** pdf
-file.
+1.  Transformer application
+2.  Report
+
+Deliverables should be contained in your project repository.
+
+### Kafka-based application
+
+All Scala source files required to build your Kafka-based application should be
+committed to your Lab 3 repository before the deadline.
+
+### Report
+
+The results and analysis in the `README.md` markdown file in the root of your
+repository.
