@@ -30,7 +30,7 @@ check-ins per city within a time window, and produce streaming updates for the
 real-time world map of the web interface.
 
 ### Supplying beer styles
-Beer styles to include are supplied in a file called 'beer.styles'.
+Beer styles to include are supplied in a file called `beer.styles`.
 Beer styles are separated by newline. For example:
 ```
 Amber ale
@@ -39,6 +39,10 @@ Pilsener/Pilsner/Pils
 ```
 Beer styles in this file match exactly with the names of the producer
 implementation found in: `producer/src/main.rs`.
+
+### Supplying the time window
+The time window will be supplied on the command-line as the first argument
+representing the time window size in seconds.
 
 ### Producing updates
 
@@ -97,6 +101,10 @@ K, V:
   * If you copy-paste the description
     [in this tool](https://zz85.github.io/kafka-streams-viz/),
     you can visualize it.
+* You probably want to convert the JSONs to a Scala case class to be able to
+  process the data in a type-safe manner. It is recommended to use one of the
+  options from [this repository](https://github.com/azhur/kafka-serde-scala).
+  `circe` is a good option that worked for the TA's. 
 
 ### Notes
 \* For this particular style, "wild" yeasts are used. Folklore says pigeons

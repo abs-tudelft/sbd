@@ -54,14 +54,14 @@ The Producer will be provided, you don't have to do anything on the Producer.
 The transformer consumes records from the Kafka stream of the topic `events`.
 It produces a Kafka stream of the topic `updates`.
 It therefore transforms 'events' to 'updates', where usually many events are
-aggregates into some statistic, or filtered by some predicate.
+aggregated into some statistic, or filtered by some predicate.
 
-Why this intermediate step? Why can't a consumer not process the `events`
-itself? For typical applications, this is usually not done by the consumer of
-the data because the producers send so much data on the `events` topic, that
-e.g. a simple phone or a laptop could not process it --- only a scalable
-application run on a cluster could process so much information so quickly.
-This is the type of framework that Kafka provides.
+Why this intermediate step? Why can't a consumer process the `events` itself?
+For typical applications, this is usually not done by the consumer of the data
+because the producers send so much data on the `events` topic, that e.g. a
+simple phone or a laptop could not process it --- only a scalable application
+run on a cluster could process so much information so quickly. This is the type
+of framework that Kafka provides.
 
 This is the component that you must implement.
 
@@ -82,9 +82,10 @@ can browse to it by using this link: [localhost:1234](http://localhost:1234).
 ### Further reading on Kafka
 
 * [Kafka Intro](https://kafka.apache.org/intro)
+* [Kafka Streams Architecture](https://kafka.apache.org/26/documentation/streams/architecture.html)
 * [Kafka DSL API](https://kafka.apache.org/26/documentation/streams/developer-guide/dsl-api.html)
-* [Circe JSON Serde support for Kafka](https://github.com/azhur/kafka-serde-scala)
+* [Kafka Processor API](https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html)
+* [Kafka KStream API docs](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html)
 * [Kafka Stream Examples](https://github.com/confluentinc/kafka-streams-examples)
-* [Kafka KStream API](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html)
+* [JSON Serde support for Kafka](https://github.com/azhur/kafka-serde-scala)
 * [Mastering Kafka Streams](https://jaceklaskowski.gitbooks.io/mastering-kafka-streams/)
-* [Kafka Streams internals](https://docs.confluent.io/current/streams/architecture.html#streams-architecture-parallelism-model)
