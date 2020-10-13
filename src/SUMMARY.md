@@ -27,7 +27,10 @@
   - [Assignment](./lab2/assignment.md)
   - [Deliverables](./lab2/deliverables.md)
   - [Rubric](./lab2/rubric.md)
-
+- [Lab 3](./lab3/index.md)
+  - [Before you start](./lab3/before-you-start.md)
+  - [Assignment](./lab3/assignment.md)
+  - [Deliverables](./lab3/deliverables.md)
 ---
 
 - [FAQ](./faq.md)
