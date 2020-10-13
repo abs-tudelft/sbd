@@ -46,8 +46,8 @@ representing the time window size in seconds.
 
 ### Producing updates
 
-The updates are to be sent over a Kafka stream with a key-value-pair `<Long,
-Long>`, where the key is the ID of the city where the check-in was made, and the
+The updates are to be sent over a Kafka stream with a key-value-pair `<String,
+String>`, where the key is the ID of the city where the check-in was made, and the
 value is the number of check-ins within our window.
 
 For example, if we receive the following JSONs on the `events` stream:
@@ -63,15 +63,15 @@ And if we would set our recent window to a 3 milliseconds range, we
 need to produce the following records on the 'updates' stream:
 
 ```C++
-K, V:
-1, 1  // t=1 ms, update Delft with the new recent check-in 
-1, 2  // t=2 ms, update Delft with the new recent check-in
-1, 3  // t=3 ms, update Delft with the new recent check-in
-1, 2  // t=4 ms, update Delft, the oldest check-in went out of the window
-2, 1  // t=4 ms, update Rotterdam to have 1 check-in recently
-1, 1  // t=5 ms, update Delft to remove old check-ins
-1, 0  // t=6 ms, update Delft to remove old check-ins
-2, 0  // t=7 ms, update Rotterdam to remove old check-ins
+ K    V
+"1", "1"  // t=1 ms, update Delft with the new recent check-in 
+"1", "2"  // t=2 ms, update Delft with the new recent check-in
+"1", "3"  // t=3 ms, update Delft with the new recent check-in
+"1", "2"  // t=4 ms, update Delft, the oldest check-in went out of the window
+"2", "1"  // t=4 ms, update Rotterdam to have 1 check-in recently
+"1", "1"  // t=5 ms, update Delft to remove old check-ins
+"1", "0"  // t=6 ms, update Delft to remove old check-ins
+"2", "0"  // t=7 ms, update Rotterdam to remove old check-ins
 ```
 
 ### General hints and recommended approach
