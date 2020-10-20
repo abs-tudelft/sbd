@@ -196,11 +196,12 @@ implementation found in: <code>producer/src/main.rs</code>.</p>
 <p>The time window will be supplied on the command-line as the first argument
 representing the time window size in seconds.</p>
 <h3><a class="header" href="#producing-updates" id="producing-updates">Producing updates</a></h3>
-<p>The updates are to be sent over a Kafka stream with a JSON string value of an update object with the following fields and types.
-| Field | JSON Type | Description |
-|-------------|-------------|-------------|
-| <code>city_id</code> | number | The ID of the city for this update. |
-| <code>count</code> | number | The number of check-ins for this city within our window. |</p>
+<p>The updates are to be sent over a Kafka stream with a JSON string value of an
+update object with the following fields and types.</p>
+<table><thead><tr><th>Field</th><th>JSON Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>city_id</code></td><td>number</td><td>The ID of the city for this update.</td></tr>
+<tr><td><code>count</code></td><td>number</td><td>The number of check-ins for this city within our window.</td></tr>
+</tbody></table>
 <p>For example, if we receive the following JSONs on the <code>events</code> stream:</p>
 <pre><code class="language-json">{&quot;timestamp&quot;:1, &quot;city_id&quot;:1, &quot;city_name&quot;:&quot;Delft&quot;, &quot;style&quot;:&quot;Brown ale&quot;}
 {&quot;timestamp&quot;:2, &quot;city_id&quot;:1, &quot;city_name&quot;:&quot;Delft&quot;, &quot;style&quot;:&quot;Bitter&quot;}
@@ -209,7 +210,7 @@ representing the time window size in seconds.</p>
 </code></pre>
 <p>And if we would set our recent window to a 3 milliseconds range, we
 need to produce the following records on the 'updates' stream:</p>
-<pre><code class="language-C++"> K    V
+<pre><code class="language-C++"> K   V
 &quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 1 } // t=1 ms, update Delft with the new recent check-in
 &quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 2 }  // t=2 ms, update Delft with the new recent check-in
 &quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 3 }  // t=3 ms, update Delft with the new recent check-in
