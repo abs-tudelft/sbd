@@ -239,7 +239,7 @@ store</strong>.
 <strong>stateful transformations</strong> of records.</li>
 <li>It is recommended to use the
 <a href="https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html">Processor API</a>
-for this.</li>
+for this. Check <a href="https://kafka.apache.org/26/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration">this documentation</a> on how to apply processors and transformers. Consider the differences between <a href="https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-">processors</a> and <a href="https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-">transformers</a> and pick the one that best suits this application.</li>
 <li>While it is technically possible to use Kafka's Windowing abstractions, it
 is <strong>not recommended</strong>, because it does not exactly match our use-case.</li>
 </ul>
