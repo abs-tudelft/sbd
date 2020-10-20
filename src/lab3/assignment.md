@@ -53,10 +53,10 @@ representing the time window size in seconds.
 The updates are to be sent over a Kafka stream with a JSON string value of an
 update object with the following fields and types.
 
-| Field       | JSON Type   | Description                                      |
-|-------------|-------------|--------------------------------------------------|
-| `city_id`   | number      | The ID of the city for this update.              |
-| `count`     | number      | The number of check-ins for this city within our window. |
+| Field     | JSON Type | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `city_id` | number    | The ID of the city for this update.                      |
+| `count`   | number    | The number of check-ins for this city within our window. |
 
 For example, if we receive the following JSONs on the `events` stream:
 
@@ -68,7 +68,7 @@ For example, if we receive the following JSONs on the `events` stream:
 ```
 
 And if we would set our recent window to a 3 milliseconds range, we
-need to produce the following records on the 'updates' stream:
+need to produce the following records on the `updates` stream:
 
 ```C++
  K   V
