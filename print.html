@@ -2245,7 +2245,7 @@ update object with the following fields and types.</p>
 {&quot;timestamp&quot;:4, &quot;city_id&quot;:2, &quot;city_name&quot;:&quot;Rotterdam&quot;, &quot;style&quot;:&quot;Schwarzbier&quot;}
 </code></pre>
 <p>And if we would set our recent window to a 3 milliseconds range, we
-need to produce the following records on the 'updates' stream:</p>
+need to produce the following records on the <code>updates</code> stream:</p>
 <pre><code class="language-C++"> K   V
 &quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 1 } // t=1 ms, update Delft with the new recent check-in
 &quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 2 }  // t=2 ms, update Delft with the new recent check-in
