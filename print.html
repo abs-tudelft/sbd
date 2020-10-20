@@ -2225,7 +2225,7 @@ real-time world map of the web interface.</p>
 Beer styles are separated by newline. For example:</p>
 <pre><code>Amber ale
 Stout
-Pilsener/Pilsner/Pils 
+Pilsener/Pilsner/Pils
 </code></pre>
 <p>Beer styles in this file match exactly with the names of the producer
 implementation found in: <code>producer/src/main.rs</code>.</p>
@@ -2233,8 +2233,11 @@ implementation found in: <code>producer/src/main.rs</code>.</p>
 <p>The time window will be supplied on the command-line as the first argument
 representing the time window size in seconds.</p>
 <h3><a class="header" href="#producing-updates" id="producing-updates">Producing updates</a></h3>
-<p>The updates are to be sent over a Kafka stream with a key-value-pair <code>&lt;String, String&gt;</code>, where the key is the ID of the city where the check-in was made, and the
-value is the number of check-ins within our window.</p>
+<p>The updates are to be sent over a Kafka stream with a JSON string value of an update object with the following fields and types.
+| Field | JSON Type | Description |
+|-------------|-------------|-------------|
+| <code>city_id</code> | number | The ID of the city for this update. |
+| <code>count</code> | number | The number of check-ins for this city within our window. |</p>
 <p>For example, if we receive the following JSONs on the <code>events</code> stream:</p>
 <pre><code class="language-json">{&quot;timestamp&quot;:1, &quot;city_id&quot;:1, &quot;city_name&quot;:&quot;Delft&quot;, &quot;style&quot;:&quot;Brown ale&quot;}
 {&quot;timestamp&quot;:2, &quot;city_id&quot;:1, &quot;city_name&quot;:&quot;Delft&quot;, &quot;style&quot;:&quot;Bitter&quot;}
@@ -2244,15 +2247,16 @@ value is the number of check-ins within our window.</p>
 <p>And if we would set our recent window to a 3 milliseconds range, we
 need to produce the following records on the 'updates' stream:</p>
 <pre><code class="language-C++"> K    V
-&quot;1&quot;, &quot;1&quot;  // t=1 ms, update Delft with the new recent check-in 
-&quot;1&quot;, &quot;2&quot;  // t=2 ms, update Delft with the new recent check-in
-&quot;1&quot;, &quot;3&quot;  // t=3 ms, update Delft with the new recent check-in
-&quot;1&quot;, &quot;2&quot;  // t=4 ms, update Delft, the oldest check-in went out of the window
-&quot;2&quot;, &quot;1&quot;  // t=4 ms, update Rotterdam to have 1 check-in recently
-&quot;1&quot;, &quot;1&quot;  // t=5 ms, update Delft to remove old check-ins
-&quot;1&quot;, &quot;0&quot;  // t=6 ms, update Delft to remove old check-ins
-&quot;2&quot;, &quot;0&quot;  // t=7 ms, update Rotterdam to remove old check-ins
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 1 } // t=1 ms, update Delft with the new recent check-in
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 2 }  // t=2 ms, update Delft with the new recent check-in
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 3 }  // t=3 ms, update Delft with the new recent check-in
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 2 }  // t=4 ms, update Delft, the oldest check-in went out of the window
+&quot;2&quot;, { &quot;city_id&quot;: 2, &quot;count&quot;: 1 }  // t=4 ms, update Rotterdam to have 1 check-in recently
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 1 }  // t=5 ms, update Delft to remove old check-ins
+&quot;1&quot;, { &quot;city_id&quot;: 1, &quot;count&quot;: 0 }  // t=6 ms, update Delft to remove old check-ins
+&quot;2&quot;, { &quot;city_id&quot;: 2, &quot;count&quot;: 0 }  // t=7 ms, update Rotterdam to remove old check-ins
 </code></pre>
+<p>Please note that the keys are ignored by the consumer, and set to the city IDs in this example.</p>
 <h3><a class="header" href="#general-hints-and-recommended-approach" id="general-hints-and-recommended-approach">General hints and recommended approach</a></h3>
 <ul>
 <li>Streaming frameworks like Kafka usually work with very strong notions of
@@ -2260,7 +2264,7 @@ need to produce the following records on the 'updates' stream:</p>
 <ul>
 <li>An example of a <strong>stateless</strong> operation is to filter records of a stream based
 on their content.</li>
-<li>An example of a <strong>stateful</strong> operation is to update some existing data 
+<li>An example of a <strong>stateful</strong> operation is to update some existing data
 structure based on streamed records.</li>
 </ul>
 </li>
@@ -2270,19 +2274,19 @@ store</strong>.
 <ul>
 <li>You can operate on state stores whenever a new record arrives using so called
 <strong>stateful transformations</strong> of records.</li>
-<li>It is recommended to use the 
+<li>It is recommended to use the
 <a href="https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html">Processor API</a>
 for this.</li>
-<li>While it is technically possible to use Kafka's Windowing abstractions, it 
+<li>While it is technically possible to use Kafka's Windowing abstractions, it
 is <strong>not recommended</strong>, because it does not exactly match our use-case.</li>
 </ul>
 </li>
 <li>What is a little bit similar to building up DAGs in Spark is what in Kafka is
-called building up the stream Topology. 
+called building up the stream Topology.
 <ul>
 <li>This is also lazily evaluated and only starts doing its thing when you call
-<code>.start()</code> on a <code>KafkaStreams</code>. </li>
-<li>You can obtain a Topology description for debugging after using e.g. 
+<code>.start()</code> on a <code>KafkaStreams</code>.</li>
+<li>You can obtain a Topology description for debugging after using e.g.
 <code>val topology = builder.build()</code> and then <code>println(topology.describe())</code>.</li>
 <li>If you copy-paste the description
 <a href="https://zz85.github.io/kafka-streams-viz/">in this tool</a>,
@@ -2292,7 +2296,7 @@ you can visualize it.</li>
 <li>You probably want to convert the JSONs to a Scala case class to be able to
 process the data in a type-safe manner. It is recommended to use one of the
 options from <a href="https://github.com/azhur/kafka-serde-scala">this repository</a>.
-<code>circe</code> is a good option that worked for the TA's. </li>
+<code>circe</code> is a good option that worked for the TA's.</li>
 </ul>
 <h3><a class="header" href="#notes" id="notes">Notes</a></h3>
 <p>* For this particular style, &quot;wild&quot; yeasts are used. Folklore says pigeons
