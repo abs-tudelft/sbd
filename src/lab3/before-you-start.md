@@ -11,16 +11,15 @@ this assignment. Also take a look at the
 For this assignment the following containers are defined in the
 `docker-compose.yml` file:
 
-| Container          | Description                                             |
-|--------------------|---------------------------------------------------------|
-| `zookeeper-server` | A Zookeeper server instance. Kafka requires Zookeeper to run. |
-| `kafka-server`     | A single Kafka server instance. |
-| `producer`         | A Kafka producer running the Producer application. |
-| `transformer`      | A Kafka stream processor running the Transformer application. |
-| `consumer`         | A Kafka consumer running the Consumer application. |
-| `visualizer`       | Simple webserver serving the Visualizer web application. The application can be accessed when the service is running by navigating to [localhost:1234](http://localhost:1234). |
-| `events`           | A Kafka consumer subscribed to the `events` topic, writing records to the console. Useful for debugging. | 
-| `updates`          | A Kafka consumer subscribed to the `updates` topic, writing records to the console. Useful for debugging. |
+| Container          | Description                                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `zookeeper-server` | A Zookeeper server instance. Kafka requires Zookeeper to run.                                                                                                                              |
+| `kafka-server`     | A single Kafka server instance.                                                                                                                                                            |
+| `producer`         | A Kafka producer running the Producer application.                                                                                                                                         |
+| `transformer`      | A Kafka stream processor running the Transformer application.                                                                                                                              |
+| `consumer`         | A Kafka consumer running the Consumer application and the visualizer. The visualizer can be accessed when the service is running by navigating to [localhost:1234](http://localhost:1234). |
+| `events`           | A Kafka consumer subscribed to the `events` topic, writing records to the console. Useful for debugging.                                                                                   |
+| `updates`          | A Kafka consumer subscribed to the `updates` topic, writing records to the console. Useful for debugging.                                                                                  |
 
 To start the containers, navigate to the repository root directory and run
 `docker-compose up`. This will build and start all the containers defined in
@@ -38,16 +37,16 @@ your application before running it again after changing the source using
 You can use the following `docker-compose` commands to interact with your
 running containers:
 
-| Command                                  | Description                       |
-|------------------------------------------|-----------------------------------|
-| `docker-compose up`                      |  Create and start containers. |
-| `docker-compose up -d`                   |  Create and start containers in the background. |
-| `docker-compose down`                    |  Stop and remove containers, networks, images, and  volumes. |
-| `docker-compose start`                   |  Start services. |
-| `docker-compose restart`                 |  Restart services. |
-| `docker-compose stop`                    |  Stop services. |
-| `docker-compose rm`                      |  Remove stopped containers. |
-| `docker-compose logs --follow <SERVICE>` |  View and follow log output from  containers. |
+| Command                                  | Description                                                |
+| ---------------------------------------- | ---------------------------------------------------------- |
+| `docker-compose up`                      | Create and start containers.                               |
+| `docker-compose up -d`                   | Create and start containers in the background.             |
+| `docker-compose down`                    | Stop and remove containers, networks, images, and volumes. |
+| `docker-compose start`                   | Start services.                                            |
+| `docker-compose restart`                 | Restart services.                                          |
+| `docker-compose stop`                    | Stop services.                                             |
+| `docker-compose rm`                      | Remove stopped containers.                                 |
+| `docker-compose logs --follow <SERVICE>` | View and follow log output from containers.                |
 
 For a full list of available commands please refer to the
 [CLI Reference](https://docs.docker.com/compose/reference/overview/).

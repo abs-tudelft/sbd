@@ -97,7 +97,7 @@ Please note that the keys are ignored by the consumer, and set to the city IDs i
     **stateful transformations** of records.
   - It is recommended to use the
     [Processor API](https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html)
-    for this.
+    for this. Check [this documentation](https://kafka.apache.org/26/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration) on how to apply processors and transformers. Consider the differences between [processors](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-) and [transformers](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-) and pick the one that best suits this application.
   - While it is technically possible to use Kafka's Windowing abstractions, it
     is **not recommended**, because it does not exactly match our use-case.
 - What is a little bit similar to building up DAGs in Spark is what in Kafka is
