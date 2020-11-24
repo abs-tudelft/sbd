@@ -115,5 +115,5 @@ other way around.
 
 | Grade          | Indicators                                                  |
 |----------------|-------------------------------------------------------------|
-| 0 (fail)       | The student applies several inappropriate strategies for application improvements. |
-| 10 (excellent) | The student applies appropriate strategies for application improvement. |
+| 0 (fail)       | The student applies several inappropriate strategies for cluster improvements. |
+| 10 (excellent) | The student applies appropriate strategies for cluster improvement. |
