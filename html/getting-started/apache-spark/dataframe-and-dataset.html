@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Dataframe and Dataset - Supercomputing for Big Data - Lab Manual</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../../favicon.svg">
+                        <link rel="shortcut icon" href="../../favicon.png">
+                <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+                <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../introduction/goal-of-this-lab.html"><strong aria-hidden="true">1.1.</strong> Goal of this lab</a></li><li class="chapter-item expanded "><a href="../../introduction/communication-with-tas.html"><strong aria-hidden="true">1.2.</strong> Communication with TAs</a></li><li class="chapter-item expanded "><a href="../../introduction/code-repositories.html"><strong aria-hidden="true">1.3.</strong> Code repositories</a></li><li class="chapter-item expanded "><a href="../../introduction/groups.html"><strong aria-hidden="true">1.4.</strong> Groups</a></li><li class="chapter-item expanded "><a href="../../introduction/aws.html"><strong aria-hidden="true">1.5.</strong> AWS</a></li><li class="chapter-item expanded "><a href="../../introduction/grading.html"><strong aria-hidden="true">1.6.</strong> Grading</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/docker.html"><strong aria-hidden="true">2.1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../../getting-started/scala.html"><strong aria-hidden="true">2.2.</strong> Scala</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/index.html"><strong aria-hidden="true">2.3.</strong> Apache Spark</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/resilient-distributed-datasets.html"><strong aria-hidden="true">2.3.1.</strong> Resilient Distributed Datasets</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/dataframe-and-dataset.html" class="active"><strong aria-hidden="true">2.3.2.</strong> Dataframe and Dataset</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/packaging-your-application-using-sbt.html"><strong aria-hidden="true">2.3.3.</strong> Packaging your application using SBT</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/amazon-web-services.html"><strong aria-hidden="true">2.4.</strong> Amazon Web Services</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-kafka.html"><strong aria-hidden="true">2.5.</strong> Apache Kafka</a></li><li class="chapter-item expanded "><a href="../../getting-started/openstreetmap.html"><strong aria-hidden="true">2.6.</strong> OpenStreetMap</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab1/index.html"><strong aria-hidden="true">3.</strong> Lab 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab1/before-you-start.html"><strong aria-hidden="true">3.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab1/assignment.html"><strong aria-hidden="true">3.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab1/deliverables.html"><strong aria-hidden="true">3.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab1/rubric.html"><strong aria-hidden="true">3.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab2/index.html"><strong aria-hidden="true">4.</strong> Lab 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab2/before-you-start.html"><strong aria-hidden="true">4.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab2/assignment.html"><strong aria-hidden="true">4.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab2/deliverables.html"><strong aria-hidden="true">4.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab2/rubric.html"><strong aria-hidden="true">4.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab3/index.html"><strong aria-hidden="true">5.</strong> Lab 3</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab3/before-you-start.html"><strong aria-hidden="true">5.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab3/assignment.html"><strong aria-hidden="true">5.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab3/deliverables.html"><strong aria-hidden="true">5.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab3/rubric.html"><strong aria-hidden="true">5.4.</strong> Rubric</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../../faq.html"><strong aria-hidden="true">6.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../../quiz_example.html"><strong aria-hidden="true">7.</strong> Quiz example</a></li><li class="chapter-item expanded "><a href="../../links.html"><strong aria-hidden="true">8.</strong> Useful links</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Supercomputing for Big Data - Lab Manual</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="dataframe-and-dataset"><a class="header" href="#dataframe-and-dataset">Dataframe and Dataset</a></h3>
+<p>Our previous example is quite a typical use case for Spark. We have a big data
+store of some structured (tabular) format (be it csv, JSON, parquet, or
+something else) that we would like to analyse, typically in some SQL-like
+fashion. Manually applying operations to rows like this is both labour
+intensive, and inefficient, as we have knowledge of the 'schema' of data. This
+is where DataFrames originate from. Spark has an optimized SQL query engine that
+can optimize the compute path as well as provide a more efficient representation
+of the rows when given a schema. From the
+<a href="https://spark.apache.org/docs/2.4.6/sql-programming-guide.html#overview">Spark SQL, DataFrames and Datasets
+Guide</a>:</p>
+<blockquote>
+<p>Spark SQL is a Spark module for structured data processing. Unlike the basic
+Spark RDD API, the interfaces provided by Spark SQL provide Spark with more
+information about the structure of both the data and the computation being
+performed. Internally, Spark SQL uses this extra information to perform extra
+optimizations. There are several ways to interact with Spark SQL including
+SQL and the Dataset API. When computing a result the same execution engine is
+used, independent of which API/language you are using to express the
+computation. This unification means that developers can easily switch back
+and forth between different APIs based on which provides the most natural way
+to express a given transformation.</p>
+</blockquote>
+<p>Under the hood, these are still immutable distributed collections of data (with
+the same compute graph semantics, only now Spark can apply extra
+optimizations because of the (structured) format.</p>
+<p>Let's do the same analysis as last time using this API. First we will define a
+schema. Let's take a look at a single row of the csv:</p>
+<pre><code>COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
+</code></pre>
+<p>So first a string field, a date, a timestamp, and some numeric information.
+We can thus define the schema as such:</p>
+<pre><code class="language-scala">val schema =
+  StructType(
+    Array(
+      StructField(&quot;sensorname&quot;, StringType, nullable=false),
+      StructField(&quot;timestamp&quot;, TimestampType, nullable=false),
+      StructField(&quot;numA&quot;, DoubleType, nullable=false),
+      StructField(&quot;numB&quot;, DoubleType, nullable=false),
+      StructField(&quot;numC&quot;, LongType, nullable=false),
+      StructField(&quot;numD&quot;, DoubleType, nullable=false),
+      StructField(&quot;numE&quot;, LongType, nullable=false),
+      StructField(&quot;numF&quot;, DoubleType, nullable=false)
+    )
+  )
+</code></pre>
+<p>If we import types first, and then enter this in our interactive shell we get
+the following:</p>
+<pre><code class="language-scala">scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+import org.apache.spark.sql.types._
+
+val schema =
+  StructType(
+    Array(
+      StructField(&quot;sensorname&quot;, StringType, nullable=false),
+      StructField(&quot;timestamp&quot;, TimestampType, nullable=false),
+      StructField(&quot;numA&quot;, DoubleType, nullable=false),
+      StructField(&quot;numB&quot;, DoubleType, nullable=false),
+      StructField(&quot;numC&quot;, LongType, nullable=false),
+      StructField(&quot;numD&quot;, DoubleType, nullable=false),
+      StructField(&quot;numE&quot;, LongType, nullable=false),
+      StructField(&quot;numF&quot;, DoubleType, nullable=false)
+    )
+  )
+
+
+// Exiting paste mode, now interpreting.
+
+import org.apache.spark.sql.types._
+schema: org.apache.spark.sql.types.StructType =
+StructType(StructField(sensorname,StringType,false),
+StructField(timestamp,TimestampType,false), StructField(numA,DoubleType,false),
+StructField(numB,DoubleType,false), StructField(numC,LongType,false),
+StructField(numD,DoubleType,false), StructField(numE,LongType,false),
+StructField(numF,DoubleType,false))
+</code></pre>
+<p>An overview of the different <a href="https://spark.apache.org/docs/2.4.6/api/scala/#org.apache.spark.sql.types.package">Spark SQL types</a>
+can be found online. For the timestamp field we need to specify the format
+according to the <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">Javadate format</a>
+—in our case <code>MM/dd/yy:hh:mm</code>. Tying this all together we can build a Dataframe
+like so.</p>
+<pre><code class="language-scala">scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+val df = spark.read
+              .schema(schema)
+              .option(&quot;timestampFormat&quot;, &quot;MM/dd/yy:hh:mm&quot;)
+              .csv(&quot;./sensordata.csv&quot;)
+// Exiting paste mode, now interpreting.
+df: org.apache.spark.sql.DataFrame =
+        [sensorname: string, timestamp: date ... 6 more fields]
+
+scala&gt; df.printSchema
+root
+ |-- sensorname: string (nullable = true)
+ |-- timestamp: timestamp (nullable = true)
+ |-- numA: double (nullable = true)
+ |-- numB: double (nullable = true)
+ |-- numC: long (nullable = true)
+ |-- numD: double (nullable = true)
+ |-- numE: long (nullable = true)
+ |-- numF: double (nullable = true
+
+scala&gt; df.take(5).foreach(println)
+[COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
+[COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
+[COHUTTA,2014-03-10 01:03:00.0,10.47,1.732,882,1.7,92,0.66]
+[COHUTTA,2014-03-10 01:05:00.0,9.56,1.734,883,1.35,99,0.68]
+[COHUTTA,2014-03-10 01:06:00.0,9.74,1.736,884,1.27,92,0.73]
+</code></pre>
+<p>We will now continue to perform the same filtering operation as previously
+performed on the RDD.
+There are three ways in which we could do this:</p>
+<ol>
+<li>By supplying an SQL query string to Spark SQL, operating on the <em>untyped</em>
+<code>DataFrame</code>.</li>
+<li>By using the Scala API for the <em>untyped</em> <code>DataFrame</code>.</li>
+<li>By using the Scala API for the <em>strongly-typed</em> <code>DataSet</code>. </li>
+</ol>
+<h4 id="sql-query-string"><a class="header" href="#sql-query-string">SQL query string</a></h4>
+<p>We can use really error prone SQL queries, like so:</p>
+<pre><code class="language-scala">scala&gt; df.createOrReplaceTempView(&quot;sensor&quot;)
+
+scala&gt; val dfFilter = spark.sql(&quot;SELECT * FROM sensor
+WHERE timestamp=TIMESTAMP(\&quot;2014-03-10 01:01:00\&quot;)&quot;)
+// I think the newline in the multiline string breaks it if you paste it
+dfFilter: org.apache.spark.sql.DataFrame =
+            [sensorname: string, timestamp: timestamp ... 6 more fields]
+
+scala&gt; dfFilter.collect.foreach(println)
+[COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
+[NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78]
+[THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89]
+...
+</code></pre>
+<p>As you can see, we're simply providing an SQL string to the <code>spark.sql</code> method.
+The string is not checked by the Scala compiler, but only during run-time by
+the Spark SQL library. Any errors will only show up during run-time.
+These errors may include both typos in </p>
+<ul>
+<li>the SQL keywords, and</li>
+<li>the field names, and</li>
+<li>the timestamp.</li>
+</ul>
+<p>This is not recommended unless you absolutely love SQL and like debugging these
+command strings. (This took me about 20 minutes to get right!)</p>
+<h4 id="dataframe"><a class="header" href="#dataframe">DataFrame</a></h4>
+<p>A slightly more sane and type-safe way would be to do the following:</p>
+<pre><code class="language-scala">scala&gt; val dfFilter = df.filter(&quot;timestamp = TIMESTAMP(\&quot;2014-03-10 01:01:00\&quot;)&quot;)
+dfFilter: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] =
+                    [sensorname: string, timestamp: timestamp ... 6 more fields]
+
+scala&gt; dfFilter.collect.foreach(println)
+[COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
+[NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78]
+[THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89]
+...
+</code></pre>
+<p>We have now replaced the SQL query of the form:</p>
+<pre><code class="language-sql">SELECT fieldname WHERE predicate
+</code></pre>
+<p>... with the <code>filter()</code> method of a Spark DataFrame. This is already a bit
+better, since the <em>Scala compiler</em> and <em>not the Spark SQL run-time library</em> can
+now check the the existence of the <code>filter()</code> method for the DataFrame class.
+If we made a typo, we would get a compiler error, before running the code!</p>
+<p>Also, the methods supported by DataFrames look much like those of 
+<a href="https://docs.scala-lang.org/overviews/parallel-collections/overview.html">Scala's parallel collections</a>,
+just like with RDDs, but there are also some SQL-like database-oriented methods
+such as <code>join()</code>. As such, the Scala API for DataFrames combines the best of
+both worlds.</p>
+<p>Still, this approach is error-prone, since it is allowed to write the filter
+predicate as an SQL predicate, retaining the problem of potential errors in the
+timestamp field name and the timestamp itself.</p>
+<h4 id="dataset"><a class="header" href="#dataset">DataSet</a></h4>
+<p>Luckily, there is also the DataSet abstraction. 
+It is a sort of middle ground between DataFrames and RDDs, where you get some of
+the type safety of RDDs by operating on a Scala <a href="https://docs.scala-lang.org/tour/case-classes.html">case
+class</a> (also known as
+product type).</p>
+<p>This allows even more compile-time type checking on the product types, while
+still allowing Spark to optimize the query and storage of the data by making use
+of schemas.</p>
+<p>We do have to write a bit more Scala to be able to use the strongly-typed
+DataSet:</p>
+<pre><code class="language-scala">scala&gt; import java.sql.Timestamp
+import java.sql.Timestamp
+
+scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+
+case class SensorData (
+    sensorName: String,
+    timestamp: Timestamp,
+    numA: Double,
+    numB: Double,
+    numC: Long,
+    numD: Double,
+    numE: Long,
+    numF: Double
+)
+
+// Exiting paste mode, now interpreting.
+
+defined class SensorData
+</code></pre>
+<p>Now we can convert a DataFrame (which is actually just a <code>DataSet[Row]</code>, where
+<code>Row</code> allows fields to be untyped) to a typed DataSet using the <code>as</code> method.</p>
+<pre><code class="language-scala">scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+
+val ds = spark.read
+              .schema(schema)
+              .option(&quot;timestampFormat&quot;, &quot;MM/dd/yy:hh:mm&quot;)
+              .csv(&quot;./sensordata.csv&quot;)
+              .as[SensorData]
+
+// Exiting paste mode, now interpreting.
+
+ds: org.apache.spark.sql.Dataset[SensorData] =
+            [sensorname: string, timestamp: timestamp ... 6 more fields]
+</code></pre>
+<p>Now we can apply compile-time type-checked operations:</p>
+<pre><code class="language-scala">scala&gt; val dsFilter = ds.filter(a =&gt; a.timestamp ==
+                                new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+dsFilter: org.apache.spark.sql.Dataset[SensorData] =
+                [sensorname: string, timestamp: timestamp ... 6 more fields]
+
+scala&gt; dsFilter.collect.foreach(println)
+SensorData(COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94)
+SensorData(NANTAHALLA,2014-03-10 01:01:00.0,10.47,1.712,778,1.96,76,0.78)
+SensorData(THERMALITO,2014-03-10 01:01:00.0,10.24,1.75,777,1.25,80,0.89)
+...
+</code></pre>
+<p>This has two advantages:</p>
+<ul>
+<li>The field names can now be checked by the Scala compiler as well, by inspecting
+our case class. It will detect if we made a mistake when writing <code>a.timestamp</code>.</li>
+<li>The SQL-like predicate used in the DataFrame implementation is now
+replaced with the constructor of the Timestamp class. This is more type-safe,
+since any type mismatches will be detected by the Scala compiler. </li>
+</ul>
+<p>Of course, you could still supply an incorrect month number (e.g. 13). However,
+the Timestamp object is already created during construction of the
+lazy-evaluated DAG, not when that stage of the DAG actually starts computation.
+The constructor will therefore raise any errors early on, and not at the end
+stage of e.g. some computation that has been taking hours already.</p>
+<p>We now have an setup where the Scala compiler will check all methods used to
+build up the directed acyclic graph (DAG) of our computation exist at every
+intermediate resulting DataFrame. We can't make mistakes in the SQL keywords
+anymore, as well as mistakes in the field names, or data types thrown into the
+filter. This provides us with more guarantees that our queries are valid (at
+least at the type level).</p>
+<p>There are a lot of additional advantages to DataSets that have not yet been
+exposed through these examples. DataBricks has published <a href="https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html">an excellent
+blog</a>
+about why DataSets were introduced, next to RDDs. While DataSets don't replace
+RDDs, they are nowadays most often used, because they have some more nice
+properties as explained before. Read the blog to get to know the details!</p>
+<p>This was a brief overview of the 2 (or 3) different Spark APIs. You can always
+find more information on the programming guides for
+<a href="https://spark.apache.org/docs/2.4.6/rdd-programming-guide.html">RDDs</a> and
+<a href="https://spark.apache.org/docs/2.4.6/sql-programming-guide.html">Dataframes/Datasets</a>
+and in the <a href="https://spark.apache.org/docs/2.4.6/api/scala/index.html#package">Spark
+documentation</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../../getting-started/apache-spark/resilient-distributed-datasets.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../../getting-started/apache-spark/packaging-your-application-using-sbt.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../../getting-started/apache-spark/resilient-distributed-datasets.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../../getting-started/apache-spark/packaging-your-application-using-sbt.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>

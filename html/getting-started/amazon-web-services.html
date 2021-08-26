@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Amazon Web Services - Supercomputing for Big Data - Lab Manual</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../favicon.svg">
+                        <link rel="shortcut icon" href="../favicon.png">
+                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+                <link rel="stylesheet" href="../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../introduction/goal-of-this-lab.html"><strong aria-hidden="true">1.1.</strong> Goal of this lab</a></li><li class="chapter-item expanded "><a href="../introduction/communication-with-tas.html"><strong aria-hidden="true">1.2.</strong> Communication with TAs</a></li><li class="chapter-item expanded "><a href="../introduction/code-repositories.html"><strong aria-hidden="true">1.3.</strong> Code repositories</a></li><li class="chapter-item expanded "><a href="../introduction/groups.html"><strong aria-hidden="true">1.4.</strong> Groups</a></li><li class="chapter-item expanded "><a href="../introduction/aws.html"><strong aria-hidden="true">1.5.</strong> AWS</a></li><li class="chapter-item expanded "><a href="../introduction/grading.html"><strong aria-hidden="true">1.6.</strong> Grading</a></li></ol></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/docker.html"><strong aria-hidden="true">2.1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../getting-started/scala.html"><strong aria-hidden="true">2.2.</strong> Scala</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/index.html"><strong aria-hidden="true">2.3.</strong> Apache Spark</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/apache-spark/resilient-distributed-datasets.html"><strong aria-hidden="true">2.3.1.</strong> Resilient Distributed Datasets</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/dataframe-and-dataset.html"><strong aria-hidden="true">2.3.2.</strong> Dataframe and Dataset</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-spark/packaging-your-application-using-sbt.html"><strong aria-hidden="true">2.3.3.</strong> Packaging your application using SBT</a></li></ol></li><li class="chapter-item expanded "><a href="../getting-started/amazon-web-services.html" class="active"><strong aria-hidden="true">2.4.</strong> Amazon Web Services</a></li><li class="chapter-item expanded "><a href="../getting-started/apache-kafka.html"><strong aria-hidden="true">2.5.</strong> Apache Kafka</a></li><li class="chapter-item expanded "><a href="../getting-started/openstreetmap.html"><strong aria-hidden="true">2.6.</strong> OpenStreetMap</a></li></ol></li><li class="chapter-item expanded "><a href="../lab1/index.html"><strong aria-hidden="true">3.</strong> Lab 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab1/before-you-start.html"><strong aria-hidden="true">3.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../lab1/assignment.html"><strong aria-hidden="true">3.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../lab1/deliverables.html"><strong aria-hidden="true">3.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../lab1/rubric.html"><strong aria-hidden="true">3.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../lab2/index.html"><strong aria-hidden="true">4.</strong> Lab 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab2/before-you-start.html"><strong aria-hidden="true">4.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../lab2/assignment.html"><strong aria-hidden="true">4.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../lab2/deliverables.html"><strong aria-hidden="true">4.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../lab2/rubric.html"><strong aria-hidden="true">4.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../lab3/index.html"><strong aria-hidden="true">5.</strong> Lab 3</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab3/before-you-start.html"><strong aria-hidden="true">5.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../lab3/assignment.html"><strong aria-hidden="true">5.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../lab3/deliverables.html"><strong aria-hidden="true">5.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../lab3/rubric.html"><strong aria-hidden="true">5.4.</strong> Rubric</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">6.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../quiz_example.html"><strong aria-hidden="true">7.</strong> Quiz example</a></li><li class="chapter-item expanded "><a href="../links.html"><strong aria-hidden="true">8.</strong> Useful links</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Supercomputing for Big Data - Lab Manual</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="amazon-web-services"><a class="header" href="#amazon-web-services">Amazon Web Services</a></h2>
+<p>AWS consists of a variety of different services, the ones relevant for this lab
+are listed below:</p>
+<h3 id="ec2"><a class="header" href="#ec2">EC2</a></h3>
+<p><a href="https://aws.amazon.com/ec2/">Elastic Compute Cloud</a> allows you to provision a variety of different
+machines that can be used to run a computation. An overview of the
+different machines and their use cases can be found on the EC2 website.</p>
+<h3 id="emr"><a class="header" href="#emr">EMR</a></h3>
+<p><a href="https://aws.amazon.com/emr/">Elastic MapReduce</a> is a layer on top of EC2, that allows you to quickly
+deploy MapReduce-like applications, for instance Apache Spark.</p>
+<h3 id="s3"><a class="header" href="#s3">S3</a></h3>
+<p><a href="https://aws.amazon.com/s3/">Simple Storage Server</a> is an object based storage system that is easy to
+interact with from different AWS services.</p>
+<p>Note that the OpenStreetMap data is hosted on AWS S3 in the <code>us-east-1</code> region, so any EC2/EMR instances interacting with this data set should also be provisioned
+there. At the time of writing, this means that you should select the
+N. Virginia region for your instances.</p>
+<p>AWS EC2 offers spot instances, a marketplace for unused machines that you can
+bid on. These spot instances are often a order of magnitude cheaper than
+on-demand instances. The current price list can be found in the <a href="https://aws.amazon.com/ec2/spot/pricing/">EC2 website</a>.
+We recommend using spot instances for the entirety of this lab.</p>
+<p>We will be using the AWS infrastructure to run the application. Log in to the AWS
+console, and open the S3 interface. Create a bucket where we can store the
+application JAR, and all the other files needed by your application.</p>
+<p>There are (at least) two ways to transfer files to S3:</p>
+<ol>
+<li>The web interface, and</li>
+<li>The command line interface.</li>
+</ol>
+<p>The web interface is straightforward to use. To use the command line interface,
+first install the <a href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html">AWS CLI</a>.
+Some example operations are listed below.</p>
+<p>To copy a file</p>
+<pre><code class="language-bash">aws s3 cp path/to/file s3://destination-bucket/path/to/file
+</code></pre>
+<p>To copy a directory recursively</p>
+<pre><code class="language-bash">aws s3 cp --recursive s3://origin-bucket/path/to/file
+</code></pre>
+<p>To move a file</p>
+<pre><code class="language-bash">aws s3 mv path/to/file s3://destination-bucket/path/to/file
+</code></pre>
+<p>The aws-cli contains much more functionality, which can be found on the
+<a href="https://aws.amazon.com/cli/">AWS-CLI docs</a>.</p>
+<p>Once you have uploaded all the necessary files (again your application JAR, and
+all the files required by the application), we are ready to provision a
+cluster. Go to the EMR service, and select <em>Create Cluster</em>. Next select <em>Go to
+advanced options</em>, select the latest release, and check the frameworks you want
+to use. In this case this means Spark, Hadoop and Ganglia. Spark and Hadoop you
+already know, we will introduce Ganglia later in this chapter.</p>
+<p>EMR works with steps, which can be thought of as a job, or the execution of a
+single application. You can choose to add steps in the creation of the cluster,
+but this can also be done at a later time. Press <em>next</em>.</p>
+<p>In the <em>Hardware Configuration</em> screen, we can configure the arrangement and
+selection of the machines. We suggest starting out with <code>m4.large</code> machines on
+spot pricing. You should be fine running a small example workload with a single
+master node and two core nodes. Be sure to select <em>spot pricing</em> and
+place an appropriate bid. Remember that you can always check the current prices
+in the information popup or on the <a href="https://aws.amazon.com/ec2/spot/pricing/">ec2 website</a>.
+After selecting the machines, press <em>next</em>.</p>
+<p>Please note:</p>
+<ul>
+<li>
+<p>You always need a master node, which is tasked with distributing
+resources and managing tasks for the core nodes. We recommend using
+the cheap <code>m4.large</code> instance. If you start to notice unexplained
+bottlenecks for tasks with many machines and a lot of data, you might want
+to try a larger master node. Ganglia should provide you with some insights
+regarding this matter.</p>
+</li>
+<li>
+<p>By default, there are some limitations on the number of spot instances
+your account is allowed to provision. If you don't have access to enough
+spot instances, the procedure to request additional can be found in the
+<a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html">AWS documentation</a>.</p>
+</li>
+</ul>
+<p>In the <em>General Options</em> you can select a cluster name. You can tune where the
+system logs and a number of other features (more information in the popups).
+After finishing this step, press <em>next</em>.</p>
+<p>You should now arrive in the <em>Security Options</em> screen. If you have not created
+an <em>EC2 keypair</em>, it is recommended that you do so now. This will allow you to
+access the Yarn, Spark, and Ganglia <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html">web interfaces</a>
+in your browser. This makes debugging and monitoring the execution of your Spark Job much more manageable.
+To create an <em>EC2 keypair</em>, follow <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">these instructions</a>.</p>
+<p>After this has all been completed you are ready to spin up your first cluster
+by pressing <em>Create cluster</em>. Once the cluster has been created, AWS will start
+provisioning machines. This should take about 10 minutes. In the meantime you
+can add a step. Go to the <em>Steps</em> foldout, and select <em>Spark application</em> for
+<em>Step Type</em>. Clicking on <em>Configure</em> will open a dialogue in which you can
+select the application JAR location in your S3 bucket, as well as any number
+of arguments to the application, spark-submit, as well as your action on
+failure.</p>
+<p>The setup will take some time to finish, so in the meantime you should
+configure a proxy for the web interfaces. More detailed information can be
+found on the <a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html">AWS website</a>. You can check the logs in your S3 bucket, or the
+web interfaces to track the progress of your application and whether any errors
+have occurred.</p>
+<p>By forwarding the web interfaces you will also have access to Apache Ganglia.
+Ganglia is a tool that allows you to monitor your cluster for incoming and
+outgoing network, CPU load, memory pressure, and other useful metrics. They can
+help to characterize the workload at hand, and help optimizing computation
+times. An example of its interface is shown in the figure below.</p>
+<p><img src="../assets/images/ganglia.png" alt="Ganglia screenshot" /></p>
+<p>It's not uncommon to run into problems when you first deploy your application
+to AWS, here are some general clues:</p>
+<ul>
+<li>
+<p>You can access S3 files directly using Spark, so via
+<code>SparkContext.textFile</code> and <code>SparkSession.read.csv</code>, but not using the OS,
+so using an ordinary <code>File</code> java class will not work. If you want to load a
+file to the environment, you will have to figure out a workaround.</p>
+</li>
+<li>
+<p>You can monitor the (log) output of your master and worker nodes in Yarn,
+which you can access in the web interfaces. It might help you to insert
+some helpful logging messages in your Application.</p>
+</li>
+<li>
+<p>Scale your application by increasing the workload by an order of magnitude
+at a time, some bugs only become apparent when you have a sufficient load
+on your cluster and a sufficient cluster size. In terms of cost, it's also
+much cheaper if you do your debugging incrementally on smaller clusters.</p>
+</li>
+<li>
+<p>Ensure that your cluster is running in actual cluster mode (can be visually
+confirmed by checking the load on the non-master nodes in Ganglia).</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../getting-started/apache-spark/packaging-your-application-using-sbt.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../getting-started/apache-kafka.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../getting-started/apache-spark/packaging-your-application-using-sbt.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../getting-started/apache-kafka.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>

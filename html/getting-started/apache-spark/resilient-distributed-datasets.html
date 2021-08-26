@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Resilient Distributed Datasets - Supercomputing for Big Data - Lab Manual</title>
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="../../favicon.svg">
+                        <link rel="shortcut icon" href="../../favicon.png">
+                <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+                <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../introduction/goal-of-this-lab.html"><strong aria-hidden="true">1.1.</strong> Goal of this lab</a></li><li class="chapter-item expanded "><a href="../../introduction/communication-with-tas.html"><strong aria-hidden="true">1.2.</strong> Communication with TAs</a></li><li class="chapter-item expanded "><a href="../../introduction/code-repositories.html"><strong aria-hidden="true">1.3.</strong> Code repositories</a></li><li class="chapter-item expanded "><a href="../../introduction/groups.html"><strong aria-hidden="true">1.4.</strong> Groups</a></li><li class="chapter-item expanded "><a href="../../introduction/aws.html"><strong aria-hidden="true">1.5.</strong> AWS</a></li><li class="chapter-item expanded "><a href="../../introduction/grading.html"><strong aria-hidden="true">1.6.</strong> Grading</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/docker.html"><strong aria-hidden="true">2.1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../../getting-started/scala.html"><strong aria-hidden="true">2.2.</strong> Scala</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/index.html"><strong aria-hidden="true">2.3.</strong> Apache Spark</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/resilient-distributed-datasets.html" class="active"><strong aria-hidden="true">2.3.1.</strong> Resilient Distributed Datasets</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/dataframe-and-dataset.html"><strong aria-hidden="true">2.3.2.</strong> Dataframe and Dataset</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-spark/packaging-your-application-using-sbt.html"><strong aria-hidden="true">2.3.3.</strong> Packaging your application using SBT</a></li></ol></li><li class="chapter-item expanded "><a href="../../getting-started/amazon-web-services.html"><strong aria-hidden="true">2.4.</strong> Amazon Web Services</a></li><li class="chapter-item expanded "><a href="../../getting-started/apache-kafka.html"><strong aria-hidden="true">2.5.</strong> Apache Kafka</a></li><li class="chapter-item expanded "><a href="../../getting-started/openstreetmap.html"><strong aria-hidden="true">2.6.</strong> OpenStreetMap</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab1/index.html"><strong aria-hidden="true">3.</strong> Lab 1</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab1/before-you-start.html"><strong aria-hidden="true">3.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab1/assignment.html"><strong aria-hidden="true">3.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab1/deliverables.html"><strong aria-hidden="true">3.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab1/rubric.html"><strong aria-hidden="true">3.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab2/index.html"><strong aria-hidden="true">4.</strong> Lab 2</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab2/before-you-start.html"><strong aria-hidden="true">4.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab2/assignment.html"><strong aria-hidden="true">4.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab2/deliverables.html"><strong aria-hidden="true">4.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab2/rubric.html"><strong aria-hidden="true">4.4.</strong> Rubric</a></li></ol></li><li class="chapter-item expanded "><a href="../../lab3/index.html"><strong aria-hidden="true">5.</strong> Lab 3</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lab3/before-you-start.html"><strong aria-hidden="true">5.1.</strong> Before you start</a></li><li class="chapter-item expanded "><a href="../../lab3/assignment.html"><strong aria-hidden="true">5.2.</strong> Assignment</a></li><li class="chapter-item expanded "><a href="../../lab3/deliverables.html"><strong aria-hidden="true">5.3.</strong> Deliverables</a></li><li class="chapter-item expanded "><a href="../../lab3/rubric.html"><strong aria-hidden="true">5.4.</strong> Rubric</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../../faq.html"><strong aria-hidden="true">6.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../../quiz_example.html"><strong aria-hidden="true">7.</strong> Quiz example</a></li><li class="chapter-item expanded "><a href="../../links.html"><strong aria-hidden="true">8.</strong> Useful links</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Supercomputing for Big Data - Lab Manual</h1>
+
+                    <div class="right-buttons">
+                                                <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="resilient-distributed-datasets"><a class="header" href="#resilient-distributed-datasets">Resilient Distributed Datasets</a></h3>
+<p><img src="../../assets/images/RDD.png" alt="Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements." /></p>
+<blockquote>
+<p>Illustration of RDD abstraction of an RDD with a tuple of characters and integers as elements.</p>
+</blockquote>
+<p>RDDs are the original data abstraction used in Spark. Conceptually one can
+think of these as a large, unordered list of Java/Scala/Python objects, let's
+call these objects elements. This list of elements is divided in partitions
+(which may still contain multiple elements), which can reside on different
+machines. One can operate on these elements with a number of operations, which
+can be subdivided in wide and narrow dependencies, see the table below. An
+illustration of the RDD abstraction can be seen in the figure above.</p>
+<p>RDDs are immutable, which means that the elements cannot be altered, without
+creating a new RDD. Furthermore, the application of transformations (wide or
+narrow) is <a href="https://en.wikipedia.org/wiki/Lazy_evaluation">lazy evaluation</a>,
+meaning that the actual computation will be delayed until results are requested
+(an action in Spark terminology). When applying transformations, these will
+form a directed acyclic graph (DAG), that instructs workers what operations to
+perform, on which elements to find a specific result. This can be seen in the
+figure above as the arrows between elements.</p>
+<table><thead><tr><th align="left">Narrow Dependency</th><th align="left">Wide Dependency</th></tr></thead><tbody>
+<tr><td align="left"><code>map</code></td><td align="left"><code>coGroup</code></td></tr>
+<tr><td align="left"><code>mapValues</code></td><td align="left"><code>flatMap</code></td></tr>
+<tr><td align="left"><code>flatMap</code></td><td align="left"><code>groupByKey</code></td></tr>
+<tr><td align="left"><code>filter</code></td><td align="left"><code>reduceByKey</code></td></tr>
+<tr><td align="left"><code>mapPartitions</code></td><td align="left"><code>combineByKey</code></td></tr>
+<tr><td align="left"><code>mapPartitionsWithIndex</code></td><td align="left"><code>distinct</code></td></tr>
+<tr><td align="left"><code>join</code> with sorted keys</td><td align="left"><code>join</code></td></tr>
+<tr><td align="left"></td><td align="left"><code>intersection</code></td></tr>
+<tr><td align="left"></td><td align="left"><code>repartition</code></td></tr>
+<tr><td align="left"></td><td align="left"><code>coalesce</code></td></tr>
+<tr><td align="left"></td><td align="left"><code>sort</code></td></tr>
+</tbody></table>
+<blockquote>
+<p>List of wide and narrow dependencies for (pair) RDD operations</p>
+</blockquote>
+<p>Now that you have an idea of what the abstraction is about, let's demonstrate
+some example code with the Spark shell. </p>
+<p><em>If you want to paste pieces of code into the spark shell from this guide, it
+might be useful to copy from the github version, and use the <code>:paste</code> command in
+the spark shell to paste the code. Hit <code>ctrl+D</code> to stop pasting.</em></p>
+<p>We can start the shell using <a href="../docker.html">Docker</a>:</p>
+<pre><code class="language-bash">docker run -it --rm -v &quot;`pwd`&quot;:/io spark-shell
+</code></pre>
+<p>We should now ge the following output:</p>
+<pre><code class="language-scala">1337-42-01 07:44:21,765 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to &quot;WARN&quot;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://333c7146e54b:4040
+Spark context available as 'sc' (master = local[*], app id = local-1599464666576).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.6
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+Type in expressions to have them evaluated.
+Type :help for more information.
+</code></pre>
+<p>When opening a Spark Shell, by default, you get two objects.</p>
+<ul>
+<li>A <code>SparkSession</code> named <code>spark</code>.</li>
+<li>A <code>SparkContext</code> named <code>sc</code>. </li>
+</ul>
+<p>These objects contains the configuration of your session, i.e. whether you are
+running in local or cluster mode, the name of your application, the logging
+level etc.</p>
+<p>We can get some (sometimes slightly arcane) information about Scala objects that
+exist in the scope of the shell, e.g.:</p>
+<pre><code class="language-scala">scala&gt; spark
+res0: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@747e0a31
+</code></pre>
+<p>Now, let's first create some sample data that we can demonstrate the RDD API
+around. Here we create an infinite list of repeating characters from 'a' tot
+'z'.</p>
+<pre><code class="language-scala">scala&gt; val charsOnce = ('a' to 'z').toStream
+charsOnce: scala.collection.immutable.Stream[Char] = Stream(a, ?)
+
+scala&gt; val chars: Stream[Char] = charsOnce #::: chars
+chars: Stream[Char] = Stream(a, ?)
+</code></pre>
+<p>Now we build a collection with the first 200000 integers, zipped with the
+character stream. We display the first five results.</p>
+<pre><code class="language-scala">scala&gt; val rdd = sc.parallelize(chars.zip(1 to 200000), numSlices=20)
+rdd: org.apache.spark.rdd.RDD[(Char, Int)] = ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:26
+
+scala&gt; rdd.take(5)
+res2: Array[(Char, Int)] = Array((a,1), (b,2), (c,3), (d,4), (e,5))
+</code></pre>
+<p>Let's dissect what just happened. We created a Scala object that is a list of
+tuples of <code>Char</code>s and <code>Int</code>s in the statement <code>(chars).zip(1 to 200000)</code>. With
+<code>sc.parallelize</code> we are transforming a Scala sequence into an RDD. This allows
+us to enter Spark's programming model. With the optional parameter <code>numSlices</code>
+we indicate in how many partitions we want to subdivide the sequence.</p>
+<p>Let's apply some (lazily evaluated) transformations to this RDD.</p>
+<pre><code class="language-scala">scala&gt; val mappedRDD = rdd.map({case (chr, num) =&gt; (chr, num+1)})
+mappedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = MapPartitionsRDD[1] at map at &lt;console&gt;:25
+</code></pre>
+<p>We apply a <code>map</code> to the RDD, applying a function to all the elements in the
+RDD. The function we apply pattern matches over the elements as being a tuple
+of <code>(Char, Int)</code>, and add one to the integer. Scala's syntax can be a bit
+foreign, so if this is confusing, spend some time looking at tutorials and
+messing around in the Scala interpreter.</p>
+<p>You might have noticed that the transformation completed awfully fast. This is
+Spark's <a href="https://en.wikipedia.org/wiki/Lazy_evaluation">lazy evaluation</a> in
+action. No computation will be performed until an action is applied.</p>
+<pre><code class="language-scala">scala&gt; val reducedRDD = rdd.reduceByKey(_ + _)
+reducedRDD: org.apache.spark.rdd.RDD[(Char, Int)] = ShuffledRDD[2] at reduceByKey at &lt;console&gt;:25
+</code></pre>
+<p>Now we apply a <code>reduceByKey</code> operation, grouping all of the identical keys together and
+merging the results with the specified function, in this case the <code>+</code> operator.</p>
+<p>Now we will perform an action, which will trigger the computation of the
+transformations on the data. We will use the collect action, which means to
+gather all the results to the master, going out of the Spark programming model,
+back to a Scala sequence. How many elements do you expect there to be in this
+sequence after the previous transformations?</p>
+<pre><code class="language-scala">scala&gt; reducedRDD.collect
+res3: Array[(Char, Int)] = Array((d,769300000), (x,769253844), (e,769307693),
+(y,769261536), (z,769269228), (f,769315386), (g,769323079), (h,769330772),
+(i,769138464), (j,769146156), (k,769153848), (l,769161540), (m,769169232),
+(n,769176924), (o,769184616), (p,769192308), (q,769200000), (r,769207692),
+(s,769215384), (t,769223076), (a,769276921), (u,769230768), (b,769284614),
+(v,769238460), (w,769246152), (c,769292307))
+</code></pre>
+<p>Typically, we don't build the data first, but we actually load it from a
+database or file system. Say we have some data in (multiple) files in a
+specific format. As an example consider <code>sensordata.csv</code> (in the <code>example</code>
+folder). We can load it as follows:</p>
+<pre><code class="language-scala">// sc.textFile can take multiple files as argument!
+scala&gt; val raw_data = sc.textFile(&quot;sensordata.csv&quot;)
+raw_data: org.apache.spark.rdd.RDD[String] = sensordata.csv MapPartitionsRDD[1] at textFile at &lt;console&gt;:24
+</code></pre>
+<p>And observe some of its contents:</p>
+<pre><code class="language-scala">scala&gt; raw_data.take(10).foreach(println)
+COHUTTA,3/10/14:1:01,10.27,1.73,881,1.56,85,1.94
+COHUTTA,3/10/14:1:02,9.67,1.731,882,0.52,87,1.79
+COHUTTA,3/10/14:1:03,10.47,1.732,882,1.7,92,0.66
+COHUTTA,3/10/14:1:05,9.56,1.734,883,1.35,99,0.68
+COHUTTA,3/10/14:1:06,9.74,1.736,884,1.27,92,0.73
+COHUTTA,3/10/14:1:08,10.44,1.737,885,1.34,93,1.54
+COHUTTA,3/10/14:1:09,9.83,1.738,885,0.06,76,1.44
+COHUTTA,3/10/14:1:11,10.49,1.739,886,1.51,81,1.83
+COHUTTA,3/10/14:1:12,9.79,1.739,886,1.74,82,1.91
+COHUTTA,3/10/14:1:13,10.02,1.739,886,1.24,86,1.79
+</code></pre>
+<p>We can process this data to filter only measurements on <code>3/10/14:1:01</code>.</p>
+<pre><code class="language-scala">scala&gt; val filterRDD = raw_data.map(_.split(&quot;,&quot;))
+                               .filter(x =&gt; x(1) == &quot;3/10/14:1:01&quot;)
+filterRDD: org.apache.spark.rdd.RDD[Array[String]] = MapPartitionsRDD[11] at filter at &lt;console&gt;:25
+</code></pre>
+<p>And look at the output:</p>
+<pre><code class="language-scala">scala&gt; filterRDD.foreach(a =&gt; println(a.mkString(&quot; &quot;)))
+COHUTTA 3/10/14:1:01 10.27 1.73 881 1.56 85 1.94
+LAGNAPPE 3/10/14:1:01 9.59 1.602 777 0.09 88 1.78
+NANTAHALLA 3/10/14:1:01 10.47 1.712 778 1.96 76 0.78
+CHER 3/10/14:1:01 10.17 1.653 777 1.89 96 1.57
+THERMALITO 3/10/14:1:01 10.24 1.75 777 1.25 80 0.89
+ANDOUILLE 3/10/14:1:01 10.26 1.048 777 1.88 94 1.66
+BUTTE 3/10/14:1:01 10.12 1.379 777 1.58 83 0.67
+CARGO 3/10/14:1:01 9.93 1.903 778 0.55 76 1.44
+MOJO 3/10/14:1:01 10.47 1.828 967 0.36 77 1.75
+BBKING 3/10/14:1:01 10.03 0.839 967 1.17 80 1.28
+</code></pre>
+<p>You might have noticed that this is a bit tedious to work with, as we have to
+convert everything to Scala objects, and aggregations rely on having a pair RDD,
+which is fine when we have a single key. For more complex aggregations, this
+becomes a bit tedious to juggle with.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                                                    <a rel="prev" href="../../getting-started/apache-spark/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+                                                    <a rel="next" href="../../getting-started/apache-spark/dataframe-and-dataset.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                                    <a rel="prev" href="../../getting-started/apache-spark/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+                                    <a rel="next" href="../../getting-started/apache-spark/dataframe-and-dataset.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        
+    </body>
+</html>
