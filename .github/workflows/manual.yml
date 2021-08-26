@@ -4,7 +4,13 @@ on:
   push:
     branches:
     - master
+    - staging
+    - trying
   pull_request:
+
+env:
+  MDBOOK: '0.4.12'
+  LINKCHECK: '0.7.4'
 
 jobs:
   deploy:
@@ -13,10 +19,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install mdbook
+      run: curl -L https://github.com/rust-lang/mdBook/releases/download/v$MDBOOK/mdbook-v$MDBOOK-x86_64-unknown-linux-gnu.tar.gz | tar xz -C ~/.cargo/bin
+    - name: Install mdbook-linkcheck
       run: |
-        mkdir -p $HOME/mdbook
-        curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.2/mdbook-v0.4.2-x86_64-unknown-linux-gnu.tar.gz | tar xz -C $HOME/mdbook
-        echo "${HOME}/mdbook/" >> $GITHUB_PATH
+        wget -qO mdbook-linkcheck.zip https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v$LINKCHECK/mdbook-linkcheck.v$LINKCHECK.x86_64-unknown-linux-gnu.zip
+        unzip mdbook-linkcheck.zip -d ~/.cargo/bin
     - name: Build
       run: mdbook build
     - uses: peaceiris/actions-gh-pages@v3
