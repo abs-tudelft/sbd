@@ -54,20 +54,20 @@ docker run -it --rm -v "`pwd`":/io spark-shell
 We should now ge the following output:
 
 ```scala
-1337-42-01 07:44:21,765 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2021-08-26 09:20:28,815 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-Spark context Web UI available at http://333c7146e54b:4040
-Spark context available as 'sc' (master = local[*], app id = local-1599464666576).
+Spark context Web UI available at http://588d3dbe7377:4040
+Spark context available as 'sc' (master = local[*], app id = local-1629969638164).
 Spark session available as 'spark'.
 Welcome to
       ____              __
      / __/__  ___ _____/ /__
     _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 2.4.6
+   /___/ .__/\_,_/_/ /_/\_\   version 3.1.2
       /_/
-         
-Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_302)
 Type in expressions to have them evaluated.
 Type :help for more information.
 ```

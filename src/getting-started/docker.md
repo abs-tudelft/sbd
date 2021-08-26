@@ -76,17 +76,13 @@ Here `<target>` selects the target from the Dockerfile, `<tag>` sets the tag
 for the resulting image, and the `.` sets the build context to the current
 working directory.
 
-We use `docker build` to build the images we need to use Spark and SBT.
+We use `docker` to pull and build the images we need to use Spark and SBT.
 
 - `sbt`
 
   ```bash
-  docker build \
-  --build-arg BASE_IMAGE_TAG="8" \
-  --build-arg SBT_VERSION="1.3.13" \
-  --build-arg SCALA_VERSION="2.12.12" \
-  -t sbt \
-  github.com/hseeberger/scala-sbt.git#:debian
+  docker pull hseeberger/scala-sbt:8u302_1.5.5_2.12.14
+  docker tag hseeberger/scala-sbt:8u302_1.5.5_2.12.14 sbt
   ```
 
 - `spark-shell`

@@ -25,10 +25,10 @@ file. An example `build.sbt` file is
 ```scala
 name := "Example"
 version := "0.1.0"
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.14"
 ```
 
-This specifies the Scala version of the project (2.12.12) and the name of the
+This specifies the Scala version of the project (2.12.14) and the name of the
 project.
 
 If you run `sbt` in this folder it will generate the project directory and
@@ -54,12 +54,8 @@ by writing the `compile` command.
 
 ```
 $ docker run -it --rm -v "`pwd`":/root sbt sbt
-[info] [launcher] getting org.scala-sbt sbt 1.3.13  (this may take some time)...
-downloading https://repo1.maven.org/maven2/org/scala-sbt/sbt/1.3.13/sbt-1.3.13.jar ...
-downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.10/scala-library-2.12.10.jar ...
-
+[info] [launcher] getting org.scala-sbt sbt 1.5.5  (this may take some time)...
 ...
-https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar
   100.0% [##########] 544.5 KiB (4.8 MiB / s)
 [info] Fetched artifacts of
 [info] loading settings for project root from build.sbt ...
@@ -75,13 +71,13 @@ sbt:Example> compile
 [info] Updating
 [info] Resolved  dependencies
 [info] Updating
-https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12.pom
+https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.14/scala-compiler-2.12.14.pom
   100.0% [##########] 2.6 KiB (69.1 KiB / s)
 
 ...
 
 [info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
-[info] Non-compiled module 'compiler-bridge_2.12' for Scala 2.12.12. Compiling...
+[info] Non-compiled module 'compiler-bridge_2.12' for Scala 2.12.14. Compiling...
 [info]   Compilation completed in 8.038s.
 [success] Total time: 10 s, completed Sep 7, 2020 10:39:38 AM
 
@@ -130,7 +126,7 @@ We can also open an interactive session using SBT.
 ```
 sbt:Example> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.12.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_265).
+Welcome to Scala 2.12.14 (OpenJDK 64-Bit Server VM, Java 1.8.0_302).
 Type in expressions for evaluation. Or try :help.
 
 scala> example.Example.addOne('a', 1)
@@ -146,9 +142,9 @@ most notably) to build the project. Modify your `build.sbt` file like so
 ```scala
 name := "Example"
 version := "0.1.0"
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.14"
 
-val sparkVersion = "2.4.6"
+val sparkVersion = "3.1.2"
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion,
@@ -239,7 +235,7 @@ The output should look as follows:
 
 ```
 2020-09-07 11:07:28,890 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-2020-09-07 11:07:29,068 INFO spark.SparkContext: Running Spark version 2.4.6
+2020-09-07 11:07:29,068 INFO spark.SparkContext: Running Spark version 3.1.2
 2020-09-07 11:07:29,087 INFO spark.SparkContext: Submitted application: Example
 
 ...
