@@ -16,4 +16,4 @@ sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd6
 
 However, it's more convenient to [use the Docker container] for this course.
 
-[use the Docker container]: guide/docker.md
+[use the Docker container]: getting-started/docker.md
