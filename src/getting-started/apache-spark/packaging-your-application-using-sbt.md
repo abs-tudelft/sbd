@@ -54,13 +54,13 @@ by writing the `compile` command.
 
 ```
 $ docker run -it --rm -v "`pwd`":/root sbt sbt
-[info] [launcher] getting org.scala-sbt sbt 1.5.5  (this may take some time)...
-...
-  100.0% [##########] 544.5 KiB (4.8 MiB / s)
-[info] Fetched artifacts of
+copying runtime jar...
+[info] welcome to sbt 1.5.5 (Oracle Corporation Java 11.0.12)
+[info] loading project definition from /root/project
 [info] loading settings for project root from build.sbt ...
 [info] set current project to Example (in build file:/root/)
 [info] sbt server started at local:///root/.sbt/1.0/server/27dc1aa3fdf4049b492d/sock
+[info] started sbt server
 sbt:Example>
 ```
 
@@ -68,19 +68,11 @@ We can now type `compile`.
 
 ```
 sbt:Example> compile
-[info] Updating
-[info] Resolved  dependencies
-[info] Updating
-https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.14/scala-compiler-2.12.14.pom
-  100.0% [##########] 2.6 KiB (69.1 KiB / s)
-
+[info] compiling 1 Scala source to /root/target/scala-2.12/classes ...
 ...
-
-[info] Compiling 1 Scala source to /root/target/scala-2.12/classes ...
 [info] Non-compiled module 'compiler-bridge_2.12' for Scala 2.12.14. Compiling...
-[info]   Compilation completed in 8.038s.
-[success] Total time: 10 s, completed Sep 7, 2020 10:39:38 AM
-
+[info]   Compilation completed in 10.128s.
+[success] Total time: 14 s, completed Aug 26, 2021, 3:03:34 PM
 ```
 
 We can try to run the application by typing `run`.
@@ -89,7 +81,7 @@ We can try to run the application by typing `run`.
 sbt:Example> run
 [info] running example.Example
 Hello world!
-[success] Total time: 0 s, completed Sep 7, 2020 10:40:24 AM
+[success] Total time: 1 s, completed Aug 26, 2021, 3:05:29 PM
 ```
 
 Now let's add a function to `example.scala`.
@@ -126,7 +118,7 @@ We can also open an interactive session using SBT.
 ```
 sbt:Example> console
 [info] Starting scala interpreter...
-Welcome to Scala 2.12.14 (OpenJDK 64-Bit Server VM, Java 1.8.0_302).
+Welcome to Scala 2.12.14 (OpenJDK 64-Bit Server VM, Java 11.0.12).
 Type in expressions for evaluation. Or try :help.
 
 scala> example.Example.addOne('a', 1)

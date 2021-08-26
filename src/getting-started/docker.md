@@ -81,8 +81,8 @@ We use `docker` to pull and build the images we need to use Spark and SBT.
 - `sbt`
 
   ```bash
-  docker pull hseeberger/scala-sbt:8u302_1.5.5_2.12.14
-  docker tag hseeberger/scala-sbt:8u302_1.5.5_2.12.14 sbt
+  docker pull hseeberger/scala-sbt:11.0.12_1.5.5_2.12.14
+  docker tag hseeberger/scala-sbt:11.0.12_1.5.5_2.12.14 sbt
   ```
 
 - `spark-shell`
