@@ -144,7 +144,7 @@ res1: Long = 18426861
 It has over 18 million rows already, and this is just the province of
 Zuid-Holland!
 
-[openstreetmap]: (https://www.openstreetmap.org)
+[openstreetmap]: https://www.openstreetmap.org
 [wiki]: https://wiki.openstreetmap.org/wiki/Main_Page
 [ways]: https://wiki.openstreetmap.org/wiki/Way
 [nodes]: https://wiki.openstreetmap.org/wiki/Node

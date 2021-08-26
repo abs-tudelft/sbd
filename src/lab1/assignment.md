@@ -19,7 +19,7 @@ in this city. For your report please mention the top 10 cities (in terms of
 brewery count).
 
 We will use the [Zuid-Holland](https://download.geofabrik.de/europe/netherlands/zuid-holland-latest.osm.pbf)
-subset provided by [Geofabrik](geofabrik.de/). The `.osm.pbf` files can be
+subset provided by [Geofabrik](https://geofabrik.de/). The `.osm.pbf` files can be
 converted to `.orc` files using the tool mentioned in the introduction.
 
 Please note that using other datasets for this assignment is **not** allowed.
