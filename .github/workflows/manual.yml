@@ -24,6 +24,7 @@ jobs:
       run: |
         wget -qO mdbook-linkcheck.zip https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v$LINKCHECK/mdbook-linkcheck.v$LINKCHECK.x86_64-unknown-linux-gnu.zip
         unzip mdbook-linkcheck.zip -d ~/.cargo/bin
+        chmod +x ~/.cargo/bin/mdbook-linkcheck
     - name: Build
       run: mdbook build
     - uses: peaceiris/actions-gh-pages@v3
