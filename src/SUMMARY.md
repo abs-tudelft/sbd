@@ -17,6 +17,7 @@
   - [Amazon Web Services](./getting-started/amazon-web-services.md)
   - [Apache Kafka](./getting-started/apache-kafka.md)
   - [OpenStreetMap](./getting-started/openstreetmap.md)
+  - [ASTER GDEM V3](./getting-started/aster.md)
 - [Lab 1](./lab1/index.md)
   - [Before you start](./lab1/before-you-start.md)
   - [Assignment](./lab1/assignment.md)

@@ -17,5 +17,5 @@ group-01
 ```
 
 That is, `group<dash><two digit group number with leading zero>`. If you do not
-adhere to this group name format, some of our tools may not work and we cannot
+adhere to this group name format, some of our tools may not work, and we cannot
 grade you.
