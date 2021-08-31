@@ -10,4 +10,12 @@ integration between Classroom and Brightspace yet. We use Brightspace for grade
 administration, and GitHub Classroom for the code.
 
 All groups in Classroom **must** be named after their respective name in
-Brightspace.
+Brightspace, after the following example:
+
+```
+group-01
+```
+
+That is, `group<dash><two digit group number with leading zero>`. If you do not
+adhere to this group name format, some of our tools may not work and we cannot
+grade you.
