@@ -31,7 +31,7 @@ on Brightspace and Discord.
 The priority of this lab is to allow you to achieve all learning objectives of
 the course. This becomes less boring and more effective if we do not choose the
 assignments to be completely abstract and detached from reality (e.g. when we
-ask you to join datasat A with fields W and X to dataset B with fields Y and Z,
+ask you to join data set A with fields W and X to dataset B with fields Y and Z,
 without any further context). The priority of this lab is not to teach you about
 earth sciences or policymaking. The contents of this lab manual may include
 oversimplifications of these subjects in order to allow us to achieve the
