@@ -41,17 +41,22 @@ val schema = StructType(
    datasets.
 8. The application uses the OpenStreetMap dataset and the ALOS Global Digital
    Surface Model dataset, and no other data set whatsoever.
+9. When determining which place lies at which elevation, the application uses
+   the [H3: Uber’s Hexagonal Hierarchical Spatial Index] to reduce the
+   computational complexity of joins between the OSM and ALOS data sets. In the
+   report (README.md), it is explicitly explained why this spatial index
+   reduces the computational complexity for these types of joins.
 
 ### "Good" application requirements
 
-9. Produce a relocation plan which is a mapping from source place to the closest
-   safe (one that is not underwater) city (not town or village or hamlet). For
-   the distance calculation, consider the earth to be flat (like 🥞), i.e. you
-   don't have to take the curvature of the earth into consideration. In this
-   case, the application outputs a modified `.orc` file with the following
-   schema, where `place` is the name of a city/town/village/hamlet,
-   `num_evacuees` is the number of people in this place, and `destination`
-   is the name of the city to relocate to.
+10. Produce a relocation plan which is a mapping from source place to the
+    closest safe (one that is not underwater) city (not town or village or
+    hamlet). For the distance calculation, consider the earth to be flat (like
+    🥞), i.e. you don't have to take the curvature of the earth into
+    consideration. In this case, the application outputs a modified `.orc` file
+    with the following schema, where `place` is the name of a
+    city/town/village/hamlet, `num_evacuees` is the number of people in this
+    place, and `destination` is the name of the city to relocate to.
 
 ```scala
 import org.apache.spark.sql.types._
@@ -67,9 +72,9 @@ val schema = StructType(
 
 ### "Excellent" application requirements
 
-10. The application also calculates the distance of each place to the closest
+11. The application also calculates the distance of each place to the closest
     harbour.
-11. If a harbour is closer than a safe city, 25% of the population of the place
+12. If a harbour is closer than a safe city, 25% of the population of the place
     must relocate to the harbour to get a boat and live on the ocean. The
     application outputs a modified `.orc` file with the following schema,
     where `place` is the name of a city/town/village/hamlet, `num_evacuees` is
@@ -88,7 +93,7 @@ val schema = StructType(
              )
 ```
 
-12. The application produces a list of cities that are to be relocated to,
+13. The application produces a list of cities that are to be relocated to,
     including `Waterworld` as if it's a city. The list also provides the old
     population and the new population The application outputs this list as a
     secondary `.orc` file with the following schema, where `destination` is the
@@ -127,5 +132,5 @@ Try to keep the following in mind when building your application:
   the input data set grows larger.
 
 [Zuid-Holland]: https://download.geofabrik.de/europe/netherlands/zuid-holland-latest.osm.pbf
-
 [Geofabrik]: https://geofabrik.de/
+[H3: Uber’s Hexagonal Hierarchical Spatial Index]: https://github.com/uber/h3
