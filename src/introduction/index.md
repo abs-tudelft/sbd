@@ -9,7 +9,7 @@ inhabitants of flooded areas given a specific amount of sea level rise.
 It turns out that we can achieve all the learning objectives of the course by
 attempting to answer this question and some variants on it. To this end, we
 limit ourselves to a context where we can only use the [OpenStreetMap]
-and [ASTER Global Digital Elevation Map] datasets, together with various
+and [ALOS Global Digital Surface Model] datasets, together with various
 industry-standard frameworks and tools, such as the [Scala programming language]
 to write our programs, [Apache Spark] to process batches of data, [Apache Kafka]
 to process streaming data, and the [Amazon Web Services]
@@ -40,7 +40,7 @@ learning goals related to distributed computing on big data more effectively.
 [Sea levels are rising]: https://en.wikipedia.org/wiki/Sea_level_rise
 [Waterworld (1995)]: https://www.imdb.com/title/tt0114898/
 [OpenStreetMap]: https://www.openstreetmap.org
-[ASTER Global Digital Elevation Map]: https://asterweb.jpl.nasa.gov/gdem.asp
+[ALOS Global Digital Surface Model]: https://www.eorc.jaxa.jp/ALOS/en/aw3d/index_e.htm
 [Scala programming language]: https://www.scala-lang.org/
 [Apache Spark]: https://spark.apache.org
 [Apache Kafka]: https://kafka.apache.org

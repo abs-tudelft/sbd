@@ -1,8 +1,8 @@
 # Lab 1
 
 In this lab, we will design and develop an application to process
-the [OpenStreetMap] and [ASTER GDEM V3] data sets for a small subset of the
-planet (the Zuid-Holland province of the Netherlands).
+the [OpenStreetMap] and [ALOS Global Digital Surface Model] data sets for a
+small subset of the planet (the Zuid-Holland province of the Netherlands).
 
 This lab will not yet require significant resources in terms of compute, memory
 or storage. It should be able to perform this lab on a laptop. The first lab is
@@ -14,4 +14,4 @@ perhaps Scala. We will:
 3. draw some conclusions on how to run it efficiently at scale for lab 2
 
 [OpenStreetMap]: https://www.openstreetmap.org
-[ASTER GDEM V3]: https://asterweb.jpl.nasa.gov/gdem.asp
+[ALOS Global Digital Surface Model]: https://www.eorc.jaxa.jp/ALOS/en/aw3d30/index.htm

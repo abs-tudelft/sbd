@@ -55,7 +55,7 @@ real-time, using Kafka.
 An open source project capturing geographic data from all over the world. The
 assignments of this lab are based on (parts of) this data set.
 
-## ASTER Global Digital Elevation Map V3
+## ALOS Global Digital Surface Model
 
 An open data set with elevation levels of the entire planet (except oceans).
 

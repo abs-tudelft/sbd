@@ -20,7 +20,7 @@ requirements where applicable) that the program needs to adhere to.
    which places need to relocate.
 5. The application considers cities, towns, villages and hamlets as discrete
    places. Boroughs, suburbs, quarters, etc. are considered parts of cities and
-   should not be considered separately.
+   must not be considered separately.
 6. The application outputs an `.orc` file with the following schema,
    where `place` is the name of a city/town/village/hamlet, and `num_evacuees`
    is the number of people in this place:
@@ -39,8 +39,8 @@ val schema = StructType(
 6. The application outputs the sum of all evacuees on the command line.
 7. The application is written in Scala and uses Apache Spark dataframes or
    datasets.
-8. The application uses the OpenStreetMap dataset and the ASTER GDEM V3 dataset,
-   and no other data set whatsoever.
+8. The application uses the OpenStreetMap dataset and the ALOS Global Digital
+   Surface Model dataset, and no other data set whatsoever.
 
 ### "Good" application requirements
 
@@ -74,8 +74,7 @@ val schema = StructType(
     application outputs a modified `.orc` file with the following schema,
     where `place` is the name of a city/town/village/hamlet, `num_evacuees` is
     the number of people in this place, `destination` is the name of the city to
-    relocate to or `Waterworld`
-    in the case of boat relocation.
+    relocate to or `Waterworld` in the case of boat relocation:
 
 ```scala
 import org.apache.spark.sql.types._
@@ -93,9 +92,9 @@ val schema = StructType(
     including `Waterworld` as if it's a city. The list also provides the old
     population and the new population The application outputs this list as a
     secondary `.orc` file with the following schema, where `destination` is the
-    name of the city (or `Waterworld`) that will receive
-    evacuees, `old_population` is the population before relocation,
-    and `new_population` is the population after relocation.
+    name of the city (or `Waterworld`) that will receive evacuees,
+    `old_population` is the population before relocation, and `new_population`
+    is the population after relocation.
 
 ```scala
 import org.apache.spark.sql.types._
