@@ -40,7 +40,7 @@ learning goals related to distributed computing on big data more effectively.
 [Sea levels are rising]: https://en.wikipedia.org/wiki/Sea_level_rise
 [Waterworld (1995)]: https://www.imdb.com/title/tt0114898/
 [OpenStreetMap]: https://www.openstreetmap.org
-[ALOS Global Digital Surface Model]: https://www.eorc.jaxa.jp/ALOS/en/aw3d/index_e.htm
+[ALOS Global Digital Surface Model]: https://www.eorc.jaxa.jp/ALOS/en/aw3d30/index.htm
 [Scala programming language]: https://www.scala-lang.org/
 [Apache Spark]: https://spark.apache.org
 [Apache Kafka]: https://kafka.apache.org
