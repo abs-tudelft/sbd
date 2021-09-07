@@ -48,20 +48,20 @@ data to a tabular format. We will use the ORC format for this. Follow the steps
 below to end up with an ORC file for lab 1.
 
 Luckily, some people have already chopped up the whole world into manageable
-pieces. In our case, we will start off with just the province of Zuid-Holland,
+pieces. In our case, we will start off with just the Netherlands,
 where Delft is located. Also, some people have written [a conversion tool] for
 us already, that helps us convert the `.osm.pbf` file into an `.orc` file.
 
-- Download the [province of Zuid-Holland]. You need to get the `.osm.pbf` file.
+- Download the [Netherlands]. You need to get the `.osm.pbf` file.
 
 - Download and extract v.0.5.5 of [osm2orc] (click the link to download
   immediately).
 
-- Run osm2orc to obtain the ORC file of Zuid-Holland. osm2orc can be found in
+- Run osm2orc to obtain the ORC file of the Netherlands. osm2orc can be found in
   the `bin/` folder of the tool. Example usage in Linux:
 
 ```console
-./osm2orc /path/to/zuid-holland-latest.osm.pbf /destination/for/zuid-holland.orc
+./osm2orc /path/to/netherlands-latest.osm.pbf /destination/for/netherlands.orc
 ```
 
 You can also use the Dockerfile provided in the lab 1 repository to build an image
@@ -77,10 +77,10 @@ docker build --target osm2orc -t osm2orc .
   downloaded in your current working directory.
 
 ```bash
-docker run -it --rm -v "`pwd`":/io osm2orc /io/zuid-holland-latest.osm.pbf /io/zuid-holland.orc
+docker run -it --rm -v "`pwd`":/io osm2orc /io/netherlands-latest.osm.pbf /io/netherlands.orc
 ```
 
-You will now have the `zuid-holland.orc` file somewhere on your machine. We will
+You will now have the `netherlands.orc` file somewhere on your machine. We will
 use this file as our input. Make sure you understand [how to load the file into
 Spark].
 
@@ -138,11 +138,10 @@ How big is this dataframe?
 
 ```
 scala> df.count()
-res1: Long = 18426861
+res1: Long = 130506997
 ```
 
-It has over 18 million rows already, and this is just the province of
-Zuid-Holland!
+It has over 130 million rows already, and this is just the Netherlands!
 
 [openstreetmap]: https://www.openstreetmap.org
 [wiki]: https://wiki.openstreetmap.org/wiki/Main_Page
@@ -156,7 +155,7 @@ Zuid-Holland!
 [this]: https://wiki.openstreetmap.org/wiki/Brewery
 [street]: https://www.openstreetmap.org/way/7624546
 [brewery]: https://www.openstreetmap.org/node/4829046021
-[province of zuid-holland]: https://download.geofabrik.de/europe/netherlands.html
+[netherlands]: https://download.geofabrik.de/europe.html
 [a conversion tool]: https://github.com/mojodna/osm2orc
 [osm2orc]: https://github.com/mojodna/osm2orc/releases/download/v0.5.5/osm2orc-0.5.5.tar.gz
 [how to load the file into spark]: http://spark.apache.org/docs/2.4.6/sql-data-sources-load-save-functions.html
