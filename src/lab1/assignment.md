@@ -31,7 +31,7 @@ import org.apache.spark.sql.types._
 val schema = StructType(
                Array(
                  StructField("place", StringType),
-                 StructField("num_evacuees", IntegerType)
+                 StructField("num_evacuees", LongType)
                )
              )
 ```
@@ -64,7 +64,7 @@ import org.apache.spark.sql.types._
 val schema = StructType(
                Array(
                  StructField("place", StringType),
-                 StructField("num_evacuees", IntegerType)
+                 StructField("num_evacuees", LongType)
                  StructField("destination", StringType)
                )
              )
@@ -87,7 +87,7 @@ import org.apache.spark.sql.types._
 val schema = StructType(
                Array(
                  StructField("place", StringType),
-                 StructField("num_evacuees", IntegerType)
+                 StructField("num_evacuees", LongType)
                  StructField("destination", StringType)
                )
              )
@@ -107,8 +107,8 @@ import org.apache.spark.sql.types._
 val schema = StructType(
                Array(
                  StructField("destination", StringType),
-                 StructField("old_population", IntegerType)
-                 StructField("new_population", StringType)
+                 StructField("old_population", LongType)
+                 StructField("new_population", LongType)
                )
              )
 ```
