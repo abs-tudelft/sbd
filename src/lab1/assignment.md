@@ -44,8 +44,8 @@ val schema = StructType(
 9. When determining which place lies at which elevation, the application uses
    the [H3: Uber’s Hexagonal Hierarchical Spatial Index] to reduce the
    computational complexity of joins between the OSM and ALOS data sets. In the
-   report (README.md), it is explicitly explained why this spatial index
-   reduces the computational complexity for these types of joins.
+   report (README.md), it is explicitly explained why this spatial index reduces
+   the computational complexity for these types of joins.
 
 ### "Good" application requirements
 
@@ -115,12 +115,14 @@ val schema = StructType(
 
 ### Input
 
-For now, we will use the [Zuid-Holland] subset of OpenStreetMap provided
-by [Geofabrik]. The `.osm.pbf`files can be converted to `.orc` files using the
-tool mentioned in the introduction.
+For this lab, we will limit ourselves to answer the above questions for
+the [Netherlands] subset of OpenStreetMap (provided by [Geofabrik]) and ALOS.
+The `.osm.pbf` files can be converted to ORC files using the tool mentioned in
+the introduction. The ALOS tool mentioned in the introduction can be used to
+obtain Parquet files with elevation data.
 
-For the sea level rise, we will try `0`, `10`, and `100` meters, but feel free
-to experiment with other levels.
+For the sea level rise, you should report your output for `0`, `10`, and `100`
+meters, but feel free to experiment with other levels.
 
 ### Hints
 
