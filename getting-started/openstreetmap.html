@@ -184,23 +184,23 @@ enough to be moved to a large cluster (in lab 2), to process the whole thing!</p
 data to a tabular format. We will use the ORC format for this. Follow the steps
 below to end up with an ORC file for lab 1.</p>
 <p>Luckily, some people have already chopped up the whole world into manageable
-pieces. In our case, we will start off with just the province of Zuid-Holland,
+pieces. In our case, we will start off with just the Netherlands,
 where Delft is located. Also, some people have written <a href="https://github.com/mojodna/osm2orc">a conversion tool</a> for
 us already, that helps us convert the <code>.osm.pbf</code> file into an <code>.orc</code> file.</p>
 <ul>
 <li>
-<p>Download the <a href="https://download.geofabrik.de/europe/netherlands.html">province of Zuid-Holland</a>. You need to get the <code>.osm.pbf</code> file.</p>
+<p>Download the <a href="https://download.geofabrik.de/europe.html">Netherlands</a>. You need to get the <code>.osm.pbf</code> file.</p>
 </li>
 <li>
 <p>Download and extract v.0.5.5 of <a href="https://github.com/mojodna/osm2orc/releases/download/v0.5.5/osm2orc-0.5.5.tar.gz">osm2orc</a> (click the link to download
 immediately).</p>
 </li>
 <li>
-<p>Run osm2orc to obtain the ORC file of Zuid-Holland. osm2orc can be found in
+<p>Run osm2orc to obtain the ORC file of the Netherlands. osm2orc can be found in
 the <code>bin/</code> folder of the tool. Example usage in Linux:</p>
 </li>
 </ul>
-<pre><code class="language-console">./osm2orc /path/to/zuid-holland-latest.osm.pbf /destination/for/zuid-holland.orc
+<pre><code class="language-console">./osm2orc /path/to/netherlands-latest.osm.pbf /destination/for/netherlands.orc
 </code></pre>
 <p>You can also use the Dockerfile provided in the lab 1 repository to build an image
 that includes this tool:</p>
@@ -213,9 +213,9 @@ that includes this tool:</p>
 <li>Run the conversion tool in a container. Make sure the source <code>.osm.pbf</code> file is
 downloaded in your current working directory.</li>
 </ul>
-<pre><code class="language-bash">docker run -it --rm -v &quot;`pwd`&quot;:/io osm2orc /io/zuid-holland-latest.osm.pbf /io/zuid-holland.orc
+<pre><code class="language-bash">docker run -it --rm -v &quot;`pwd`&quot;:/io osm2orc /io/netherlands-latest.osm.pbf /io/netherlands.orc
 </code></pre>
-<p>You will now have the <code>zuid-holland.orc</code> file somewhere on your machine. We will
+<p>You will now have the <code>netherlands.orc</code> file somewhere on your machine. We will
 use this file as our input. Make sure you understand <a href="http://spark.apache.org/docs/2.4.6/sql-data-sources-load-save-functions.html">how to load the file into
 Spark</a>.</p>
 <h3 id="openstreetmap-schema"><a class="header" href="#openstreetmap-schema">OpenStreetMap schema</a></h3>
@@ -262,10 +262,9 @@ also have the <code>&quot;way&quot;</code> and <code>&quot;relation&quot;</code>
 table by the conversion tool.</p>
 <p>How big is this dataframe?</p>
 <pre><code>scala&gt; df.count()
-res1: Long = 18426861
+res1: Long = 130506997
 </code></pre>
-<p>It has over 18 million rows already, and this is just the province of
-Zuid-Holland!</p>
+<p>It has over 130 million rows already, and this is just the Netherlands!</p>
 
                     </main>
 
