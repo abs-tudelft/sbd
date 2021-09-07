@@ -12,19 +12,35 @@ files hold tabular datastructures. This makes it easier to work with when using
 various Spark APIs.
 
 ```
-<schema goes here>
+message schema {
+  REQUIRED DOUBLE lat;
+  REQUIRED DOUBLE lon;
+  REQUIRED INT32 elevation;
+}
 ```
 
-To produce a Parquet file from the data, first install the tool or build it from
-source. Follow the instructions of the README of the [aw3d30-parquet]
-repository.
+Coordinates are in the [WGS84] reference schema and elevation is in meters.
 
-Once you've installed the tool, you can run it as follows:
+To produce a Parquet file from the data, first build a Docker image or build and install the tool from [source](https://github.com/mbrobbel/aw3d30-parquet).
 
 ```
-<how to run the tool goes here>
+docker build -t aw3d30 https://github.com/mbrobbel/aw3d30-parquet.git#main
 ```
+
+Once you've build the image, you can run it as follows:
+
+```
+docker run -it --rm -v `pwd`:/io aw3d30 -t /io/tif -p /io/parquet <set>
+```
+
+Or when built from source:
+
+```
+aw3d30-parquet <set>
+```
+
+Where `<set>` is one of `netherlands`, `europe` or `world`.
 
 [ALOS Global Digital Surface Model]: https://www.eorc.jaxa.jp/ALOS/en/aw3d30/index.htm
-
 [aw3d30-parquet]: https://github.com/mbrobbel/aw3d30-parquet
+[WGS84]: https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84
