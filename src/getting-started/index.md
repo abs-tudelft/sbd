@@ -52,7 +52,11 @@ real-time, using Kafka.
 
 ## OpenStreetMap
 
-A open source project capturing geographic data from all over the world. The
+An open source project capturing geographic data from all over the world. The
 assignments of this lab are based on (parts of) this data set.
+
+## ALOS Global Digital Surface Model
+
+An open data set with elevation levels of the entire planet (except oceans).
 
 [online repository]: https://github.com/abs-tudelft/sbd-example

@@ -9,7 +9,7 @@ is where DataFrames originate from. Spark has an optimized SQL query engine that
 can optimize the compute path as well as provide a more efficient representation
 of the rows when given a schema. From the
 [Spark SQL, DataFrames and Datasets
-Guide](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html#overview):
+Guide](https://spark.apache.org/docs/3.1.2/sql-programming-guide.html#overview):
 
 > Spark SQL is a Spark module for structured data processing. Unlike the basic
 > Spark RDD API, the interfaces provided by Spark SQL provide Spark with more
@@ -86,7 +86,7 @@ StructField(numD,DoubleType,false), StructField(numE,LongType,false),
 StructField(numF,DoubleType,false))
 ```
 
-An overview of the different [Spark SQL types](https://spark.apache.org/docs/2.4.6/api/scala/#org.apache.spark.sql.types.package)
+An overview of the different [Spark SQL types](https://spark.apache.org/docs/3.1.2/api/scala/org/apache/spark/sql/types/index.html)
 can be found online. For the timestamp field we need to specify the format
 according to the [Javadate format](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html)
 —in our case `MM/dd/yy:hh:mm`. Tying this all together we can build a Dataframe
@@ -297,7 +297,7 @@ properties as explained before. Read the blog to get to know the details!
 
 This was a brief overview of the 2 (or 3) different Spark APIs. You can always
 find more information on the programming guides for
-[RDDs](https://spark.apache.org/docs/2.4.6/rdd-programming-guide.html) and
-[Dataframes/Datasets](https://spark.apache.org/docs/2.4.6/sql-programming-guide.html)
+[RDDs](https://spark.apache.org/docs/3.1.2/rdd-programming-guide.html) and
+[Dataframes/Datasets](https://spark.apache.org/docs/3.1.2/sql-programming-guide.html)
 and in the [Spark
-documentation](https://spark.apache.org/docs/2.4.6/api/scala/index.html#package).
+documentation](https://spark.apache.org/docs/3.1.2/api/scala/org/apache/spark/index.html).
