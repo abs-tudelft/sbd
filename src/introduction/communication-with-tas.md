@@ -6,7 +6,7 @@
 
 * `#general`: for ***general*** questions of which the answer ***could be useful
   for other students***.
-* `#queue`: for joining the queue for voice attention from TAs (`q!join`)
+* `#queue`: for joining the queue for voice attention from TAs (`/join`)
 * `#manual-notifications`: Notifies of changes in the lab manual.
 
 ##### Voice:
