@@ -132,6 +132,8 @@ Try to keep the following in mind when building your application:
   attempt to make your application as robust as possible.
 - Scalable: your application should keep functioning correctly when the size of
   the input data set grows larger.
+- Use H3 version 3.7.0, since higher versions may cause problems in the
+  container setup.
 
 [Zuid-Holland]: https://download.geofabrik.de/europe/netherlands/zuid-holland-latest.osm.pbf
 [Geofabrik]: https://geofabrik.de/
