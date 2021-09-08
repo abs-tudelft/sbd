@@ -134,6 +134,21 @@ Try to keep the following in mind when building your application:
   the input data set grows larger.
 - Use H3 version 3.7.0, since higher versions may cause problems in the
   container setup.
+- If you use all data while developing and debugging, testing a single code
+  change may take very long, e.g. more than 10 minutes. Therefore, while
+  developing, try to make your iterations as short as possible by limiting the
+  input datasets. For example, you could first try to answer the question only
+  for cities of a population higher than some large amount (so you end up
+  answering the query for a few cities, rather than for thousands of places).
+  Or, you could load only one or two ALOS tiles of which you know includes a few
+  places, so you end up with less elevation data. Once you have a functional
+  implementation, move towards calculating on the whole dataset to report the
+  output and the run times.
+- To get an idea of where a lot of computation takes place, make sure to check
+  the Spark history server. This helps you think about how to improve expensive
+  steps such as shuffles, by reordering or caching computations, or
+  pre-processing data sets, or by thinking about when to include pieces of data
+  in intermediate dataframes/sets.
 
 [Zuid-Holland]: https://download.geofabrik.de/europe/netherlands/zuid-holland-latest.osm.pbf
 [Geofabrik]: https://geofabrik.de/
