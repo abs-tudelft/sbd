@@ -1593,7 +1593,7 @@ various Spark APIs.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-1"><a class="header" href="#lab-1">Lab 1</a></h1>
 <p>In this lab, we will design and develop an application to process
 the <a href="https://www.openstreetmap.org">OpenStreetMap</a> and <a href="https://www.eorc.jaxa.jp/ALOS/en/aw3d30/index.htm">ALOS Global Digital Surface Model</a> data sets for a
-small subset of the planet (the Zuid-Holland province of the Netherlands).</p>
+tiny subset of the planet (the Netherlands).</p>
 <p>This lab will not yet require significant resources in terms of compute, memory
 or storage. It should be able to perform this lab on a laptop. The first lab is
 mainly meant to familiarize yourself with the toolchains and the data sets, and
@@ -1717,7 +1717,7 @@ val schema = StructType(
 </code></pre>
 <h3 id="input"><a class="header" href="#input">Input</a></h3>
 <p>For this lab, we will limit ourselves to answer the above questions for
-the [Netherlands] subset of OpenStreetMap (provided by <a href="https://geofabrik.de/">Geofabrik</a>) and ALOS.
+the <a href="http://download.geofabrik.de/europe/netherlands-latest.osm.pbf">Netherlands</a> subset of OpenStreetMap (provided by <a href="https://geofabrik.de/">Geofabrik</a>) and ALOS.
 The <code>.osm.pbf</code> files can be converted to ORC files using the tool mentioned in
 the introduction. The ALOS tool mentioned in the introduction can be used to
 obtain Parquet files with elevation data.</p>
