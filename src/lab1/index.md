@@ -2,7 +2,7 @@
 
 In this lab, we will design and develop an application to process
 the [OpenStreetMap] and [ALOS Global Digital Surface Model] data sets for a
-small subset of the planet (the Zuid-Holland province of the Netherlands).
+tiny subset of the planet (the Netherlands).
 
 This lab will not yet require significant resources in terms of compute, memory
 or storage. It should be able to perform this lab on a laptop. The first lab is

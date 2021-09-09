@@ -150,6 +150,6 @@ Try to keep the following in mind when building your application:
   pre-processing data sets, or by thinking about when to include pieces of data
   in intermediate dataframes/sets.
 
-[Zuid-Holland]: https://download.geofabrik.de/europe/netherlands/zuid-holland-latest.osm.pbf
+[Netherlands]: http://download.geofabrik.de/europe/netherlands-latest.osm.pbf
 [Geofabrik]: https://geofabrik.de/
 [H3: Uber’s Hexagonal Hierarchical Spatial Index]: https://github.com/uber/h3
