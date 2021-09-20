@@ -1680,11 +1680,12 @@ val schema = StructType(
 <li>The application also calculates the distance of each place to the closest
 harbour.</li>
 <li>If a harbour is closer than a safe city, 25% of the population of the place
-must relocate to the harbour to get a boat and live on the ocean. The
-application outputs a modified <code>.orc</code> file with the following schema,
-where <code>place</code> is the name of a city/town/village/hamlet, <code>num_evacuees</code> is
-the number of people in this place, <code>destination</code> is the name of the city to
-relocate to or <code>Waterworld</code> in the case of boat relocation:</li>
+must relocate to the harbour to get a boat and live on the ocean. The other 
+75% will still relocate to the nearest safe city. The application outputs a 
+modified <code>.orc</code> file with the following schema, where <code>place</code> is the name of 
+a city/town/village/hamlet, <code>num_evacuees</code> is the number of people in this 
+place, <code>destination</code> is the name of the city to relocate to or <code>Waterworld</code> 
+in the case of boat relocation:</li>
 </ol>
 <pre><code class="language-scala">import org.apache.spark.sql.types._
 
