@@ -229,7 +229,7 @@ like so.</p>
 // Entering paste mode (ctrl-D to finish)
 val df = spark.read
               .schema(schema)
-              .option(&quot;timestampFormat&quot;, &quot;MM/dd/yy:hh:mm&quot;)
+              .option(&quot;timestampFormat&quot;, &quot;M/d/y:h:m&quot;)
               .csv(&quot;./sensordata.csv&quot;)
 // Exiting paste mode, now interpreting.
 df: org.apache.spark.sql.DataFrame =
@@ -355,7 +355,7 @@ defined class SensorData
 
 val ds = spark.read
               .schema(schema)
-              .option(&quot;timestampFormat&quot;, &quot;MM/dd/yy:hh:mm&quot;)
+              .option(&quot;timestampFormat&quot;, &quot;M/d/y:h:m&quot;)
               .csv(&quot;./sensordata.csv&quot;)
               .as[SensorData]
 
