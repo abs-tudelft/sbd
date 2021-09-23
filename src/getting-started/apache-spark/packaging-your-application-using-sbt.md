@@ -196,7 +196,7 @@ object ExampleSpark {
 
     val ds = spark.read
                   .schema(schema)
-                  .option("timestampFormat", "MM/dd/yy:hh:mm")
+                  .option("timestampFormat", "M/d/y:h:m")
                   .csv("./sensordata.csv")
                   .as[SensorData]
 
