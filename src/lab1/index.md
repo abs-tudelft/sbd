@@ -1,5 +1,7 @@
 # Lab 1
 
+`Workload: approx. 65 hours per student`
+
 In this lab, we will design and develop an application to process
 the [OpenStreetMap] and [ALOS Global Digital Surface Model] data sets for a
 tiny subset of the planet (the Netherlands).

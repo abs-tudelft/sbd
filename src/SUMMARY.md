@@ -28,11 +28,11 @@
   - [Assignment]()
   - [Deliverables]()
   - [Rubric]()
-- [Lab 3]()
-  - [Before you start]()
-  - [Assignment]()
-  - [Deliverables]()
-  - [Rubric]()
+- [Lab 3](./lab3/index.md)
+  - [Before you start](./lab3/before-you-start.md)
+  - [Assignment](./lab3/assignment.md)
+  - [Deliverables](./lab3/deliverables.md)
+  - [Rubric](./lab3/rubric.md)
 ---
 
 - [FAQ](./faq.md)

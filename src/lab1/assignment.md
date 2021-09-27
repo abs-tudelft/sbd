@@ -150,6 +150,10 @@ Try to keep the following in mind when building your application:
   steps such as shuffles, by reordering or caching computations, or
   pre-processing data sets, or by thinking about when to include pieces of data
   in intermediate dataframes/sets.
+- When writing ORC files, multiple files will be created. This is fine, because
+  Spark saves each partition separately and for a typical deployment it does so 
+  in a distributed manner. When a requirement says to write "an ORC file", it is
+  OK if you end up with multiple files. 
 
 [Netherlands]: http://download.geofabrik.de/europe/netherlands-latest.osm.pbf
 [Geofabrik]: https://geofabrik.de/

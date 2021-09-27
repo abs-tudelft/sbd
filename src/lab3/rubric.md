@@ -25,34 +25,29 @@ indicators should not be used as an exhaustive check-list for the grade, but do
 provide a strong recommendation for a specific grade.
 
 ### Functionality 
-* Weight: 30%
+* Weight: 60%
 * Related Learning Objectives: L2, L5
 
-The student has implemented an application that functions according to the 
-specifications given in the lab manual.
-
-With regard to the functionality of the transformer application, we stipulate
-the following:
-* For every incoming record on the `events` stream, an update is produced.
-* When event records fall outside the window of interest and cause a change in 
-  any stateful data structure related to the `updates` stream, an update is also
-  produced. Observe the example carefully.
+The program functions correctly according to the requirements described in the
+assignment for at least an "adequate" application.
 
 | Grade          | Indicators                                                  |
 |----------------|-------------------------------------------------------------|
 | 0 (fail)       | The program does not compile.                               |
 |                | The program exits with errors not due to the user.          |
-|                | The program does not produce the correct output.            |
+|                | The program does not adhere to all requirements of an "adequate application". |
 | 6 (adequate)   | The program compiles.                                       |
 |                | The program exits without errors, unless the user does something wrong. |
-|                | The program produces the correct updates for every event.   |
-|                | The program does not produce the correct updates when stateful data structures change due to events falling outside the window of interest. |
-| 10 (excellent) | The program compiles.                                       |
+|                | The program adheres to all requirements of an "adequate application". |
+| 8 (good)       | The program compiles.                                       |
 |                | The program exits without errors. When the user does something wrong, a descriptive text of how to correct their input is returned. |
-|                | The program does produces the correct output.               |
+|                | The program adheres to all requirements of an "good application". |
+| 10 (excellent) | The program compiles.                                       | 
+|                | The program exits without errors. When the user does something wrong, a descriptive text of how to correct their input is returned. |
+|                | The program adheres to all requirements of an "excellent application". |
 
 ### Streaming 
-* Weight: 40%
+* Weight: 20%
 * Related Learning Objectives: L2, L5
 
 The student makes use of Kafka's ability to implement streamable low-latency
@@ -80,7 +75,7 @@ transformations, since this specific functionality does not require state.
 |                | The transformer application produces an update for every incoming record without applying micro-batching. |  
 
 ### Analysis
- * Weight: (30%)
+ * Weight: 20%
  * Related Learning Objectives: L1, L2, L3, L5
  
 The student shows a thorough understanding of the produced code and its behavior
