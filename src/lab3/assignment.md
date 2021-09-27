@@ -1,123 +1,167 @@
 ## Assignment
 
-Once you have created your lab 3 repository on GitHub Classroom, your job is to
-implement the Transformer component in the following file:
-`transformer/src/main/scala/Transformer.scala`.
+The scenario of the first lab has worsened so much that the whole world is about
+to get flooded. The people of Waterworld have united under the banner of the
+United Mariners (UM) and coordinate their efforts through a number of massive 
+ships (called UM motherships), temporarily sheltering those who seek refuge in 
+Waterworld from the dangers of the ocean.
 
-The Transformer application this year will also be a beer-themed assignment. The
-producer produces a stream of events that represent "check-ins" of a specific
-drink in a specific city (inspired by [Untappd](https://untappd.com/)).
+To coordinate the UM effort, they have released an app for refugees that have
+satellite phones. The app can send Waterworld entry events to notify a number of
+refugees from some city have boarded some vessel and are now seeking refuge in
+one of the motherships.
 
-Each check-in is supplied as a [JSON](https://www.json.org/json-en.html) object
-on the stream. Check-ins contain the following fields:
+The Waterworld entry events enter the application via the `events` topic input
+stream and are formatted as [JSON documents], and have the following schema:
 
-| Field       | JSON Type | Description                                       |
-| ----------- | --------- | ------------------------------------------------- |
-| `timestamp` | number    | The Unix timestamp of the check-in.               |
-| `city_id`   | number    | The ID of the city where the check-in was made.   |
-| `city_name` | string    | The name of the city where the check-in was made. |
-| `style`     | string    | The drink style.                                  |
+| Field       | JSON Type | Description                                          |
+| ----------- | --------- | ---------------------------------------------------- |
+| `timestamp` | number    | The Unix timestamp of the check-in.                  |
+| `city_id`   | number    | A unique ID of the city where the check-in was made. |
+| `city_name` | string    | The name of the city where the check-in was made.    |
+| `refugees`  | number    | The number of refugees entering the vessel.          |
 
-Suppose we are beer connoisseurs and we are interested to learn where a lot of
-check-in activity is coming from. Usually this means there is a beer festival
-that we want to visit, and perhaps it is in our city or a city close-by. We do
-want to make sure that there is plenty of beer with styles to our preference. So
-we can filter out or include some of the more [adventurous
-styles](https://en.wikipedia.org/wiki/Gueuze)\*.
+*Disclaimer:* While technically not required, we include the city name to
+facilitate debugging. This goes for some requirements below as well.
 
-Your task is to filter check-ins by beer style, and count the number of
-check-ins per city within a time window, and produce streaming updates for the
-real-time world map of the web interface.
+The requirements of the Kafka application that you must implement based on this
+description are described below in three tiers ("adequate", "good" and "
+excellent"). These tiers correspond to one of the grading criteria (explained on
+the rubric page). To pass the lab, you must at least achieve the "adequate"
+tier. "Good" and "excellent" tier applications contain **additional**
+requirements (and may supersede previous requirements where applicable) that the
+application needs to adhere to.
 
-### Supplying beer styles
+### "Adequate" application requirements
 
-Beer styles to include are supplied in a file called `beer.styles`.
-Beer styles are separated by newline. For example:
+1. The application outputs a Kafka stream on the topic `updates` with the total
+   number of refugees in Waterworld, whenever an incoming entry event is pulled
+   from the `events` input stream. The `update` data is serialized as a JSON
+   document with the following schema:
+   
+   | Field       | JSON Type | Description                   |
+   | ----------- | --------- | ----------------------------- |
+   | `refugees`  | number    | The total number of refugees. |
 
+- Example:
+
+On the input stream, the following events are received:
+```json
+{"timestamp":1, "city_id":1, "city_name":"Delft", "refugees":10}
+{"timestamp":3, "city_id":1, "city_name":"Delft", "refugees":20}
+{"timestamp":4, "city_id":2, "city_name":"Rotterdam", "refugees":30}
 ```
-Amber ale
-Stout
-Pilsener/Pilsner/Pils
+On the output stream, the following updates are required:
+```json
+{"refugees":10}
+{"refugees":30}
+{"refugees":60}
 ```
 
-Beer styles in this file match exactly with the names of the producer
-implementation found in: `producer/src/main.rs`.
+### "Good" application requirements
+
+2. Superseding requirement 1, the application outputs the total number of
+   refugees in Waterworld ***for each city***. The `update` data is serialized
+   as a JSON document with the following schema:
+
+   | Field       | JSON Type | Description                   | 
+   | ----------- | --------- | ----------------------------- |
+   | `city_id`   | number    | The total number of refugees. |
+   | `city_name` | string    | The name of the city.         |
+   | `refugees`  | number    | The total number of refugees in the respecitve city. |
+
+- Example:
+
+On the input stream, the following events are received:
+```json
+{"timestamp":1, "city_id":1, "city_name":"Delft", "refugees":10}
+{"timestamp":3, "city_id":1, "city_name":"Delft", "refugees":20}
+{"timestamp":4, "city_id":2, "city_name":"Rotterdam", "refugees":30}
+```
+On the output stream, the following updates are required:
+```json
+{"city_id":1, "city_name":"Delft", "refugees":10}
+{"city_id":1, "city_name":"Delft", "refugees":30}
+{"city_id":2, "city_name":"Rotterdam", "refugees":30}
+```
+
+### "Excellent" application requirements
+
+3. The applications keeps track of the events within a window of N seconds, and,
+   superseding requirement 2, also sends out the change in refugee count within 
+   that window.
+   
+   | Field       | JSON Type | Description                                     | 
+   | ----------- | --------- | ----------------------------------------------- |
+   | `city_id`   | number    | The total number of refugees.                   |
+   | `city_name` | string    | The name of the city.                           |
+   | `refugees`  | number    | The total number of refugees in the respective city. |
+   | `change`    | number    | The total number of refugees entering Waterworld from the respective city in the last N seconds. |
+
+- Example:
+
+On the input stream, the following events are received:
+```json
+{"timestamp":1, "city_id":1, "city_name":"Delft",     "refugees":10}
+{"timestamp":2, "city_id":1, "city_name":"Delft",     "refugees":20}
+{"timestamp":3, "city_id":2, "city_name":"Rotterdam", "refugees":30}
+{"timestamp":4, "city_id":1, "city_name":"Delft",     "refugees":40}
+{"timestamp":5, "city_id":2, "city_name":"Rotterdam", "refugees":12}
+```
+
+When N = 2, on the output stream, the following updates are required:
+```json
+{"city_id":1, "city_name":"Delft",     "refugees":10, "change": 10}  // At timestamp 1
+{"city_id":1, "city_name":"Delft",     "refugees":30, "change": 30}  // At timestamp 2
+{"city_id":1, "city_name":"Delft",     "refugees":30, "change": 20}  // At timestamp 3
+{"city_id":2, "city_name":"Rotterdam", "refugees":30, "change": 30}  // At timestamp 3
+{"city_id":1, "city_name":"Delft",     "refugees":70, "change": 40}  // At timestamp 4
+{"city_id":2, "city_name":"Rotterdam", "refugees":42, "change": 12}  // At timestamp 5
+{"city_id":1, "city_name":"Delft",     "refugees":70, "change":  0}  // At timestamp 6
+{"city_id":2, "city_name":"Rotterdam", "refugees":42, "change":  0}  // At timestamp 7
+```
 
 ### Supplying the time window
 
 The time window will be supplied on the command-line as the first argument
 representing the time window size in seconds.
 
-### Producing updates
-
-The updates are to be sent over a Kafka stream with a JSON string value of an
-update object with the following fields and types.
-
-| Field     | JSON Type | Description                                              |
-| --------- | --------- | -------------------------------------------------------- |
-| `city_id` | number    | The ID of the city for this update.                      |
-| `count`   | number    | The number of check-ins for this city within our window. |
-
-For example, if we receive the following JSONs on the `events` stream:
-
-```json
-{"timestamp":1, "city_id":1, "city_name":"Delft", "style":"Brown ale"}
-{"timestamp":2, "city_id":1, "city_name":"Delft", "style":"Bitter"}
-{"timestamp":3, "city_id":1, "city_name":"Delft", "style":"Weizenbock"}
-{"timestamp":4, "city_id":2, "city_name":"Rotterdam", "style":"Schwarzbier"}
-```
-
-And if we would set our recent window to a 3 milliseconds range, we
-need to produce the following records on the `updates` stream:
-
-```C++
- K   V
-"1", { "city_id": 1, "count": 1 } // t=1 ms, update Delft with the new recent check-in
-"1", { "city_id": 1, "count": 2 }  // t=2 ms, update Delft with the new recent check-in
-"1", { "city_id": 1, "count": 3 }  // t=3 ms, update Delft with the new recent check-in
-"1", { "city_id": 1, "count": 2 }  // t=4 ms, update Delft, the oldest check-in went out of the window
-"2", { "city_id": 2, "count": 1 }  // t=4 ms, update Rotterdam to have 1 check-in recently
-"1", { "city_id": 1, "count": 1 }  // t=5 ms, update Delft to remove old check-ins
-"1", { "city_id": 1, "count": 0 }  // t=6 ms, update Delft to remove old check-ins
-"2", { "city_id": 2, "count": 0 }  // t=7 ms, update Rotterdam to remove old check-ins
-```
-
-Please note that the keys are ignored by the consumer, and set to the city IDs in this example.
-
 ### General hints and recommended approach
 
 - Streaming frameworks like Kafka usually work with very strong notions of
   **stateless** and **stateful** operations.
-  - An example of a **stateless** operation is to filter records of a stream based
-    on their content.
-  - An example of a **stateful** operation is to update some existing data
-    structure based on streamed records.
-- Keeping track of check-ins that have been included in your current window of
-  interest is **stateful**, and can be done in an abstraction called a **state
-  store**.
-  - You can operate on state stores whenever a new record arrives using so called
-    **stateful transformations** of records.
-  - It is recommended to use the
-    [Processor API](https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html)
-    for this. Check [this documentation](https://kafka.apache.org/26/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration) on how to apply processors and transformers. Consider the differences between [processors](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-) and [transformers](https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-) and pick the one that best suits this application.
-  - While it is technically possible to use Kafka's Windowing abstractions, it
-    is **not recommended**, because it does not exactly match our use-case.
-- What is a little bit similar to building up DAGs in Spark is what in Kafka is
+    - An example of a **stateless** operation is to filter records of a stream
+      based on their content.
+    - An example of a **stateful** operation is to update some existing data
+      structure based on streamed records.
+- Keeping track of total number of evacuees (or that have been included in your
+  current window of interest) is **stateful**, and can be done in an abstraction
+  called a **state store**.
+    - You can operate on state stores whenever a new record arrives using so
+      called **stateful transformations** of records.
+    - It is recommended to use the [Processor API] for this.
+      Check [this documentation] on how to apply processors and transformers.
+      Consider the differences between [processors] and [transformers] and pick
+      the one that best suits this application.
+    - While it is technically possible to use Kafka's Windowing abstractions, it
+      is **not recommended**, because for requirement 3 it does not exactly
+      match our use-case of sending the change "0" update.
+- What is slightly similar to building up DAGs in Spark is what in Kafka is
   called building up the stream Topology.
-  - This is also lazily evaluated and only starts doing its thing when you call
-    `.start()` on a `KafkaStreams`.
-  - You can obtain a Topology description for debugging after using e.g.
-    `val topology = builder.build()` and then `println(topology.describe())`.
-  - If you copy-paste the description
-    [in this tool](https://zz85.github.io/kafka-streams-viz/),
-    you can visualize it.
-- You probably want to convert the JSONs to a Scala case class to be able to
-  process the data in a type-safe manner. It is recommended to use one of the
-  options from [this repository](https://github.com/azhur/kafka-serde-scala).
-  `circe` is a good option that worked for the TA's.
+    - This is also lazily evaluated and only starts doing its thing when you
+      call
+      `.start()` on a `KafkaStreams`.
+    - You can obtain a Topology description for debugging after using e.g.
+      `val topology = builder.build()` and then `println(topology.describe())`.
+    - If you copy-paste the description [in this tool], you can visualize it.
+- You want to convert the JSONs to a Scala case class to be able to process the
+  data in a type-safe manner. It is recommended to use one of the options from
+  [this repository]. `circe` is a good option that worked for the TA's.
 
-### Notes
-
-\* For this particular style, "wild" yeasts are used. Folklore says pigeons
-sitting over the water reservoirs at breweries used to provide such yeasts
-through their droppings!
+[JSON documents]: https://en.wikipedia.org/wiki/JSON
+[Processor API]: https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html
+[this documentation]: https://kafka.apache.org/26/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration
+[processors]: https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-
+[transformers]: https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-
+[in this tool]: https://zz85.github.io/kafka-streams-viz/
+[this repository]: https://github.com/azhur/kafka-serde-scala
