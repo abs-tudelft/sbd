@@ -1,6 +1,6 @@
 # Lab 3
 
-In the third and final lab of SBD we will be implementing a streaming
+`Workload: approx. 26 hours per student`
 application. Spark, that we've used in the first two labs, is quite good at
 processing large batches of data.
 
