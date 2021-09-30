@@ -1684,9 +1684,9 @@ harbour.</li>
 must relocate to the harbour to get a boat and live on the ocean. The other 
 75% will still relocate to the nearest safe city. The application outputs a 
 modified <code>.orc</code> file with the following schema, where <code>place</code> is the name of 
-a city/town/village/hamlet, <code>num_evacuees</code> is the number of people in this 
-place, <code>destination</code> is the name of the city to relocate to or <code>Waterworld</code> 
-in the case of boat relocation:</li>
+a city/town/village/hamlet, <code>num_evacuees</code> is the number of people 
+evacuating to the <code>destination</code>, which is the name of the city to relocate
+to or <code>Waterworld</code> in the case of boat relocation:</li>
 </ol>
 <pre><code class="language-scala">import org.apache.spark.sql.types._
 
