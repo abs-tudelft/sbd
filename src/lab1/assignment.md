@@ -78,9 +78,9 @@ val schema = StructType(
     must relocate to the harbour to get a boat and live on the ocean. The other 
     75% will still relocate to the nearest safe city. The application outputs a 
     modified `.orc` file with the following schema, where `place` is the name of 
-    a city/town/village/hamlet, `num_evacuees` is the number of people in this 
-    place, `destination` is the name of the city to relocate to or `Waterworld` 
-    in the case of boat relocation:
+    a city/town/village/hamlet, `num_evacuees` is the number of people 
+    evacuating to the `destination`, which is the name of the city to relocate
+    to or `Waterworld` in the case of boat relocation:
 
 ```scala
 import org.apache.spark.sql.types._
