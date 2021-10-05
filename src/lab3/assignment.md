@@ -14,12 +14,12 @@ one of the motherships.
 The Waterworld entry events enter the application via the `events` topic input
 stream and are formatted as [JSON documents], and have the following schema:
 
-| Field       | JSON Type | Description                                          |
-| ----------- | --------- | ---------------------------------------------------- |
-| `timestamp` | number    | The Unix timestamp of the check-in.                  |
-| `city_id`   | number    | A unique ID of the city where the check-in was made. |
-| `city_name` | string    | The name of the city where the check-in was made.    |
-| `refugees`  | number    | The number of refugees entering the vessel.          |
+| Field       | JSON Type | Description                                                                           |
+| ----------- | --------- | ------------------------------------------------------------------------------------- |
+| `timestamp` | number    | The Unix timestamp (non-leap-milliseconds since January 1, 1970 UTC) of the check-in. |
+| `city_id`   | number    | A unique ID of the city where the check-in was made.                                  |
+| `city_name` | string    | The name of the city where the check-in was made.                                     |
+| `refugees`  | number    | The number of refugees entering the vessel.                                           |
 
 *Disclaimer:* While technically not required, we include the city name to
 facilitate debugging. This goes for some requirements below as well.
