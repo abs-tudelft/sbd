@@ -2011,7 +2011,7 @@ one of the motherships.</p>
 <p>The Waterworld entry events enter the application via the <code>events</code> topic input
 stream and are formatted as <a href="https://en.wikipedia.org/wiki/JSON">JSON documents</a>, and have the following schema:</p>
 <table><thead><tr><th>Field</th><th>JSON Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>timestamp</code></td><td>number</td><td>The Unix timestamp of the check-in.</td></tr>
+<tr><td><code>timestamp</code></td><td>number</td><td>The Unix timestamp (non-leap-milliseconds since January 1, 1970 UTC) of the check-in.</td></tr>
 <tr><td><code>city_id</code></td><td>number</td><td>A unique ID of the city where the check-in was made.</td></tr>
 <tr><td><code>city_name</code></td><td>string</td><td>The name of the city where the check-in was made.</td></tr>
 <tr><td><code>refugees</code></td><td>number</td><td>The number of refugees entering the vessel.</td></tr>
