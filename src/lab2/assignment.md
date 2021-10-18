@@ -68,10 +68,13 @@ Please note:
 The following data sets of increasing size are available on S3 and can be used
 in your iterative development process:
 
+- OpenStreetMap:
 1. France (1.2 GB) - `s3://abs-tudelft-sbd-2021/france.orc`
 2. United States (8.8 GB) - `s3://abs-tudelft-sbd-2021/north-america.orc`
 3. Europe (27.7 GB) - `s3://abs-tudelft-sbd-2021/europe.orc`
 4. Planet (75.8 GB) - `s3://osm-pds/planet/planet-latest.orc`
+
+- ALOS Parquet files are in: `s3://abs-tudelft-sbd-2021/ALPSMLC30.parquet/`
 
 [OpenStreetMap data set]: https://registry.opendata.aws/osm/
 [entire planet]: https://open.quiltdata.com/b/osm-pds
