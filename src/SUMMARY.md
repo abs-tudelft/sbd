@@ -23,7 +23,7 @@
   - [Assignment](./lab1/assignment.md)
   - [Deliverables](./lab1/deliverables.md)
   - [Rubric](./lab1/rubric.md)
-- [Lab 2]()
+- [Lab 2](./lab2/index.md)
   - [Before you start](./lab2/before-you-start.md)
   - [Assignment](./lab2/assignment.md)
   - [Deliverables](./lab2/deliverables.md)
