@@ -32,6 +32,13 @@ rules:
 ### Your cluster must be called after your group, as follows: `group-xx`
 - Failure to name your cluster after your group could result in random 
   terminations of your cluster.
+### Do not interfere with clusters of other groups:
+- Because the setup this year is a work-around, it is not a watertight setup.
+  It may be that you discover ways to interfere with other groups. All activity 
+  for your AWS account is logged. If you interfere with other groups, you will 
+  immediately fail this course. Be careful what actions you perform, and only
+  perform them if you are absolutely sure it will not disturb the general 
+  progress of the lab for others.
 
 Make sure you have read the introduction on Amazon Web services in the guide
 chapter before starting the assignment.
