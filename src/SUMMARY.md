@@ -24,15 +24,16 @@
   - [Deliverables](./lab1/deliverables.md)
   - [Rubric](./lab1/rubric.md)
 - [Lab 2]()
-  - [Before you start]()
-  - [Assignment]()
-  - [Deliverables]()
-  - [Rubric]()
+  - [Before you start](./lab2/before-you-start.md)
+  - [Assignment](./lab2/assignment.md)
+  - [Deliverables](./lab2/deliverables.md)
+  - [Rubric](./lab2/rubric.md)
 - [Lab 3](./lab3/index.md)
   - [Before you start](./lab3/before-you-start.md)
   - [Assignment](./lab3/assignment.md)
   - [Deliverables](./lab3/deliverables.md)
   - [Rubric](./lab3/rubric.md)
+
 ---
 
 - [FAQ](./faq.md)

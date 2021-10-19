@@ -3,33 +3,34 @@
 AWS consists of a variety of different services, the ones relevant for this lab
 are listed below:
 
-### EC2
+- [Elastic Compute Cloud](https://aws.amazon.com/ec2/) allows you to provision 
+  a variety of different machines that can be used to run a computation. An 
+  overview of the different machines and their use cases can be found on the EC2 
+  website.
+- [Elastic MapReduce](https://aws.amazon.com/emr/) is a layer on top of EC2, 
+  that allows you to quickly deploy MapReduce-like applications, for instance 
+  Apache Spark.
+- [Simple Storage Server](https://aws.amazon.com/s3/) is an object based storage
+  system that is easy to interact with from different AWS services.
 
-[Elastic Compute Cloud](https://aws.amazon.com/ec2/) allows you to provision a variety of different
-machines that can be used to run a computation. An overview of the
-different machines and their use cases can be found on the EC2 website.
-
-### EMR
-
-[Elastic MapReduce](https://aws.amazon.com/emr/) is a layer on top of EC2, that allows you to quickly
-deploy MapReduce-like applications, for instance Apache Spark.
-
-### S3
-
-[Simple Storage Server](https://aws.amazon.com/s3/) is an object based storage system that is easy to
-interact with from different AWS services.
-
-Note that the OpenStreetMap data is hosted on AWS S3 in the `us-east-1` region, so any EC2/EMR instances interacting with this data set should also be provisioned
-there. At the time of writing, this means that you should select the
+Note that the OpenStreetMap data is hosted on AWS S3 in the `us-east-1` region,
+so any EC2/EMR instances interacting with this data set should also be
+provisioned there. At the time of writing, this means that you should select the
 N. Virginia region for your instances.
 
 AWS EC2 offers spot instances, a marketplace for unused machines that you can
-bid on. These spot instances are often a order of magnitude cheaper than
-on-demand instances. The current price list can be found in the [EC2 website](https://aws.amazon.com/ec2/spot/pricing/).
-We recommend using spot instances for the entirety of this lab.
+bid on. These spot instances are often an order of magnitude cheaper than
+on-demand instances. The current price list can be found in the 
+[EC2 website](https://aws.amazon.com/ec2/spot/pricing/). We recommend using
+spot instances for the entirety of this lab.
+However, be aware that rarely AWS will reclaim a spot instance because someone
+is willing to pay more for it as an on-demand instance.
+When this happens, your cluster/job may fail.
 
-We will be using the AWS infrastructure to run the application. Log in to the AWS
-console, and open the S3 interface. Create a bucket where we can store the
+### Uploading your application
+
+We will be using the AWS infrastructure to run the application. Log in to the 
+AWS console, and open the S3 interface. Create a bucket where we can store the
 application JAR, and all the other files needed by your application.
 
 There are (at least) two ways to transfer files to S3:
@@ -61,6 +62,8 @@ aws s3 mv path/to/file s3://destination-bucket/path/to/file
 
 The aws-cli contains much more functionality, which can be found on the
 [AWS-CLI docs](https://aws.amazon.com/cli/).
+
+### Creating the cluster
 
 Once you have uploaded all the necessary files (again your application JAR, and
 all the files required by the application), we are ready to provision a
@@ -95,15 +98,19 @@ Please note:
   spot instances, the procedure to request additional can be found in the
   [AWS documentation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html).
 
-In the _General Options_ you can select a cluster name. You can tune where the
-system logs and a number of other features (more information in the popups).
-After finishing this step, press _next_.
+In the _General Options_ you can select a cluster name. Name it after your 
+group, e.g. `group-01`. You can tune where the system logs and a number of other 
+features (more information in the popups). After finishing this step, press 
+_next_.
 
 You should now arrive in the _Security Options_ screen. If you have not created
 an _EC2 keypair_, it is recommended that you do so now. This will allow you to
-access the Yarn, Spark, and Ganglia [web interfaces](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html)
-in your browser. This makes debugging and monitoring the execution of your Spark Job much more manageable.
-To create an _EC2 keypair_, follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
+access the Yarn, Spark, and Ganglia 
+[web interfaces](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html)
+in your browser. This makes debugging and monitoring the execution of your Spark
+Job much more manageable. To create an _EC2 keypair_, follow 
+[these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
+.
 
 After this has all been completed you are ready to spin up your first cluster
 by pressing _Create cluster_. Once the cluster has been created, AWS will start
@@ -116,9 +123,9 @@ failure.
 
 The setup will take some time to finish, so in the meantime you should
 configure a proxy for the web interfaces. More detailed information can be
-found on the [AWS website](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html). You can check the logs in your S3 bucket, or the
-web interfaces to track the progress of your application and whether any errors
-have occurred.
+found on the [AWS website](http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-web-interfaces.html). 
+You can check the logs in your S3 bucket, or the web interfaces to track the 
+progress of your application and whether any errors have occurred.
 
 By forwarding the web interfaces you will also have access to Apache Ganglia.
 Ganglia is a tool that allows you to monitor your cluster for incoming and
