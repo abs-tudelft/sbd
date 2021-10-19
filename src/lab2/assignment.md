@@ -63,19 +63,28 @@ Please note:
   runtime and cost. For example, decreasing the run time by 10% while increasing
   the monetary cost by 500% is typically not acceptable.
 
-### Data sets
+### Data sets on S3
 
 The following data sets of increasing size are available on S3 and can be used
 in your iterative development process:
 
-- OpenStreetMap:
+#### OpenStreetMap:
 1. France (1.2 GB) - `s3://abs-tudelft-sbd-2021/france.orc`
 2. United States (8.8 GB) - `s3://abs-tudelft-sbd-2021/north-america.orc`
 3. Europe (27.7 GB) - `s3://abs-tudelft-sbd-2021/europe.orc`
 4. Planet (75.8 GB) - `s3://osm-pds/planet/planet-latest.orc`
 
-- ALOS Parquet files are in: `s3://abs-tudelft-sbd-2021/ALPSMLC30.parquet/`
-
+#### ALOS:
+- Parquet files are in: `s3://abs-tudelft-sbd-2021/ALPSMLC30.parquet/`
+- The Parquet files contain statistics that help reduce the amount of time it
+  takes to load a file. For example, for a so-called row-group, it stores the
+  minimum and maximum values of numeric columns. If you apply a latitude and
+  longitude range filter on the ALOS data set immediately after loading, Spark
+  will push down this filter to the Parquet reader. This causes only row groups
+  within a certain latitude or longitude range to be loaded from storage, rather
+  than loading all ALOS points for the whole world. **This will save you a
+  significant amount of time.**
+  
 [OpenStreetMap data set]: https://registry.opendata.aws/osm/
 [entire planet]: https://open.quiltdata.com/b/osm-pds
 [Geofabrik]: https://download.geofabrik.de/europe/
