@@ -26,7 +26,7 @@ repository as a pull request that is made when your repository is first
 initialized. To trigger the TA's to start reviewing your master branch, you can
 also use this pull request (PRs). It will be named `Feedback #1` and can be
 found by clicking `Pull requests`, then the `Feedback #1` PR. You can then ask
-for a review from the TAs; either user `anneriet` or `aritra-sarkar`. Also see the
+for a review from the TAs; either user `anneriet` or `prince-ph0en1x`. Also see the
 figure below:
 
 ![Where to find the pull requests and ask for review](../assets/images/review_request.png)
