@@ -53,7 +53,7 @@ located). This puts you in interactive mode of SBT. We can compile the sources
 by writing the `compile` command.
 
 ```
-$ docker run -it --rm -v "`pwd`":/root sbt sbt
+docker run -it --rm -v "`pwd`":/root sbt sbt
 copying runtime jar...
 [info] welcome to sbt 1.5.5 (Oracle Corporation Java 11.0.12)
 [info] loading project definition from /root/project
@@ -220,7 +220,7 @@ mode). By mounting the `spark-events` directory the event log of the
 application run is stored to be inspected later using the Spark history server.
 
 ```
-$ docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
+docker run -it --rm -v "`pwd`":/io -v "`pwd`"/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
 ```
 
 The output should look as follows:
@@ -281,7 +281,7 @@ server. Start a `spark-history-server` container from the project root folder
 and mount the `spark-events` folder in the container.
 
 ```
-$ docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080 spark-history-server
+docker run -it --rm -v "`pwd`"/spark-events/:/spark-events -p 18080:18080 spark-history-server
 ```
 
 The output will look as follows:
