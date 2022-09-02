@@ -2,7 +2,6 @@
 
 - [Introduction](./introduction/index.md)
   - [Goal of this lab](./introduction/goal-of-this-lab.md)
-  - [Communication with TAs](introduction/communication-with-tas.md)
   - [Code repositories](introduction/code-repositories.md)
   - [Groups](introduction/groups.md)
   - [AWS](introduction/aws.md)
