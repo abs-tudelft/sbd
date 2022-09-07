@@ -7,24 +7,17 @@ must at least achieve the "adequate" tier. "Good" and "excellent" tier
 applications contain **additional** requirements (and may supersede previous
 requirements where applicable) that the program needs to adhere to.
 
+The goal of this lab is to make an application which efficiently determines how many people would need to relocate at different amount of sea level rise. 
+
 ### "Adequate" application requirements
-
-1. The user is able to supply an integer amount of sea level rise in meters at
-   the command line as the first positional argument.
-2. The application calculates which places are exactly at or below the new sea
-   level to determine whether the population of the place needs to relocate. For
-   example, if the sea level rises by 10 meters, everybody living in a place
-   located at 10 meters elevation or below must relocate.
-4. The application does not take man-made or naturally occurring water barriers
-   into consideration, but merely uses the earth surface elevation to determine
-   which places need to relocate.
-5. The application considers cities, towns, villages and hamlets as discrete
-   places. Boroughs, suburbs, quarters, etc. are considered parts of cities and
-   must not be considered separately.
-6. The application outputs an `.orc` file with the following schema,
-   where `place` is the name of a city/town/village/hamlet, and `num_evacuees`
-   is the number of people in this place:
-
+1. The application takes an integer amount of sea level rise in meters from the command line as the first positional argument.
+2. The application uses the ALOS Global Digital Surface Model dataset to determine which places are exactly at or below the new sea level, you can disregard any man-made or natural water barriers. So if the sea level rises 0 meters, everybody living in a place at elevation of 0 meters or lower has to relocate.
+3.  The application uses the OpenStreetMap dataset to determine populations. Only cities, towns, villages and hamlets are used to determine if the population needs to relocate. Boroughs, suburbs, quarters etc. are parts of cities and should not be considered separately. The whole population of a city/town/village/hamlet can be assumed to live at the exact coordinates of the place in the OSM dataset.
+4. When determining which place lies at which elevation, the application uses the [H3: Uber’s Hexagonal Hierarchical Spatial Index]
+ to reduce the computational complexity of joins between the OSM and ALOS data sets. In the report (README.md), it is explicitly explained why using such a spatial index reduces the computational complexity for these types of joins.
+5. The application uses the average elevation of an H3 tile to determine if a population needs to relocate.
+6. The application uses an H3 resolution of 9.
+7. The application outputs an `.orc` file with the following schema, where `place` is the name of a city/town/village/hamlet, and `num_evacuees` is the number of people in this place:
 ```scala
 import org.apache.spark.sql.types._
 
@@ -35,21 +28,11 @@ val schema = StructType(
                )
              )
 ```
-
-6. The application outputs the sum of all evacuees on the command line.
-7. The application is written in Scala and uses Apache Spark dataframes or
-   datasets.
-8. The application uses the OpenStreetMap dataset and the ALOS Global Digital
-   Surface Model dataset, and no other data set whatsoever.
-9. When determining which place lies at which elevation, the application uses
-   the [H3: Uber’s Hexagonal Hierarchical Spatial Index] to reduce the
-   computational complexity of joins between the OSM and ALOS data sets. In the
-   report (README.md), it is explicitly explained why this spatial index reduces
-   the computational complexity for these types of joins.
+8. The application outputs the sum of all evacuees on the command line.
 
 ### "Good" application requirements
 
-10. Produce a relocation plan which is a mapping from source place to the
+9. Produce a relocation plan which is a mapping from source place to the
     closest safe (one that is not underwater) city (not town or village or
     hamlet). For the distance calculation, consider the earth to be flat (like
     🥞), i.e. you don't have to take the curvature of the earth into
@@ -72,9 +55,9 @@ val schema = StructType(
 
 ### "Excellent" application requirements
 
-11. The application also calculates the distance of each place to the closest
+10. The application also calculates the distance of each place to the closest
     harbour.
-12. If a harbour is closer than a safe city, 25% of the population of the place
+11. If a harbour is closer than a safe city, 25% of the population of the place
     must relocate to the harbour to get a boat and live on the ocean. The other 
     75% will still relocate to the nearest safe city. The application outputs a 
     modified `.orc` file with the following schema, where `place` is the name of 
