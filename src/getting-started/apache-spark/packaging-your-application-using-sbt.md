@@ -54,6 +54,8 @@ by writing the `compile` command.
 
 ```
 docker run -it --rm -v "`pwd`":/root sbt sbt
+```
+```
 copying runtime jar...
 [info] welcome to sbt 1.5.5 (Oracle Corporation Java 11.0.12)
 [info] loading project definition from /root/project
@@ -196,12 +198,12 @@ object ExampleSpark {
 
     val ds = spark.read
                   .schema(schema)
-                  .option("timestampFormat", "M/d/y:h:m")
+                  .option("timestampFormat", "M/d/yy:H:m")
                   .csv("./sensordata.csv")
                   .as[SensorData]
 
     val dsFilter = ds.filter(a => a.timestamp ==
-        new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+        Timestamp.valueOf("2014-03-10 01:01:00"))
 
     dsFilter.collect.foreach(println)
 
