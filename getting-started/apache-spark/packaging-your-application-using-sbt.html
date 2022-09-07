@@ -183,7 +183,8 @@ object Example {
 located). This puts you in interactive mode of SBT. We can compile the sources
 by writing the <code>compile</code> command.</p>
 <pre><code>docker run -it --rm -v &quot;`pwd`&quot;:/root sbt sbt
-copying runtime jar...
+</code></pre>
+<pre><code>copying runtime jar...
 [info] welcome to sbt 1.5.5 (Oracle Corporation Java 11.0.12)
 [info] loading project definition from /root/project
 [info] loading settings for project root from build.sbt ...
@@ -302,12 +303,12 @@ object ExampleSpark {
 
     val ds = spark.read
                   .schema(schema)
-                  .option(&quot;timestampFormat&quot;, &quot;M/d/y:h:m&quot;)
+                  .option(&quot;timestampFormat&quot;, &quot;M/d/yy:H:m&quot;)
                   .csv(&quot;./sensordata.csv&quot;)
                   .as[SensorData]
 
     val dsFilter = ds.filter(a =&gt; a.timestamp ==
-        new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+        Timestamp.valueOf(&quot;2014-03-10 01:01:00&quot;))
 
     dsFilter.collect.foreach(println)
 

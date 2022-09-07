@@ -191,10 +191,9 @@ We can thus define the schema as such:</p>
 </code></pre>
 <p>If we import types first, and then enter this in our interactive shell we get
 the following:</p>
-<pre><code class="language-scala">scala&gt; :paste
+<pre><code class="language-scala">:paste
 // Entering paste mode (ctrl-D to finish)
 import org.apache.spark.sql.types._
-
 val schema =
   StructType(
     Array(
@@ -225,17 +224,17 @@ can be found online. For the timestamp field we need to specify the format
 according to the <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">Javadate format</a>
 —in our case <code>MM/dd/yy:hh:mm</code>. Tying this all together we can build a Dataframe
 like so.</p>
-<pre><code class="language-scala">scala&gt; :paste
+<pre><code class="language-scala">:paste
 // Entering paste mode (ctrl-D to finish)
 val df = spark.read
               .schema(schema)
-              .option(&quot;timestampFormat&quot;, &quot;M/d/y:h:m&quot;)
+              .option(&quot;timestampFormat&quot;, &quot;M/d/yy:H:mm&quot;)
               .csv(&quot;./sensordata.csv&quot;)
 // Exiting paste mode, now interpreting.
 df: org.apache.spark.sql.DataFrame =
         [sensorname: string, timestamp: date ... 6 more fields]
-
-scala&gt; df.printSchema
+</code></pre>
+<pre><code class="language-scala">scala&gt; df.printSchema
 root
  |-- sensorname: string (nullable = true)
  |-- timestamp: timestamp (nullable = true)
@@ -245,8 +244,8 @@ root
  |-- numD: double (nullable = true)
  |-- numE: long (nullable = true)
  |-- numF: double (nullable = true
-
-scala&gt; df.take(5).foreach(println)
+</code></pre>
+<pre><code class="language-scala">scala&gt; df.take(5).foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
 [COHUTTA,2014-03-10 01:03:00.0,10.47,1.732,882,1.7,92,0.66]
@@ -266,9 +265,7 @@ There are three ways in which we could do this:</p>
 <p>We can use really error prone SQL queries, like so:</p>
 <pre><code class="language-scala">scala&gt; df.createOrReplaceTempView(&quot;sensor&quot;)
 
-scala&gt; val dfFilter = spark.sql(&quot;SELECT * FROM sensor
-WHERE timestamp=TIMESTAMP(\&quot;2014-03-10 01:01:00\&quot;)&quot;)
-// I think the newline in the multiline string breaks it if you paste it
+scala&gt; val dfFilter = spark.sql(&quot;SELECT * FROM sensor WHERE timestamp=TIMESTAMP(\&quot;2014-03-10 01:01:00\&quot;)&quot;)
 dfFilter: org.apache.spark.sql.DataFrame =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 
@@ -329,8 +326,8 @@ of schemas.</p>
 DataSet:</p>
 <pre><code class="language-scala">scala&gt; import java.sql.Timestamp
 import java.sql.Timestamp
-
-scala&gt; :paste
+</code></pre>
+<pre><code class="language-scala">:paste
 // Entering paste mode (ctrl-D to finish)
 
 case class SensorData (
@@ -344,29 +341,29 @@ case class SensorData (
     numF: Double
 )
 
-// Exiting paste mode, now interpreting.
+</code></pre>
+<pre><code class="language-scala">// Exiting paste mode, now interpreting.
 
 defined class SensorData
 </code></pre>
 <p>Now we can convert a DataFrame (which is actually just a <code>DataSet[Row]</code>, where
 <code>Row</code> allows fields to be untyped) to a typed DataSet using the <code>as</code> method.</p>
-<pre><code class="language-scala">scala&gt; :paste
+<pre><code class="language-scala">:paste
 // Entering paste mode (ctrl-D to finish)
 
 val ds = spark.read
               .schema(schema)
-              .option(&quot;timestampFormat&quot;, &quot;M/d/y:h:m&quot;)
+              .option(&quot;timestampFormat&quot;, &quot;M/d/yy:H:m&quot;)
               .csv(&quot;./sensordata.csv&quot;)
               .as[SensorData]
-
-// Exiting paste mode, now interpreting.
+</code></pre>
+<pre><code class="language-scala">// Exiting paste mode, now interpreting.
 
 ds: org.apache.spark.sql.Dataset[SensorData] =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 </code></pre>
 <p>Now we can apply compile-time type-checked operations:</p>
-<pre><code class="language-scala">scala&gt; val dsFilter = ds.filter(a =&gt; a.timestamp ==
-                                new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+<pre><code class="language-scala">scala&gt; val dsFilter = ds.filter(a =&gt; a.timestamp == Timestamp.valueOf(&quot;2014-03-10 01:01:00&quot;))
 dsFilter: org.apache.spark.sql.Dataset[SensorData] =
                 [sensorname: string, timestamp: timestamp ... 6 more fields]
 

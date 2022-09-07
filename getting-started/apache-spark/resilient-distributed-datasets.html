@@ -299,8 +299,7 @@ COHUTTA,3/10/14:1:12,9.79,1.739,886,1.74,82,1.91
 COHUTTA,3/10/14:1:13,10.02,1.739,886,1.24,86,1.79
 </code></pre>
 <p>We can process this data to filter only measurements on <code>3/10/14:1:01</code>.</p>
-<pre><code class="language-scala">scala&gt; val filterRDD = raw_data.map(_.split(&quot;,&quot;))
-                               .filter(x =&gt; x(1) == &quot;3/10/14:1:01&quot;)
+<pre><code class="language-scala">scala&gt; val filterRDD = raw_data.map(_.split(&quot;,&quot;)).filter(x =&gt; x(1) == &quot;3/10/14:1:01&quot;)
 filterRDD: org.apache.spark.rdd.RDD[Array[String]] = MapPartitionsRDD[11] at filter at &lt;console&gt;:25
 </code></pre>
 <p>And look at the output:</p>
