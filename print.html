@@ -1579,23 +1579,17 @@ one of the grading criteria (explained on the next page). To pass the lab, you
 must at least achieve the &quot;adequate&quot; tier. &quot;Good&quot; and &quot;excellent&quot; tier
 applications contain <strong>additional</strong> requirements (and may supersede previous
 requirements where applicable) that the program needs to adhere to.</p>
+<p>The goal of this lab is to make an application which efficiently determines how many people would need to relocate at different amount of sea level rise. </p>
 <h3 id="adequate-application-requirements"><a class="header" href="#adequate-application-requirements">&quot;Adequate&quot; application requirements</a></h3>
 <ol>
-<li>The user is able to supply an integer amount of sea level rise in meters at
-the command line as the first positional argument.</li>
-<li>The application calculates which places are exactly at or below the new sea
-level to determine whether the population of the place needs to relocate. For
-example, if the sea level rises by 10 meters, everybody living in a place
-located at 10 meters elevation or below must relocate.</li>
-<li>The application does not take man-made or naturally occurring water barriers
-into consideration, but merely uses the earth surface elevation to determine
-which places need to relocate.</li>
-<li>The application considers cities, towns, villages and hamlets as discrete
-places. Boroughs, suburbs, quarters, etc. are considered parts of cities and
-must not be considered separately.</li>
-<li>The application outputs an <code>.orc</code> file with the following schema,
-where <code>place</code> is the name of a city/town/village/hamlet, and <code>num_evacuees</code>
-is the number of people in this place:</li>
+<li>The application takes an integer amount of sea level rise in meters from the command line as the first positional argument.</li>
+<li>The application uses the ALOS Global Digital Surface Model dataset to determine which places are exactly at or below the new sea level, you can disregard any man-made or natural water barriers. So if the sea level rises 0 meters, everybody living in a place at elevation of 0 meters or lower has to relocate.</li>
+<li>The application uses the OpenStreetMap dataset to determine populations. Only cities, towns, villages and hamlets are used to determine if the population needs to relocate. Boroughs, suburbs, quarters etc. are parts of cities and should not be considered separately. The whole population of a city/town/village/hamlet can be assumed to live at the exact coordinates of the place in the OSM dataset.</li>
+<li>When determining which place lies at which elevation, the application uses the <a href="https://github.com/uber/h3">H3: Uber’s Hexagonal Hierarchical Spatial Index</a>
+to reduce the computational complexity of joins between the OSM and ALOS data sets. In the report (README.md), it is explicitly explained why using such a spatial index reduces the computational complexity for these types of joins.</li>
+<li>The application uses the average elevation of an H3 tile to determine if a population needs to relocate.</li>
+<li>The application uses an H3 resolution of 9.</li>
+<li>The application outputs an <code>.orc</code> file with the following schema, where <code>place</code> is the name of a city/town/village/hamlet, and <code>num_evacuees</code> is the number of people in this place:</li>
 </ol>
 <pre><code class="language-scala">import org.apache.spark.sql.types._
 
@@ -1606,20 +1600,11 @@ val schema = StructType(
                )
              )
 </code></pre>
-<ol start="6">
+<ol start="8">
 <li>The application outputs the sum of all evacuees on the command line.</li>
-<li>The application is written in Scala and uses Apache Spark dataframes or
-datasets.</li>
-<li>The application uses the OpenStreetMap dataset and the ALOS Global Digital
-Surface Model dataset, and no other data set whatsoever.</li>
-<li>When determining which place lies at which elevation, the application uses
-the <a href="https://github.com/uber/h3">H3: Uber’s Hexagonal Hierarchical Spatial Index</a> to reduce the
-computational complexity of joins between the OSM and ALOS data sets. In the
-report (README.md), it is explicitly explained why this spatial index reduces
-the computational complexity for these types of joins.</li>
 </ol>
 <h3 id="good-application-requirements"><a class="header" href="#good-application-requirements">&quot;Good&quot; application requirements</a></h3>
-<ol start="10">
+<ol start="9">
 <li>Produce a relocation plan which is a mapping from source place to the
 closest safe (one that is not underwater) city (not town or village or
 hamlet). For the distance calculation, consider the earth to be flat (like
@@ -1640,7 +1625,7 @@ val schema = StructType(
              )
 </code></pre>
 <h3 id="excellent-application-requirements"><a class="header" href="#excellent-application-requirements">&quot;Excellent&quot; application requirements</a></h3>
-<ol start="11">
+<ol start="10">
 <li>The application also calculates the distance of each place to the closest
 harbour.</li>
 <li>If a harbour is closer than a safe city, 25% of the population of the place
