@@ -251,14 +251,7 @@ grade you.</p>
 <p>Lab 2 requires a significant amount of computations performed on a lot of data,
 so we need a large compute and storage infrastructure to run the program. In
 this lab, we will use AWS to facilitate this.</p>
-<p>As a student you are eligible for credits on this platform. We would like you to
-register for the <a href="https://education.github.com/pack">GitHub Student Developer Pack</a>, as soon as you decide to take
-this course. This gives you access to around 100 dollars worth of credits. This
-should be ample to complete lab 2. Don't forget to register on AWS using the
-referral link from GitHub. Use the &quot;AWS Account ID&quot; option (requiring a credit
-card), if you can.</p>
-<p><strong>Make sure you register for these credits as soon as possible! You can always
-ask the TAs if you run into any trouble.</strong></p>
+<p>We have gotten AWS credits for the whole course via Cloud4Research, details will follow. (Disregard anything you heard about the GitHub student developer pack, it is no longer possible to get AWS credits that way.)</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="early-feedback-and-grading"><a class="header" href="#early-feedback-and-grading">Early Feedback and Grading</a></h2>
 <p>Grading depends on the specific lab exercise and is explained in the associated
 parts of the guide, but is generally based on:</p>
@@ -1024,7 +1017,7 @@ object Example {
 <p>Start the <code>sbt</code> container in the root folder (the one where <code>build.sbt</code> is
 located). This puts you in interactive mode of SBT. We can compile the sources
 by writing the <code>compile</code> command.</p>
-<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;:/root sbt sbt
+<pre><code>docker run -it --rm -v &quot;`pwd`&quot;:/root sbt sbt
 copying runtime jar...
 [info] welcome to sbt 1.5.5 (Oracle Corporation Java 11.0.12)
 [info] loading project definition from /root/project
@@ -1164,7 +1157,7 @@ command in SBT. This JAR will be located in the
 <p>You can run the JAR via a <code>spark-submit</code> container (which will run on local
 mode). By mounting the <code>spark-events</code> directory the event log of the
 application run is stored to be inspected later using the Spark history server.</p>
-<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;:/io -v &quot;`pwd`&quot;/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
+<pre><code>docker run -it --rm -v &quot;`pwd`&quot;:/io -v &quot;`pwd`&quot;/spark-events:/spark-events spark-submit target/scala-2.12/example_2.12-0.1.0.jar
 </code></pre>
 <p>The output should look as follows:</p>
 <pre><code>2020-09-07 11:07:28,890 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
@@ -1214,7 +1207,7 @@ debugging on the AWS cluster later on.</p>
 <p>You can inspect the event log from the application run using the Spark history
 server. Start a <code>spark-history-server</code> container from the project root folder
 and mount the <code>spark-events</code> folder in the container.</p>
-<pre><code>$ docker run -it --rm -v &quot;`pwd`&quot;/spark-events/:/spark-events -p 18080:18080 spark-history-server
+<pre><code>docker run -it --rm -v &quot;`pwd`&quot;/spark-events/:/spark-events -p 18080:18080 spark-history-server
 </code></pre>
 <p>The output will look as follows:</p>
 <pre><code>starting org.apache.spark.deploy.history.HistoryServer, logging to /spark/logs/spark--org.apache.spark.deploy.history.HistoryServer-1-5b5de5805769.out
