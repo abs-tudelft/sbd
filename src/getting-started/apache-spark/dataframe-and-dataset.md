@@ -56,10 +56,9 @@ If we import types first, and then enter this in our interactive shell we get
 the following:
 
 ```scala
-scala> :paste
+:paste
 // Entering paste mode (ctrl-D to finish)
 import org.apache.spark.sql.types._
-
 val schema =
   StructType(
     Array(
@@ -93,16 +92,17 @@ according to the [Javadate format](https://docs.oracle.com/javase/8/docs/api/jav
 like so.
 
 ```scala
-scala> :paste
+:paste
 // Entering paste mode (ctrl-D to finish)
 val df = spark.read
               .schema(schema)
-              .option("timestampFormat", "M/d/y:h:m")
+              .option("timestampFormat", "M/d/yy:H:mm")
               .csv("./sensordata.csv")
 // Exiting paste mode, now interpreting.
 df: org.apache.spark.sql.DataFrame =
         [sensorname: string, timestamp: date ... 6 more fields]
-
+```
+```scala
 scala> df.printSchema
 root
  |-- sensorname: string (nullable = true)
@@ -113,7 +113,8 @@ root
  |-- numD: double (nullable = true)
  |-- numE: long (nullable = true)
  |-- numF: double (nullable = true
-
+```
+```scala
 scala> df.take(5).foreach(println)
 [COHUTTA,2014-03-10 01:01:00.0,10.27,1.73,881,1.56,85,1.94]
 [COHUTTA,2014-03-10 01:02:00.0,9.67,1.731,882,0.52,87,1.79]
@@ -136,9 +137,7 @@ We can use really error prone SQL queries, like so:
 ```scala
 scala> df.createOrReplaceTempView("sensor")
 
-scala> val dfFilter = spark.sql("SELECT * FROM sensor
-WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")")
-// I think the newline in the multiline string breaks it if you paste it
+scala> val dfFilter = spark.sql("SELECT * FROM sensor WHERE timestamp=TIMESTAMP(\"2014-03-10 01:01:00\")")
 dfFilter: org.apache.spark.sql.DataFrame =
             [sensorname: string, timestamp: timestamp ... 6 more fields]
 
@@ -214,8 +213,9 @@ DataSet:
 ```scala
 scala> import java.sql.Timestamp
 import java.sql.Timestamp
-
-scala> :paste
+```
+```scala
+:paste
 // Entering paste mode (ctrl-D to finish)
 
 case class SensorData (
@@ -229,6 +229,8 @@ case class SensorData (
     numF: Double
 )
 
+```
+```scala
 // Exiting paste mode, now interpreting.
 
 defined class SensorData
@@ -238,15 +240,16 @@ Now we can convert a DataFrame (which is actually just a `DataSet[Row]`, where
 `Row` allows fields to be untyped) to a typed DataSet using the `as` method.
 
 ```scala
-scala> :paste
+:paste
 // Entering paste mode (ctrl-D to finish)
 
 val ds = spark.read
               .schema(schema)
-              .option("timestampFormat", "M/d/y:h:m")
+              .option("timestampFormat", "M/d/yy:H:m")
               .csv("./sensordata.csv")
               .as[SensorData]
-
+```
+```scala
 // Exiting paste mode, now interpreting.
 
 ds: org.apache.spark.sql.Dataset[SensorData] =
@@ -256,8 +259,7 @@ ds: org.apache.spark.sql.Dataset[SensorData] =
 Now we can apply compile-time type-checked operations:
 
 ```scala
-scala> val dsFilter = ds.filter(a => a.timestamp ==
-                                new Timestamp(2014 - 1900, 2, 10, 1, 1, 0, 0))
+scala> val dsFilter = ds.filter(a => a.timestamp == Timestamp.valueOf("2014-03-10 01:01:00"))
 dsFilter: org.apache.spark.sql.Dataset[SensorData] =
                 [sensorname: string, timestamp: timestamp ... 6 more fields]
 

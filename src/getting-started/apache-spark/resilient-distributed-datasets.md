@@ -194,8 +194,7 @@ COHUTTA,3/10/14:1:13,10.02,1.739,886,1.24,86,1.79
 We can process this data to filter only measurements on `3/10/14:1:01`.
 
 ```scala
-scala> val filterRDD = raw_data.map(_.split(","))
-                               .filter(x => x(1) == "3/10/14:1:01")
+scala> val filterRDD = raw_data.map(_.split(",")).filter(x => x(1) == "3/10/14:1:01")
 filterRDD: org.apache.spark.rdd.RDD[Array[String]] = MapPartitionsRDD[11] at filter at <console>:25
 ```
 
