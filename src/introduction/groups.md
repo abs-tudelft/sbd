@@ -13,9 +13,9 @@ All groups in Classroom **must** be named after their respective name in
 Brightspace, after the following example:
 
 ```
-group-01
+2022-group-01
 ```
 
-That is, `group<dash><two digit group number with leading zero>`. If you do not
+That is, `2022<dash>group<dash><two digit group number with leading zero>`. If you do not
 adhere to this group name format, some of our tools may not work, and we cannot
 grade you.
