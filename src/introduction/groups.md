@@ -19,3 +19,8 @@ Brightspace, after the following example:
 That is, `2022<dash>group<dash><two digit group number with leading zero>`. If you do not
 adhere to this group name format, some of our tools may not work, and we cannot
 grade you.
+
+The invite links for the GitHub Classrooms for the 3 assignments are as follows:
+* [Lab 1](https://classroom.github.com/a/FbLNcSus)
+* [Lab 2](https://classroom.github.com/a/0YZ1GMKp)
+* [Lab 3](https://classroom.github.com/a/8f8dILKF)
