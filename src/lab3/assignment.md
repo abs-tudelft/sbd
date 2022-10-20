@@ -157,6 +157,7 @@ representing the time window size in seconds.
 - You want to convert the JSONs to a Scala case class to be able to process the
   data in a type-safe manner. It is recommended to use one of the options from
   [this repository]. `circe` is a good option that worked for the TA's.
+- An example of how to implement a transformer in scala can be found [here].
 
 [JSON documents]: https://en.wikipedia.org/wiki/JSON
 [Processor API]: https://kafka.apache.org/26/documentation/streams/developer-guide/processor-api.html
@@ -165,3 +166,4 @@ representing the time window size in seconds.
 [transformers]: https://kafka.apache.org/26/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-
 [in this tool]: https://zz85.github.io/kafka-streams-viz/
 [this repository]: https://github.com/azhur/kafka-serde-scala
+[here]: https://github.com/apache/kafka/blob/trunk/streams/streams-scala/src/test/scala/org/apache/kafka/streams/scala/TopologyTest.scala
