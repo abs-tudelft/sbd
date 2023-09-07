@@ -30,7 +30,7 @@ docker build -t aw3d30 https://github.com/mbrobbel/aw3d30-parquet.git#main
 Once you've build the image, you can run it as follows:
 
 ```
-docker run -it --rm -v `pwd`:/io aw3d30 -t /io/tif -p /io/parquet <set>
+docker run -it --rm -v "`pwd`":/io aw3d30 -t /io/tif -p /io/parquet <set>
 ```
 
 Or when built from source:
