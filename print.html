@@ -1550,7 +1550,7 @@ various Spark APIs.</p>
 <pre><code>docker build -t aw3d30 https://github.com/mbrobbel/aw3d30-parquet.git#main
 </code></pre>
 <p>Once you've build the image, you can run it as follows:</p>
-<pre><code>docker run -it --rm -v `pwd`:/io aw3d30 -t /io/tif -p /io/parquet &lt;set&gt;
+<pre><code>docker run -it --rm -v &quot;`pwd`&quot;:/io aw3d30 -t /io/tif -p /io/parquet &lt;set&gt;
 </code></pre>
 <p>Or when built from source:</p>
 <pre><code>aw3d30-parquet &lt;set&gt;
