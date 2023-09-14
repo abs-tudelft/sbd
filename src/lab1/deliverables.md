@@ -21,4 +21,5 @@ The report should include:
 * The output of the `adequate` application for a sea level rise of `0`, `10`, and `100` meters.
 * What the highest level of the application is that you implemented.
 * The final runtime of your implementation.
+
 As well as the requirements as stated in the `Rubric` section.
