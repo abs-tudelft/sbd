@@ -1674,8 +1674,8 @@ the <a href="http://download.geofabrik.de/europe/netherlands-latest.osm.pbf">Net
 The <code>.osm.pbf</code> files can be converted to ORC files using the tool mentioned in
 the introduction. The ALOS tool mentioned in the introduction can be used to
 obtain Parquet files with elevation data.</p>
-<p>For the sea level rise, you should report your output for <code>0</code>, <code>10</code>, and <code>100</code>
-meters, but feel free to experiment with other levels.</p>
+<p><strong>For the sea level rise, you should report your output for <code>0</code>, <code>10</code>, and <code>100</code>
+meters, but feel free to experiment with other levels.</strong></p>
 <h3 id="hints"><a class="header" href="#hints">Hints</a></h3>
 <p>Try to keep the following in mind when building your application:</p>
 <ul>
@@ -1703,7 +1703,8 @@ in intermediate dataframes/sets.</li>
 <li>When writing ORC files, multiple files will be created. This is fine, because
 Spark saves each partition separately and for a typical deployment it does so 
 in a distributed manner. When a requirement says to write &quot;an ORC file&quot;, it is
-OK if you end up with multiple files. </li>
+OK if you end up with multiple files.</li>
+<li>For 0 meter sealevel rise, approximately a million people should move. This is obviously not very realistic. If you want to see if you can get a more realistic answer, you can do so and put it in the report, might be worth some bonus points. But make sure you also show that you did the exercise as written.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="deliverables"><a class="header" href="#deliverables">Deliverables</a></h2>
 <p>The deliverables for this lab are:</p>
