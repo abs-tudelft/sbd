@@ -106,7 +106,7 @@ the introduction. The ALOS tool mentioned in the introduction can be used to
 obtain Parquet files with elevation data.
 
 **For the sea level rise, you should report your output for `0`, `10`, and `100`
-meters, but feel free to experiment with other levels.**
+meters,** but feel free to experiment with other levels.
 
 ### Hints
 
