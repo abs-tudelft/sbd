@@ -105,8 +105,8 @@ The `.osm.pbf` files can be converted to ORC files using the tool mentioned in
 the introduction. The ALOS tool mentioned in the introduction can be used to
 obtain Parquet files with elevation data.
 
-For the sea level rise, you should report your output for `0`, `10`, and `100`
-meters, but feel free to experiment with other levels.
+**For the sea level rise, you should report your output for `0`, `10`, and `100`
+meters, but feel free to experiment with other levels.**
 
 ### Hints
 
@@ -136,7 +136,8 @@ Try to keep the following in mind when building your application:
 - When writing ORC files, multiple files will be created. This is fine, because
   Spark saves each partition separately and for a typical deployment it does so 
   in a distributed manner. When a requirement says to write "an ORC file", it is
-  OK if you end up with multiple files. 
+  OK if you end up with multiple files.
+- For 0 meter sealevel rise, approximately a million people should move. This is obviously not very realistic. If you want to see if you can get a more realistic answer, you can do so and put it in the report, might be worth some bonus points. But make sure you also show that you did the exercise as written.
 
 [Netherlands]: http://download.geofabrik.de/europe/netherlands-latest.osm.pbf
 [Geofabrik]: https://geofabrik.de/
