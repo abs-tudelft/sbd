@@ -38,11 +38,6 @@ application.
 
 Please note:
 
-- When using Amazon's services, **ONLY use the N.Virgina region (`us-east-1`).
-  This is where the S3 buckets with the data sets are hosted.** Create your
-  buckets and clusters in this region. **This is the only region that should be
-  used during this course.**
-
 - Always **start with a small number of small instance types** e.g. 1 master
   node  (`c5.xlarge`) and 5 core nodes (`c5.xlarge`). Make sure your application
   is scalable before spinning up large clusters (and/or more expensive instance
