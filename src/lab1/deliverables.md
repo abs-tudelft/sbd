@@ -18,7 +18,7 @@ The results and analysis in the `README.md` markdown file in the root of your
 repository.
 
 The report should include:
-* The output of the `adequate` application for a sea level rise of `0`, `10`, and `100` meters.
+* The output of the `adequate` application for a sea level rise of `0`, `10`, and `100` meters, as a table with the *total* number of evacuees for these three sea levels.
 * What the highest level of the application is that you implemented.
 * The final runtime of your implementation.
 
