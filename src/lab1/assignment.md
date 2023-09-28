@@ -17,7 +17,8 @@ The goal of this lab is to make an application which efficiently determines how 
  to reduce the computational complexity of joins between the OSM and ALOS data sets. In the report (README.md), it is explicitly explained why using such a spatial index reduces the computational complexity for these types of joins.
 5. The application uses the average elevation of an H3 tile to determine if a population needs to relocate.
 6. The application uses an H3 resolution of 9.
-7. The application outputs an `.orc` file with the following schema, where `place` is the name of a city/town/village/hamlet, and `num_evacuees` is the number of people in this place:
+7. The application outputs the sum of all evacuees on the command line.
+8. The application outputs an `.orc` file with the following schema, where `place` is the name of a city/town/village/hamlet, and `num_evacuees` is the number of people in this place:
 ```scala
 import org.apache.spark.sql.types._
 
@@ -28,7 +29,6 @@ val schema = StructType(
                )
              )
 ```
-8. The application outputs the sum of all evacuees on the command line.
 
 ### "Good" application requirements
 
