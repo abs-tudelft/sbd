@@ -28,15 +28,22 @@ a. Each lab will have an associated [Rubric], which is like a table with
   indicators for specific grades in specific parts of the assignment, that are 
   related to the learning objectives of this course.
 
-b. You can request reviews from the TAs in GitHub Classroom on e.g. your pull
+[b. You can request reviews from the TAs in GitHub Classroom on e.g. your pull
    requests with incremental changes to your code. This includes requesting 
-   reviews on your `README.md` (i.e. your report).
+   reviews on your `README.md` (i.e. your report).]: # 
+   
+b. You can ask the TAs during the lab for feedback on your code or your report, after you have looked at the rubric and/or if you have specific questions.
 
-Therefore, by spending the required amount of time to learn, using the Rubric to
+[Therefore, by spending the required amount of time to learn, using the Rubric to
 reflect on your own work, and by making use of the review functionality of
 GitHub Classroom, it is incredibly unlikely that you will fail this course. At
 the same time, do remember that programming experience is a prerequisite for
-this course. We unfortunately do not have time to teach you how to program.
+this course. We unfortunately do not have time to teach you how to program.]: #
+
+Therefore, by spending the required amount of time to learn, using the Rubric to
+reflect on your own work, and by asking questions during the lab, it is incredibly unlikely that you will fail this course. At the same time, do remember that 
+programming experience is a prerequisite for this course. We unfortunately do not 
+have time to teach you how to program.
 
 Regarding the oral exam, there is a possibility that some group members do not
 contribute to achieving the lab goals, in turn causing them to not achieve the
