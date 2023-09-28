@@ -160,6 +160,7 @@ requirements where applicable) that the program needs to adhere to.</p>
 to reduce the computational complexity of joins between the OSM and ALOS data sets. In the report (README.md), it is explicitly explained why using such a spatial index reduces the computational complexity for these types of joins.</li>
 <li>The application uses the average elevation of an H3 tile to determine if a population needs to relocate.</li>
 <li>The application uses an H3 resolution of 9.</li>
+<li>The application outputs the sum of all evacuees on the command line.</li>
 <li>The application outputs an <code>.orc</code> file with the following schema, where <code>place</code> is the name of a city/town/village/hamlet, and <code>num_evacuees</code> is the number of people in this place:</li>
 </ol>
 <pre><code class="language-scala">import org.apache.spark.sql.types._
@@ -171,9 +172,6 @@ val schema = StructType(
                )
              )
 </code></pre>
-<ol start="8">
-<li>The application outputs the sum of all evacuees on the command line.</li>
-</ol>
 <h3 id="good-application-requirements"><a class="header" href="#good-application-requirements">&quot;Good&quot; application requirements</a></h3>
 <ol start="9">
 <li>Produce a relocation plan which is a mapping from source place to the
