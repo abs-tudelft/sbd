@@ -19,7 +19,7 @@ rules:
   with a cluster, you ***MUST terminate*** the cluster, to avoid unnecessary
   costs.
 ### Run the cluster in the correct region.
-- Do not run clusters in different regions, only in `us-east-1`.
+- Please run clusters in regions europe (like `eu-west-1` or `eu-central-1`). If you run into spot instance limits, it might be beneficial to change the region you are using. Note: this is different than what was here before, that was for previous years. 
 ### After changing your code, take small steps before spawning a large cluster.
 - First, make sure your application runs correctly for a tiny data set on
   your laptop (e.g. in the Docker containers of Lab 1). Check the result and
