@@ -27,7 +27,7 @@ initialized. To trigger the TA's to start reviewing your master branch, you can
 also use this pull request (PRs). It will be named `Feedback #1` and can be
 found by clicking `Pull requests`, then the `Feedback #1` PR. You can then ask
 for a review from the TAs; either user `anneriet` or `prince-ph0en1x`. Also see the
-figure below:
+figure below: **This is not available this year because there is only 1 TA and I am very busy, sorry. If you have questions/want feedback, please come to me during the lab or use the Brightspace forum.**
 
 ![Where to find the pull requests and ask for review](../assets/images/review_request.png)
  
