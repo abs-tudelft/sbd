@@ -37,7 +37,7 @@ executing the next iteration, and documents their decision-making approach.
 
 Significant iterations that are to be documented include:
 
-1. The first run on the first data set after achieving robustness level 3.
+1. The first succesful run on the first data set.
 2. After significant optimizations are performed and a full run is completed on
    any of the data sets.
 3. When going from a smaller dataset to a larger data set results in
