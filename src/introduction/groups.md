@@ -13,7 +13,7 @@ All groups in Classroom **must** be named after their respective name in
 Brightspace, after the following example:
 
 ```
-2023-group-01
+2425-group-01
 ```
 
 That is, `2023<dash>group<dash><two digit group number with leading zero>`. If you do not
@@ -21,6 +21,6 @@ adhere to this group name format, some of our tools may not work, and we cannot
 grade you.
 
 The invite links for the GitHub Classrooms for the 3 assignments are as follows:
-* [Lab 1](https://classroom.github.com/a/FbLNcSus)
-* [Lab 2](https://classroom.github.com/a/0YZ1GMKp)
-* [Lab 3](https://classroom.github.com/a/8f8dILKF)
+* [Lab 1](https://classroom.github.com/a/P8cPuKQI)
+* [Lab 2](https://classroom.github.com/a/haYhCHb2)
+* [Lab 3](https://classroom.github.com/a/3Z_hhj3Y)
