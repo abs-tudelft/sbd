@@ -299,7 +299,7 @@ properties as explained before. Read the blog to get to know the details!
 
 This was a brief overview of the 2 (or 3) different Spark APIs. You can always
 find more information on the programming guides for
-[RDDs](https://spark.apache.org/docs/3.1.2/rdd-programming-guide.html) and
-[Dataframes/Datasets](https://spark.apache.org/docs/3.1.2/sql-programming-guide.html)
+[RDDs](https://spark.apache.org/docs/latest/rdd-programming-guide.html) and
+[Dataframes/Datasets](https://spark.apache.org/docs/latest/sql-programming-guide.html)
 and in the [Spark
-documentation](https://spark.apache.org/docs/3.1.2/api/scala/org/apache/spark/index.html).
+documentation](https://spark.apache.org/docs/latest/api/scala/org/apache/spark/index.html).
