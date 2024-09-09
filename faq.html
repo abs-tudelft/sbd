@@ -144,6 +144,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="frequently-asked-questions-faq"><a class="header" href="#frequently-asked-questions-faq">Frequently asked questions (FAQ)</a></h1>
+<p>(Thanks to everyone who spent the time to post their fixes to common problems on the Brightspace Q&amp;A)</p>
 <h3 id="how-do-i-use-the-h3-library"><a class="header" href="#how-do-i-use-the-h3-library">How do I use the H3 library?</a></h3>
 <p>You can import it in your scala file like:</p>
 <pre><code>import com.uber.h3core.H3Core
@@ -156,6 +157,17 @@ import com.uber.h3core.util.GeoCoord
 <h3 id="i-cannot-connect-to-my-cluster-with-ssh"><a class="header" href="#i-cannot-connect-to-my-cluster-with-ssh">I cannot connect to my cluster with SSH</a></h3>
 <p>If you have trouble connecting via SSH to your cluster, the issue might be that you are using the private subnet.</p>
 <p>During cluster creation, in step 2 under Networking, select one of the public EC2 subnets.</p>
+<p>Another issue might be the standard firewall rules for the EC2 clusters. If you are having this problem, you can try the following steps:</p>
+<ol>
+<li>Go to your cluster overview page and scroll down to &quot;Network and Security&quot;</li>
+<li>Click the link below the &quot;Primary Node - EMR managed security group&quot;</li>
+<li>Click &quot;Actions&quot; &gt; &quot;Edit inbound rules&quot; (top right)</li>
+<li>Find the rule for SSH (port 22) and click the X on the IP address that is currently there.</li>
+<li>Click in the search box and select &quot;0.0.0.0/0&quot;. (or enter a more restrictive IP range if you want)</li>
+<li>Click &quot;Save rules&quot;</li>
+</ol>
+<h3 id="do-i-need-to-keep-the-github-repo-of-lab-1-up-to-date-with-the-changes-i-made-for-lab-2"><a class="header" href="#do-i-need-to-keep-the-github-repo-of-lab-1-up-to-date-with-the-changes-i-made-for-lab-2">Do I need to keep the github repo of lab 1 up to date with the changes I made for lab 2?</a></h3>
+<p>No, this is not necessary. If you have specific changes that you discuss in lab 1, make sure to specify that the code for that is in the lab 2 repository.</p>
 
                     </main>
 
