@@ -158,4 +158,4 @@ It has over 130 million rows already, and this is just the Netherlands!
 [netherlands]: https://download.geofabrik.de/europe.html
 [a conversion tool]: https://github.com/mojodna/osm2orc
 [osm2orc]: https://github.com/mojodna/osm2orc/releases/download/v0.5.5/osm2orc-0.5.5.tar.gz
-[how to load the file into spark]: http://spark.apache.org/docs/2.4.6/sql-data-sources-load-save-functions.html
+[how to load the file into spark]: http://spark.apache.org/docs/latest/sql-data-sources-load-save-functions.html
