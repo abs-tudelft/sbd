@@ -318,7 +318,7 @@ object ExampleSpark {
 </code></pre>
 <p>We will not run this code, but submit it to a local Spark &quot;cluster&quot; (on your
 machine). To do so, we require a JAR. You can build a JAR using the <code>package</code>
-command in SBT. This JAR will be located in the
+command (or <code>assembly</code> to include all dependencies) in SBT. This JAR will be located in the
 <code>target/scala-version/project_name_version.jar</code>.</p>
 <p>You can run the JAR via a <code>spark-submit</code> container (which will run on local
 mode). By mounting the <code>spark-events</code> directory the event log of the
