@@ -214,7 +214,7 @@ object ExampleSpark {
 
 We will not run this code, but submit it to a local Spark "cluster" (on your
 machine). To do so, we require a JAR. You can build a JAR using the `package`
-command in SBT. This JAR will be located in the
+command (or `assembly` to include all dependencies) in SBT. This JAR will be located in the
 `target/scala-version/project_name_version.jar`.
 
 You can run the JAR via a `spark-submit` container (which will run on local
