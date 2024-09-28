@@ -77,7 +77,7 @@ val schema = StructType(
              )
 ```
 
-13. The application produces a list of cities that are to be relocated to,
+12. The application produces a list of cities that are to be relocated to,
     including `Waterworld` as if it's a city. The list also provides the old
     population and the new population The application outputs this list as a
     secondary `.orc` file with the following schema, where `destination` is the
