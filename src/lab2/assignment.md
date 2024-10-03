@@ -83,6 +83,6 @@ in your iterative development process:
 [OpenStreetMap data set]: https://registry.opendata.aws/osm/
 [entire planet]: https://open.quiltdata.com/b/osm-pds
 [Geofabrik]: https://download.geofabrik.de/europe/
-[tuning guide]: https://spark.apache.org/docs/3.1.2/tuning.html
-[SQL performance tuning page]: https://spark.apache.org/docs/3.1.2/sql-performance-tuning.html
+[tuning guide]: https://spark.apache.org/docs/latest/tuning.html
+[SQL performance tuning page]: https://spark.apache.org/docs/latest/sql-performance-tuning.html
 [sbt-assembly]: https://github.com/sbt/sbt-assembly
